@@ -69,4 +69,9 @@ where `ver` is the latest version of `mio` supporting rustc 1.65.0
 ```
 
 127.0.0.1:9001/get
-**127.0.0.1:9001/post**
+127.0.0.1:9001/post
+curl -X POST 'http://127.0.0.1:9001/getBody' -H 'Content-Type: application/json' -d '{
+"html_code": "a"
+}'
+
+C:/Users/edida/.cargo/bin/cargo.exe run --color=always --package axum-web-app --bin axum-web-app --profile dev
