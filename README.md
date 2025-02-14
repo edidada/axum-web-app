@@ -57,3 +57,14 @@ Feel free to submit issues or pull requests if you have suggestions or improveme
 ## License
 
 This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Mac
+
+```shell
+cargo run
+error: package `mio v1.0.3` cannot be built because it requires rustc 1.70 or newer, while the currently active rustc version is 1.65.0
+Either upgrade to rustc 1.70 or newer, or use
+cargo update -p mio@1.0.3 --precise ver
+where `ver` is the latest version of `mio` supporting rustc 1.65.0
+```
+

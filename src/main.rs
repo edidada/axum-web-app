@@ -9,7 +9,7 @@ mod routes;
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .merge(routes::setup_routes());
+        .merge(routes::routes::setup_routes());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 9001));
     println!("Listening on {}", addr);
