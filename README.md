@@ -68,3 +68,5 @@ cargo update -p mio@1.0.3 --precise ver
 where `ver` is the latest version of `mio` supporting rustc 1.65.0
 ```
 
+127.0.0.1:9001/get
+**127.0.0.1:9001/post**
