@@ -75,3 +75,19 @@ curl -X POST 'http://127.0.0.1:9001/getBody' -H 'Content-Type: application/json'
 }'
 
 C:/Users/edida/.cargo/bin/cargo.exe run --color=always --package axum-web-app --bin axum-web-app --profile dev
+
+powershell
+$env:RUST_BACKTRACE = "full"
+
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 16.69s
+     Running `target\debug\axum-web-app.exe`
+thread 'main' panicked at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tracing-subscriber-0.3.19\src\fmt\mod.rs:517:14:
+Unable to install global subscriber: SetGlobalDefaultError("a global default trace dispatcher has already been set")
+stack backtrace:
+   0:     0x7ff69dc466ad - std::backtrace_rs::backtrace::dbghelp64::trace
+                               at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\std\src\..\..\backtrace\src\backtrace\dbghelp64.rs:91
+   1:     0x7ff69dc466ad - std::backtrace_rs::backtrace::trace_unsynchronized
+                               at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\std\src\..\..\backtrace\src\backtrace\mod.rs:66
+   2:     0x7ff69dc466ad - std::sys_common::backtrace::_print_fmt
+                               at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\std\src\sys_common\backtrace.rs:68
