@@ -10,6 +10,7 @@ use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
+use crate::config::Config;
 
 mod handlers;
 mod routes;
@@ -36,8 +37,10 @@ async fn main() {
         .with(file_layer);
     // 设置全局订阅器
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+
+    let configFile = Config::from_file();
     // Initialize Redis client
-    let redis_client = Client::open("redis://127.0.0.1/").unwrap();
+    let redis_client = Client::open(configFile.webapp.redisurl).unwrap();
 
     let app = Router::new()
         .merge(routes::setup_routes())
@@ -46,7 +49,7 @@ async fn main() {
                 .layer(Extension(redis_client))
         );
 
-    let addr = SocketAddr::from(([127, 0, 0, 1], 9001));
+    let addr = SocketAddr::from(([127, 0, 0, 1], configFile.webapp.port));
     tracing::info!("Listening on {}", addr);
 
     axum::Server::bind(&addr)
