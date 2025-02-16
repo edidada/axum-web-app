@@ -21,9 +21,10 @@ pub async fn login_handler(
     if payload.username == config.auth.username && payload.password == config.auth.password {
         let mut conn = redis_client.get_async_connection().await.unwrap();
         let session_id = uuid::Uuid::new_v4().to_string();
-        let expiration = 3600; // 1 hour
+        let expiration = config.redis.expiration;
+        let key = format!("{}{}", config.redis.key_prefix, session_id);
 
-        let _: () = conn.set_ex(&session_id, &payload.username, expiration).await.unwrap();
+        let _: () = conn.set_ex(&key, &payload.username, expiration).await.unwrap();
 
         Html(format!("Logged in with session ID: {}", session_id))
     } else {

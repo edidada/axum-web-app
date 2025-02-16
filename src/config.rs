@@ -10,11 +10,18 @@ pub struct WebappConfig {
     pub port: u16,
     pub redisurl: String,
 }
-
+#[derive(Deserialize)]
+pub struct RedisConfig {
+    pub ip: String,
+    pub port: u16,
+    pub expiration: usize,
+    pub key_prefix: String,
+}
 #[derive(Deserialize)]
 pub struct Config {
     pub auth: AuthConfig,
     pub webapp: WebappConfig,
+    pub redis: RedisConfig,
 }
 
 impl Config {

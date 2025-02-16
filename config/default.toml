@@ -4,3 +4,8 @@ password = "Pass123Qwe"
 [webapp]
 port = 9001
 redisurl = "redis://127.0.0.1/"
+[redis]
+ip = "127.0.0.1"
+port = 6379
+expiration = 3600  # Expiration time in seconds
+key_prefix = "session:"

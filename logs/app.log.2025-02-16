@@ -37,3 +37,5 @@
 [2m2025-02-16 12:38:14[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
 [2m2025-02-16 12:38:16[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
 [2m2025-02-16 12:40:00[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:54:03[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 13:00:57[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001

@@ -10,6 +10,7 @@ use redis::{AsyncCommands, Client};
 use std::task::{Context, Poll};
 use tower::Service;
 use tracing::{error, info};
+use crate::config::Config;
 
 pub struct ValidSession(pub String);
 
@@ -22,6 +23,7 @@ where
 
     async fn from_request(req: &mut RequestParts<B>) -> Result<Self, Self::Rejection> {
         let redis_client = req.extensions().get::<Client>().cloned().ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Redis client missing"))?;
+        let config = Config::from_file();
 
         let session_id = req
             .headers()
@@ -31,12 +33,11 @@ where
             .ok_or((StatusCode::UNAUTHORIZED, "Missing or invalid Authorization header"))?;
 
         let mut conn = redis_client.get_async_connection().await.map_err(|_| {
-            error!("Failed to connect to Redis");
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to connect to Redis")
         })?;
 
-        let username: Option<String> = conn.get(session_id).await.map_err(|_| {
-            error!("Failed to query Redis");
+        let key = format!("{}{}", config.redis.key_prefix, session_id);
+        let username: Option<String> = conn.get(&key).await.map_err(|_| {
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to query Redis")
         })?;
 
@@ -45,7 +46,6 @@ where
             req.extensions_mut().insert(session_id.clone());
             Ok(ValidSession(username))
         } else {
-            error!("Invalid session");
             Err((StatusCode::UNAUTHORIZED, "Invalid session"))
         }
     }
@@ -53,6 +53,7 @@ where
 
 pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl IntoResponse {
     let redis_client = req.extensions().get::<Client>().cloned().unwrap();
+    let config = Config::from_file();
 
     // Extract session_id before borrowing req mutably
     let session_id = req
@@ -64,7 +65,8 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
 
     if let Some(session_id) = session_id {
         let mut conn = redis_client.get_async_connection().await.unwrap();
-        let username: Option<String> = conn.get(&session_id).await.unwrap();
+        let key = format!("{}{}", config.redis.key_prefix, session_id);
+        let username: Option<String> = conn.get(&key).await.unwrap();
 
         if username.is_some() {
             req.extensions_mut().insert(session_id);
@@ -72,6 +74,5 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
         }
     }
 
-    error!("Invalid session");
     (StatusCode::UNAUTHORIZED, "Invalid session").into_response()
 }
