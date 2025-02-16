@@ -9,6 +9,7 @@ use axum::{
 use redis::{AsyncCommands, Client};
 use std::task::{Context, Poll};
 use tower::Service;
+use tracing::{error, info};
 
 pub struct ValidSession(pub String);
 
@@ -30,10 +31,12 @@ where
             .ok_or((StatusCode::UNAUTHORIZED, "Missing or invalid Authorization header"))?;
 
         let mut conn = redis_client.get_async_connection().await.map_err(|_| {
+            error!("Failed to connect to Redis");
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to connect to Redis")
         })?;
 
         let username: Option<String> = conn.get(session_id).await.map_err(|_| {
+            error!("Failed to query Redis");
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to query Redis")
         })?;
 
@@ -42,6 +45,7 @@ where
             req.extensions_mut().insert(session_id.clone());
             Ok(ValidSession(username))
         } else {
+            error!("Invalid session");
             Err((StatusCode::UNAUTHORIZED, "Invalid session"))
         }
     }
@@ -68,5 +72,6 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
         }
     }
 
+    error!("Invalid session");
     (StatusCode::UNAUTHORIZED, "Invalid session").into_response()
 }

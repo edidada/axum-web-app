@@ -15,3 +15,24 @@
 [2m2025-02-16 11:58:34[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
 [2m2025-02-16 12:08:45[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
 [2m2025-02-16 12:13:22[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 12:31:55[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 12:36:16[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 12:36:56[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:36:58[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:10[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:10[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:27[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:30[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:30[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:30[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:32[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:33[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:37[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:37[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:39[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:37:39[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:38:12[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:38:13[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:38:14[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:38:14[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
+[2m2025-02-16 12:38:16[0m [31mERROR[0m [2mmain::middleware::session_validation[0m[2m:[0m Invalid session
