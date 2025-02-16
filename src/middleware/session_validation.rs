@@ -39,7 +39,7 @@ where
 
         if let Some(username) = username {
             let session_id = session_id.to_string();
-            req.extensions_mut().insert(session_id);
+            req.extensions_mut().insert(session_id.clone());
             Ok(ValidSession(username))
         } else {
             Err((StatusCode::UNAUTHORIZED, "Invalid session"))
@@ -47,20 +47,23 @@ where
     }
 }
 
-pub async fn validate_session<B>(req: Request<B>, next: Next<B>) -> impl IntoResponse {
+pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl IntoResponse {
     let redis_client = req.extensions().get::<Client>().cloned().unwrap();
 
+    // Extract session_id before borrowing req mutably
     let session_id = req
         .headers()
         .get("Authorization")
         .and_then(|header| header.to_str().ok())
-        .and_then(|auth| auth.strip_prefix("Bearer "));
+        .and_then(|auth| auth.strip_prefix("Bearer "))
+        .map(|s| s.to_string());
 
     if let Some(session_id) = session_id {
         let mut conn = redis_client.get_async_connection().await.unwrap();
-        let username: Option<String> = conn.get(session_id).await.unwrap();
+        let username: Option<String> = conn.get(&session_id).await.unwrap();
 
         if username.is_some() {
+            req.extensions_mut().insert(session_id);
             return next.run(req).await;
         }
     }
