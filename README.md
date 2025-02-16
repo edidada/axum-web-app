@@ -91,3 +91,8 @@ stack backtrace:
                                at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\std\src\..\..\backtrace\src\backtrace\mod.rs:66
    2:     0x7ff69dc466ad - std::sys_common::backtrace::_print_fmt
                                at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\std\src\sys_common\backtrace.rs:68
+
+
+C:/Users/edida/.cargo/bin/cargo.exe build --color=always --message-format=json-diagnostic-rendered-ansi --package axum-web-app --bin axum-web-app --profile dev
+
+C:/Users/edida/.cargo/bin/cargo.exe build --color=always --message-format=json-diagnostic-rendered-ansi --package axum-web-app --bin log_chinese --profile dev
