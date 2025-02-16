@@ -1,6 +1,6 @@
 // This file is the entry point of the application. It sets up the Axum server, initializes routes, and starts the application.
 
-use axum::Router;
+use axum::{Extension, Router};
 use std::net::SocketAddr;
 use chrono::Local;
 use tracing_appender::rolling::{RollingFileAppender, Rotation};
@@ -9,9 +9,14 @@ use tracing_subscriber::fmt::format::Writer;
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;
+use redis::Client;
+use tower::ServiceBuilder;
+
 
 mod handlers;
 mod routes;
+mod middleware;
+
 
 #[tokio::main]
 async fn main() {
@@ -32,9 +37,15 @@ async fn main() {
         .with(file_layer);
     // 设置全局订阅器
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+    // Initialize Redis client
+    let redis_client = Client::open("redis://127.0.0.1/").unwrap();
 
     let app = Router::new()
-        .merge(routes::routes::setup_routes());
+        .merge(routes::routes::setup_routes())
+        .layer(
+            ServiceBuilder::new()
+                .layer(Extension(redis_client))
+        );
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 9001));
     tracing::info!("Listening on {}", addr);
