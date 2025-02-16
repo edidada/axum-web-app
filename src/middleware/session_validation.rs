@@ -38,6 +38,8 @@ where
         })?;
 
         if let Some(username) = username {
+            let session_id = session_id.to_string();
+            req.extensions_mut().insert(session_id);
             Ok(ValidSession(username))
         } else {
             Err((StatusCode::UNAUTHORIZED, "Invalid session"))
