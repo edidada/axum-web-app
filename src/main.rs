@@ -7,11 +7,9 @@ use tracing_appender::rolling::{RollingFileAppender, Rotation};
 use tracing_subscriber::{fmt, EnvFilter, Registry};
 use tracing_subscriber::fmt::format::Writer;
 use tracing_subscriber::fmt::time::FormatTime;
-use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
-
 
 mod handlers;
 mod routes;
@@ -41,7 +39,7 @@ async fn main() {
     let redis_client = Client::open("redis://127.0.0.1/").unwrap();
 
     let app = Router::new()
-        .merge(routes::routes::setup_routes())
+        .merge(routes::setup_routes())
         .layer(
             ServiceBuilder::new()
                 .layer(Extension(redis_client))

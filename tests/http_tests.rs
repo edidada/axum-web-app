@@ -38,3 +38,17 @@ async fn test_get_body() {
     let body = res.text().await.expect("Failed to read response body");
     assert!(body.contains("&lt;h1&gt;Test&lt;/h1&gt;"));
 }
+
+#[tokio::test]
+async fn test_login() {
+    let client = Client::new();
+    let res = client.post("http://127.0.0.1:9001/login")
+        .json(&serde_json::json!({ "username": "user", "password": "password" }))
+        .send()
+        .await
+        .expect("Failed to send request");
+
+    assert!(res.status().is_success());
+    let body = res.text().await.expect("Failed to read response body");
+    assert!(body.contains("Logged in with session ID:"));
+}
