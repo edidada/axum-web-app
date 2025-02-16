@@ -96,3 +96,8 @@ stack backtrace:
 C:/Users/edida/.cargo/bin/cargo.exe build --color=always --message-format=json-diagnostic-rendered-ansi --package axum-web-app --bin axum-web-app --profile dev
 
 C:/Users/edida/.cargo/bin/cargo.exe build --color=always --message-format=json-diagnostic-rendered-ansi --package axum-web-app --bin log_chinese --profile dev
+C:/Users/edida/.cargo/bin/cargo.exe build --message-format=json-diagnostic-rendered-ansi --color=always --package axum-web-app --bin main --profile dev
+
+cargo run --package axum-web-app --bin main --profile dev
+
+cargo test -- --test-threads=1

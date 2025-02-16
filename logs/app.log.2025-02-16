@@ -2,3 +2,9 @@
 [2m2025-02-16T02:36:44.744529Z[0m [32m INFO[0m [2mlog_app[0m[2m:[0m Listening on 127.0.0.1:8080
 [2m2025-02-16T02:38:15.236435Z[0m [32m INFO[0m [2maxum_web_app[0m[2m:[0m Listening on 127.0.0.1:9001
 [2m2025-02-16 10:45:03[0m [32m INFO[0m [2mlog_chinese[0m[2m:[0m Listening on 127.0.0.1:8080
+[2m2025-02-16T02:53:10.309975Z[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 10:58:55[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 11:00:16[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 11:03:47[0m [32m INFO[0m [2mmain[0m[2m:[0m Listening on 127.0.0.1:9001
+[2m2025-02-16 11:03:48[0m [32m INFO[0m [2mmain::handlers::get_handler[0m[2m:[0m get get_handler
+[2m2025-02-16 11:04:16[0m [32m INFO[0m [2mmain::handlers::get_handler[0m[2m:[0m get_body_handler RequestBody { html_code: "sssa" }

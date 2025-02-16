@@ -1,9 +1,12 @@
 // This file is the entry point of the application. It sets up the Axum server, initializes routes, and starts the application.
 
-use axum::{Router, routing::get, routing::post};
+use axum::Router;
 use std::net::SocketAddr;
+use chrono::Local;
 use tracing_appender::rolling::{RollingFileAppender, Rotation};
 use tracing_subscriber::{fmt, EnvFilter, Registry};
+use tracing_subscriber::fmt::format::Writer;
+use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::fmt::writer::MakeWriterExt;
 use tracing_subscriber::layer::SubscriberExt;
 
@@ -17,7 +20,8 @@ async fn main() {
     let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
 
     // 创建一个日志记录器层，将日志输出到文件
-    let file_layer = fmt::layer().with_writer(non_blocking);
+    let file_layer = fmt::layer().with_timer(LocalTimer)
+        .with_writer(non_blocking);
 
     // 创建一个基于环境变量的过滤器层
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
@@ -39,4 +43,11 @@ async fn main() {
         .serve(app.into_make_service())
         .await
         .unwrap();
+}
+struct LocalTimer;
+
+impl FormatTime for LocalTimer {
+    fn format_time(&self, w: &mut Writer<'_>) -> std::fmt::Result {
+        write!(w, "{}", Local::now().format("%Y-%m-%d %H:%M:%S"))
+    }
 }
