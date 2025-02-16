@@ -2,6 +2,7 @@ use axum::{response::Html, Json, extract::Extension};
 use serde::Deserialize;
 use redis::AsyncCommands;
 use std::time::{SystemTime, UNIX_EPOCH};
+use crate::config::Config;
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
@@ -13,8 +14,11 @@ pub async fn login_handler(
     Json(payload): Json<LoginRequest>,
     Extension(redis_client): Extension<redis::Client>,
 ) -> Html<String> {
-    // Validate username and password (this is just a placeholder)
-    if payload.username == "user" && payload.password == "password" {
+    // Load configuration
+    let config = Config::from_file();
+
+    // Validate username and password
+    if payload.username == config.auth.username && payload.password == config.auth.password {
         let mut conn = redis_client.get_async_connection().await.unwrap();
         let session_id = uuid::Uuid::new_v4().to_string();
         let expiration = 3600; // 1 hour

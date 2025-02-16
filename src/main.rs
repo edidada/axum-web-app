@@ -14,6 +14,7 @@ use tower::ServiceBuilder;
 mod handlers;
 mod routes;
 mod middleware;
+mod config;
 
 
 #[tokio::main]
