@@ -206,3 +206,125 @@ chrono = "0.4"
 ```
 
 这样，日志输出就不会包含 ANSI 转义序列，并且会使用你自定义的时间格式。 
+
+```shell
+cargo tree > deps.txt
+```
+
+## ammonia v3.3.0库干嘛的？
+`ammonia` 是一个用 Rust 编写的 HTML 清理库，版本 3.3.0 是其特定版本。它的主要作用是对输入的 HTML 字符串进行过滤和清理，以确保输出的 HTML 是安全的，避免潜在的安全风险，如跨站脚本攻击（XSS）。以下详细介绍其功能和使用场景：
+
+### 主要功能
+
+#### 1. 过滤危险标签和属性
+`ammonia` 可以移除 HTML 中可能包含恶意脚本的标签（如 `<script>`）和危险属性（如 `onclick`、`onload` 等事件处理属性）。例如，以下 HTML 代码包含一个恶意的 `<script>` 标签：
+```html
+<p>Some text <script>alert('XSS')</script></p>
+```
+使用 `ammonia` 清理后，`<script>` 标签会被移除，只保留安全的部分：
+```html
+<p>Some text </p>
+```
+
+#### 2. 允许白名单内的标签和属性
+你可以配置 `ammonia` 允许特定的 HTML 标签和属性通过过滤。默认情况下，`ammonia` 有一个预定义的白名单，包含常见的安全标签（如 `<p>`、`<a>`、`<img>` 等）和属性。你也可以根据需要自定义白名单。例如，允许 `<a>` 标签的 `target` 属性：
+```rust
+use ammonia::Builder;
+
+let input = "<a href='https://example.com' target='_blank'>Link</a>";
+let cleaned = Builder::default()
+   .add_generic_attribute("a", "target")
+   .clean(input)
+   .to_string();
+println!("{}", cleaned);
+```
+
+#### 3. 处理 HTML 实体
+`ammonia` 会正确处理 HTML 实体，确保它们在清理过程中不会被破坏。例如，`&lt;` 会被保留为 `&lt;`，而不是被错误地解析或修改。
+
+### 使用场景
+
+#### 1. 内容管理系统（CMS）
+在 CMS 中，用户可能会输入包含 HTML 代码的内容。为了防止恶意用户注入恶意脚本，需要对用户输入的 HTML 进行清理。`ammonia` 可以确保只有安全的 HTML 内容被保存和显示。
+
+#### 2. 论坛和评论系统
+论坛和评论系统通常允许用户使用 HTML 格式化他们的帖子和评论。使用 `ammonia` 可以过滤掉危险的 HTML 代码，保护其他用户免受 XSS 攻击。
+
+#### 3. 网站表单输入
+当网站接收用户输入的 HTML 内容（如富文本编辑器的输出）时，使用 `ammonia` 可以对输入进行清理，确保网站的安全性。
+
+### 简单示例代码
+以下是一个简单的使用 `ammonia` 清理 HTML 代码的示例：
+```rust
+use ammonia::clean;
+
+fn main() {
+    let input = "<p>Some text <script>alert('XSS')</script></p>";
+    let cleaned = clean(input);
+    println!("Cleaned HTML: {}", cleaned);
+}
+```
+在这个示例中，`clean` 函数会对输入的 HTML 进行清理，移除危险的 `<script>` 标签，并返回安全的 HTML 字符串。
+
+
+
+你给出的是一个使用 `curl` 发送 POST 请求的命令，若要对这个请求进行 AB（Apache Bench）性能测试，需要做如下几步：
+
+### 1. 安装 AB
+AB 是 Apache HTTP 服务器自带的一个性能测试工具，若你用的是 Linux 系统，可借助包管理器来安装；要是 macOS 系统，能通过 Homebrew 安装；Windows 系统则可以从 Apache 官网下载 Apache 服务器，AB 工具就在其中。
+
+#### Linux（以 Ubuntu 为例）
+```bash
+sudo apt-get update
+sudo apt-get install apache2-utils
+```
+
+#### macOS
+```bash
+brew install httpd
+```
+
+### 2. 准备测试数据文件
+因为 AB 不支持直接在命令行里传递 JSON 数据，所以要把 JSON 数据存到一个文件中。创建一个名为 `request.json` 的文件，内容如下：
+```json
+{
+  "html_code": "sssa"
+}
+```
+
+### 3. 执行 AB 性能测试
+使用 AB 命令进行性能测试，下面是具体的命令示例：
+```bash
+ab -n 1000 -c 100 -p request.json -T application/json -H "Authorization: Bearer 0b6cc057-a6a1-46a6-80e1-5c83ff28af9a" http://127.0.0.1:9001/getBody
+```
+#### 参数解释：
+- `-n 1000`：总共要发送 1000 个请求。
+- `-c 100`：并发请求数为 100，也就是同时发送 100 个请求。
+- `-p request.json`：指定包含 POST 请求数据的文件。
+- `-T application/json`：设置请求的 Content-Type 为 `application/json`。
+- `-H "Authorization: Bearer 0b6cc057-a6a1-46a6-80e1-5c83ff28af9a"`：添加请求头 `Authorization`。
+- `http://127.0.0.1:9001/getBody`：目标 URL。
+
+### 4. 分析测试结果
+执行完 AB 命令后，会输出一系列测试结果，下面是部分关键指标的解释：
+
+```plaintext
+Concurrency Level:      100
+Time taken for tests:   10.234 seconds
+Complete requests:      1000
+Failed requests:        0
+Total transferred:      234567 bytes
+HTML transferred:       200000 bytes
+Requests per second:    97.71 [#/sec] (mean)
+Time per request:       1023.422 [ms] (mean)
+Time per request:       10.234 [ms] (mean, across all concurrent requests)
+Transfer rate:          22.33 [Kbytes/sec] received
+```
+- **Concurrency Level**：并发请求数。
+- **Time taken for tests**：整个测试所花费的时间。
+- **Complete requests**：成功完成的请求数量。
+- **Failed requests**：失败的请求数量。
+- **Requests per second**：每秒处理的请求数，数值越高表明性能越好。
+- **Time per request**：每个请求平均花费的时间，有两个值，第一个是单个请求的平均时间，第二个是所有并发请求的平均时间。
+
+通过分析这些指标，你就能了解目标服务在特定并发情况下的性能表现。 
