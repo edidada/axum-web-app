@@ -26,6 +26,7 @@ async fn main() {
 
     // 创建一个日志记录器层，将日志输出到文件
     let file_layer = fmt::layer().with_timer(LocalTimer)
+        .with_ansi(false) // 禁用 ANSI 样式
         .with_writer(non_blocking);
 
     // 创建一个基于环境变量的过滤器层
