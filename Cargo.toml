@@ -8,6 +8,10 @@ name = "main"
 path = "src/main.rs"
 
 [[bin]]
+name = "threadid_log"
+path = "src/bin/threadid_log.rs"
+
+[[bin]]
 name = "log_app"
 path = "src/bin/log_app.rs"
 

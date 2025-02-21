@@ -7,7 +7,9 @@ fn main() {
     let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
 
     // 创建一个日志记录器层，将日志输出到文件
-    let file_layer = fmt::layer().with_writer(non_blocking);
+    let file_layer = fmt::layer()
+        .with_ansi(false) // 禁用 ANSI 样式
+        .with_writer(non_blocking);
 
     // 创建一个基于环境变量的过滤器层
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
