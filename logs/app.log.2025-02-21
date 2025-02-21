@@ -2,3 +2,4 @@
 2025-02-21 20:07:32  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
 2025-02-21 20:40:27  INFO log_chinese: Listening on 127.0.0.1:8080
 2025-02-21T12:41:05.904315Z  INFO log_app: Listening on 127.0.0.1:8080
+[2025-02-21 20:49:55 ThreadId(1) main:threadid_log] This is an info message with thread ID and custom time format.
