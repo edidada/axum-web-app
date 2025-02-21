@@ -11,7 +11,7 @@ use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
-use tracing_appender::non_blocking;
+use tracing_appender::non_blocking::{self, WorkerGuard};
 use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
@@ -23,7 +23,7 @@ mod config;
 
 #[tokio::main]
 async fn main() {
-    set_format_log();
+    let _guard = set_format_log();
 
     let config_file = Config::from_file();
     // Initialize Redis client
@@ -45,10 +45,10 @@ async fn main() {
         .unwrap();
 }
 
-fn set_format_log() {
-    // 创建一个滚动文件追加器，这里简单示例为非滚动的文件写入
+fn set_format_log() -> WorkerGuard {
+    // 创建一个滚动文件追加器
     let file_appender = tracing_appender::rolling::daily("logs", "app.log");
-    let (non_blocking, _guard) = non_blocking(file_appender);
+    let (non_blocking, guard) = non_blocking(file_appender);
 
     // 创建一个日志记录器层，将日志输出到文件
     let file_layer = fmt::layer()
@@ -60,7 +60,6 @@ fn set_format_log() {
     // 创建一个格式化层，将日志输出到控制台
     let console_layer = fmt::layer()
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
-        .with_ansi(false) // 禁用 ANSI 样式
         .event_format(ThreadIdFormatter);
 
     // 创建一个订阅者，将文件层和控制台层添加到订阅者中
@@ -70,6 +69,8 @@ fn set_format_log() {
 
     // 设置全局订阅者
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+
+    guard
 }
 
 // 自定义日志格式化结构体
