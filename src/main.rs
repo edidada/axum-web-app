@@ -11,7 +11,7 @@ use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
-use tracing_appender::non_blocking::{self, WorkerGuard};
+use tracing_appender::non_blocking::{self, NonBlocking, WorkerGuard};
 use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
@@ -48,7 +48,8 @@ async fn main() {
 fn set_format_log() -> WorkerGuard {
     // 创建一个滚动文件追加器
     let file_appender = tracing_appender::rolling::daily("logs", "app.log");
-    let (non_blocking, guard) = non_blocking(file_appender);
+    let (non_blocking, guard) = non_blocking::NonBlockingBuilder::default()
+        .build(file_appender);
 
     // 创建一个日志记录器层，将日志输出到文件
     let file_layer = fmt::layer()
