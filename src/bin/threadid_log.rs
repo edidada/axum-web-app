@@ -8,6 +8,7 @@ use tracing_subscriber::{
     },
     layer::Context,
     registry::LookupSpan,
+    Layer,
 };
 use chrono::Local;
 use tracing_appender::non_blocking;
@@ -22,13 +23,13 @@ impl FormatTime for LocalTimer {
     }
 }
 
-// 自定义日志格式化结构体
+// 自定义事件格式化器
 struct ThreadIdFormatter;
 
 impl<S, N> FormatEvent<S, N> for ThreadIdFormatter
 where
-    S: tracing::Subscriber + for<'lookup> LookupSpan<'lookup>,
-    N: for<'writer> FormatFields<'writer> + 'static,
+    S: tracing::Subscriber + for<'a> LookupSpan<'a>,
+    N: for<'a> FormatFields<'a> + 'static,
 {
     fn format_event(
         &self,
@@ -36,52 +37,36 @@ where
         mut writer: Writer<'_>,
         event: &tracing::Event<'_>,
     ) -> std::fmt::Result {
-        // 获取当前线程 ID
+        let meta = event.metadata();
+        let span = ctx.lookup_current().map(|s| s.name()).unwrap_or("unknown");
         let thread_id = thread::current().id();
-        // 写入线程 ID 信息
-        write!(writer, "thread {:?}, ", thread_id)?;
-
-        // 调用默认的格式化方法处理事件
-        <Format as FormatEvent<S, N>>::format_event(&Format::default(), ctx, writer, event)
+        write!(
+            writer,
+            "[{} {} {}:{}] ",
+            Local::now().format("%Y-%m-%d %H:%M:%S"),
+            thread_id,
+            span,
+            meta.target()
+        )?;
+        ctx.field_format().format_fields(writer.by_ref(), event)?;
+        writeln!(writer)
     }
 }
 
-use tracing_subscriber::{fmt, layer::SubscriberExt, Registry};
-use std::net::SocketAddr;
-
-fn setup_logging() {
-    // 创建一个滚动文件追加器，这里简单示例为非滚动的文件写入
-    let file_appender = std::fs::File::create("app.log").expect("Failed to create log file");
-    let (non_blocking, _guard) = non_blocking(file_appender);
-
-    // 创建一个日志记录器层，将日志输出到文件
-    let file_layer = fmt::layer()
-        .event_format(ThreadIdFormatter)
-        .with_timer(LocalTimer)
-        .with_ansi(false) // 禁用 ANSI 样式
-        .with_writer(non_blocking);
-
-    // 创建一个格式化层，将日志输出到控制台
-    let console_layer = fmt::layer()
-        .event_format(ThreadIdFormatter)
-        .with_timer(LocalTimer)
-        .pretty();
-
-    // 创建一个订阅者，将文件层和控制台层添加到订阅者中
-    let subscriber = Registry::default()
-        .with(console_layer)
-        .with(file_layer);
-
-    // 设置全局订阅者
-    tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
-}
-
 fn main() {
-    setup_logging();
+    let file_appender = tracing_appender::rolling::daily("logs", "app.log");
+    let (non_blocking, _guard) = tracing_appender::non_blocking(file_appender);
 
-    let payload = "example_payload";
-    info!("get_body_handler {:?}", payload);
+    let subscriber = tracing_subscriber::fmt()
+        .with_writer(non_blocking)
+        .event_format(ThreadIdFormatter)
+        .with_timer(LocalTimer)
+        .finish();
 
-    let addr: SocketAddr = "127.0.0.1:8080".parse().unwrap();
-    info!("Listening on {}", addr);
+    tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+
+    let span = span!(Level::INFO, "main");
+    let _enter = span.enter();
+
+    info!("This is an info message with thread ID and custom time format.");
 }
