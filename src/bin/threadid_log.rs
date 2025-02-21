@@ -42,7 +42,7 @@ where
         let thread_id = thread::current().id();
         write!(
             writer,
-            "[{} {} {}:{}] ",
+            "[{} {:?} {}:{}] ",
             Local::now().format("%Y-%m-%d %H:%M:%S"),
             thread_id,
             span,
@@ -59,8 +59,8 @@ fn main() {
 
     let subscriber = tracing_subscriber::fmt()
         .with_writer(non_blocking)
+        .with_timer(LocalTimer) // Move this line before event_format
         .event_format(ThreadIdFormatter)
-        .with_timer(LocalTimer)
         .finish();
 
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
