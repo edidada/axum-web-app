@@ -47,7 +47,7 @@ async fn main() {
 
 fn set_format_log() {
     // 创建一个滚动文件追加器，这里简单示例为非滚动的文件写入
-    let file_appender = std::fs::File::create("app.log").expect("Failed to create log file");
+    let file_appender = tracing_appender::rolling::daily("logs", "app.log");
     let (non_blocking, _guard) = non_blocking(file_appender);
 
     // 创建一个日志记录器层，将日志输出到文件
@@ -60,8 +60,8 @@ fn set_format_log() {
     // 创建一个格式化层，将日志输出到控制台
     let console_layer = fmt::layer()
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
-        .event_format(ThreadIdFormatter)
-        .pretty();
+        .with_ansi(false) // 禁用 ANSI 样式
+        .event_format(ThreadIdFormatter);
 
     // 创建一个订阅者，将文件层和控制台层添加到订阅者中
     let subscriber = Registry::default()
