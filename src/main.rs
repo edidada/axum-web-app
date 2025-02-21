@@ -2,6 +2,7 @@
 
 use axum::{Extension, Router};
 use std::net::SocketAddr;
+use std::thread;
 use chrono::Local;
 use tracing_appender::rolling::{RollingFileAppender, Rotation};
 use tracing_subscriber::{fmt, EnvFilter, Registry};
@@ -51,7 +52,7 @@ async fn main() {
         );
 
     let addr = SocketAddr::from(([127, 0, 0, 1], configFile.webapp.port));
-    tracing::info!("Listening on {}", addr);
+    tracing::info!("thread {:?},Listening on {}", thread::current().id(), addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

@@ -6,7 +6,8 @@ use tracing_subscriber::fmt::format::Writer;
 
 fn main() {
     // 创建一个按天滚动的日志文件追加器
-    let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
+    let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log")
+        .max_log_file_size(0.5 * 1024 * 1024); // 设置文件最大大小为 0.5MB
     let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
 
     // 创建一个日志记录器层，将日志输出到文件
