@@ -15,7 +15,7 @@ pub async fn get_handler() -> Html<String> {
 }
 
 pub async fn get_body_handler(Json(payload): Json<RequestBody>) -> Html<String> {
-    tracing::info!("thread {:?},get_body_handler {:?}", thread::current().id(),payload);
+    tracing::info!("get_body_handler {:?}",payload);
     let sanitized_html = clean(&payload.html_code);
     Html(sanitized_html)
 }

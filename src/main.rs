@@ -37,7 +37,7 @@ async fn main() {
         );
 
     let addr = SocketAddr::from(([127, 0, 0, 1], config_file.webapp.port));
-    tracing::info!("thread {:?},Listening on {}", thread::current().id(), addr);
+    tracing::info!("Listening on {}", addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
