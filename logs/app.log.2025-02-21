@@ -3,3 +3,39 @@
 2025-02-21 20:40:27  INFO log_chinese: Listening on 127.0.0.1:8080
 2025-02-21T12:41:05.904315Z  INFO log_app: Listening on 127.0.0.1:8080
 [2025-02-21 20:49:55 ThreadId(1) main:threadid_log] This is an info message with thread ID and custom time format.
+thread ThreadId(1), 2025-02-21T13:13:11.763954Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(5), 2025-02-21T13:13:15.165490Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(5), 2025-02-21T13:13:15.165853Z TRACE hyper::proto::h1::io: received 347 bytes
+thread ThreadId(5), 2025-02-21T13:13:15.166483Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=347
+thread ThreadId(5), 2025-02-21T13:13:15.166870Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(322)
+thread ThreadId(5), 2025-02-21T13:13:15.167693Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(5), 2025-02-21T13:13:15.167878Z DEBUG hyper::proto::h1::conn: incoming body is content-length (25 bytes)
+thread ThreadId(5), 2025-02-21T13:13:15.168442Z TRACE hyper::proto::h1::decode: decode; state=Length(25)
+thread ThreadId(5), 2025-02-21T13:13:15.171326Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(5), 2025-02-21T13:13:15.178581Z  INFO main::handlers::get_handler: thread ThreadId(5),get_body_handler RequestBody { html_code: "sssa" }
+thread ThreadId(5), 2025-02-21T13:13:15.180457Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(4)), req_method=Some(POST)
+thread ThreadId(5), 2025-02-21T13:13:15.180924Z TRACE hyper::proto::h1::encode: sized write, len = 4
+thread ThreadId(5), 2025-02-21T13:13:15.181248Z TRACE hyper::proto::h1::io: buffer.queue self.len=115 buf.len=4
+thread ThreadId(5), 2025-02-21T13:13:15.182031Z DEBUG hyper::proto::h1::io: flushed 119 bytes
+thread ThreadId(5), 2025-02-21T13:13:15.182241Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(5), 2025-02-21T13:13:15.182561Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(5), 2025-02-21T13:13:15.182831Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(3), 2025-02-21T13:13:16.078901Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(3), 2025-02-21T13:13:16.079584Z TRACE hyper::proto::h1::io: received 347 bytes
+thread ThreadId(3), 2025-02-21T13:13:16.081004Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=347
+thread ThreadId(3), 2025-02-21T13:13:16.082959Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(322)
+thread ThreadId(3), 2025-02-21T13:13:16.083344Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(3), 2025-02-21T13:13:16.083617Z DEBUG hyper::proto::h1::conn: incoming body is content-length (25 bytes)
+thread ThreadId(3), 2025-02-21T13:13:16.083957Z TRACE hyper::proto::h1::decode: decode; state=Length(25)
+thread ThreadId(3), 2025-02-21T13:13:16.084303Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2025-02-21T13:13:16.090458Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: KeepAlive, writing: Init, keep_alive: Busy }
+thread ThreadId(3), 2025-02-21T13:13:16.091442Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: KeepAlive, writing: Init, keep_alive: Busy }
+thread ThreadId(3), 2025-02-21T13:13:16.092565Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: KeepAlive, writing: Init, keep_alive: Busy }
+thread ThreadId(3), 2025-02-21T13:13:16.093161Z  INFO main::handlers::get_handler: thread ThreadId(3),get_body_handler RequestBody { html_code: "sssa" }
+thread ThreadId(3), 2025-02-21T13:13:16.095102Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(4)), req_method=Some(POST)
+thread ThreadId(3), 2025-02-21T13:13:16.095886Z TRACE hyper::proto::h1::encode: sized write, len = 4
+thread ThreadId(3), 2025-02-21T13:13:16.096233Z TRACE hyper::proto::h1::io: buffer.queue self.len=115 buf.len=4
+thread ThreadId(3), 2025-02-21T13:13:16.098774Z DEBUG hyper::proto::h1::io: flushed 119 bytes
+thread ThreadId(3), 2025-02-21T13:13:16.099063Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(3), 2025-02-21T13:13:16.099745Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(3), 2025-02-21T13:13:16.100210Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
