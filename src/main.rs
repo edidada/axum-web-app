@@ -1,5 +1,3 @@
-// This file is the entry point of the application. It sets up the Axum server, initializes routes, and starts the application.
-
 use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::thread;
@@ -15,14 +13,35 @@ use tracing_appender::non_blocking::{self, NonBlocking, WorkerGuard};
 use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
+use once_cell::sync::Lazy;
+use rbatis::Rbatis;
+use rbdc_mysql::driver::MysqlDriver;
 
 mod handlers;
 mod routes;
 mod middleware;
 mod config;
 
+// 定义一个静态的 Rbatis 实例
+static RB: Lazy<Rbatis> = Lazy::new(|| {
+    let rb = Rbatis::new();
+    // 初始化数据库连接，你需要根据实际情况修改连接字符串
+    let _ = tokio::runtime::Runtime::new().unwrap().block_on(
+        rb.init(MysqlDriver {}, "mysql://root:password@127.0.0.1:3306/your_database"),
+    );
+    rb
+});
+
 #[tokio::main]
 async fn main() {
+
+    // 使用唯一的 Rbatis 实例执行 SQL 查询
+    let sql = "SELECT * FROM users";
+    let results: Vec<serde_json::Value> = RB.fetch_list(sql, &[]).await?;
+
+    for result in results {
+        println!("{:?}", result);
+    }
     let _guard = set_format_log();
 
     let config_file = Config::from_file();
