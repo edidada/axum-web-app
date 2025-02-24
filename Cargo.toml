@@ -35,10 +35,11 @@ uuid = { version = "1", features = ["v4"] }
 tower = "0.4.13"
 tower-http = "0.3"
 config = "0.11"
-rbatis = "=4.4.21"
-rbdc-mysql = "=4.4.20" # 如果你使用 MySQL 数据库
+rbatis = "4.5.33"
+rbdc-mysql = "4.5.12" # 如果你使用 MySQL 数据库
 generic-array = "=1.0.0"
 once_cell = "1.19.0"
+rbs = "0.1"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }

@@ -1,3 +1,4 @@
+use std::error::Error;
 use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::thread;
@@ -14,34 +15,53 @@ use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use once_cell::sync::Lazy;
-use rbatis::Rbatis;
+use rbatis::rbatis::RBatis;
 use rbdc_mysql::driver::MysqlDriver;
+use rbs::Value;
 
 mod handlers;
 mod routes;
 mod middleware;
 mod config;
 
-// 定义一个静态的 Rbatis 实例
-static RB: Lazy<Rbatis> = Lazy::new(|| {
-    let rb = Rbatis::new();
-    // 初始化数据库连接，你需要根据实际情况修改连接字符串
-    let _ = tokio::runtime::Runtime::new().unwrap().block_on(
-        rb.init(MysqlDriver {}, "mysql://root:password@127.0.0.1:3306/your_database"),
-    );
-    rb
-});
+// 定义静态的 RBatis 实例
+static mut RB: Option<RBatis> = None;
+
+// 异步初始化函数
+async fn init_rbatis() -> Result<(), Box<dyn Error>> {
+    let rb = RBatis::new();
+    let init_result = rb.init(MysqlDriver {}, "mysql://github:5%Edidadas@114.55.62.154:3306/testdb");
+    // println!("Type of init_result: {}", std::any::type_name::<_>());
+    // init_result.await?;
+    unsafe {
+        RB = Some(rb);
+    }
+    Ok(())
+}
+
+// 获取单例的函数
+fn get_rbatis() -> &'static RBatis {
+    unsafe {
+        RB.as_ref().expect("RBatis is not initialized")
+    }
+}
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
+    // 初始化 RBatis
+    init_rbatis().await?;
 
+    // 使用单例
+    let rb = get_rbatis();
+    // 这里可以进行后续的数据库操作
     // 使用唯一的 Rbatis 实例执行 SQL 查询
     let sql = "SELECT * FROM users";
-    let results: Vec<serde_json::Value> = RB.fetch_list(sql, &[]).await?;
+    let results: Vec<Value> = rb.fetch(sql, vec![]).await?;
 
     for result in results {
         println!("{:?}", result);
     }
+
     let _guard = set_format_log();
 
     let config_file = Config::from_file();
@@ -56,12 +76,14 @@ async fn main() {
         );
 
     let addr = SocketAddr::from(([127, 0, 0, 1], config_file.webapp.port));
-    tracing::info!("Listening on {}", addr);
+    tracing::info!("thread {:?},Listening on {}", thread::current().id(), addr);
 
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
         .unwrap();
+
+    Ok(())
 }
 
 fn set_format_log() -> WorkerGuard {
