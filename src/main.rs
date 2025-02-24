@@ -30,9 +30,7 @@ static mut RB: Option<RBatis> = None;
 // 异步初始化函数
 async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let rb = RBatis::new();
-    let init_result = rb.init(MysqlDriver {}, "mysql://github:5%Edidadas@114.55.62.154:3306/testdb");
-    // println!("Type of init_result: {}", std::any::type_name::<_>());
-    // init_result.await?;
+    rb.init(MysqlDriver {}, "mysql://github:5%Edidadas@114.55.62.154:3306/testdb")?;
     unsafe {
         RB = Some(rb);
     }
