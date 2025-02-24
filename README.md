@@ -370,3 +370,13 @@ Remove-Item -Recurse -Force $env:USERPROFILE\.cargo\git
 Remove-Item -Recurse -Force $env:USERPROFILE\.cargo\registry
 # 重新运行更新命令
 cargo update -p rbatis --precise 4.5.11
+
+cargo run --package axum-web-app --bin main --profile dev
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+error: rustc 1.80.0 is not supported by the following package:
+  generic-array@1.2.0 requires rustc 1.83
+Either upgrade rustc or select compatible dependency versions with
+`cargo update <name>@<current-ver> --precise <compatible-ver>`
+where `<compatible-ver>` is the latest version supporting rustc 1.80.0
