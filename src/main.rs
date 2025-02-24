@@ -30,7 +30,7 @@ static mut RB: Option<RBatis> = None;
 // 异步初始化函数
 async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let rb = RBatis::new();
-    rb.init(MysqlDriver {}, "mysql://github:5%Edidadas@114.55.62.154:3306/testdb")?;
+    rb.init(MysqlDriver {}, "mysql://github:5%25Edidadas@114.55.62.154:3306/testdb")?;
     unsafe {
         RB = Some(rb);
     }
@@ -53,7 +53,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let rb = get_rbatis();
     // 这里可以进行后续的数据库操作
     // 使用唯一的 Rbatis 实例执行 SQL 查询
-    let sql = "SELECT * FROM users";
+    let sql = "SELECT * FROM users1";
     let results: Vec<Value> = rb.query_decode(sql, vec![]).await?;
 
     for result in results {
