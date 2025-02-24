@@ -73,6 +73,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 .layer(Extension(redis_client))
         );
 
+    // Change the port number here if necessary
     let addr = SocketAddr::from(([127, 0, 0, 1], config_file.webapp.port));
     tracing::info!("thread {:?},Listening on {}", thread::current().id(), addr);
 

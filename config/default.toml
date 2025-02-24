@@ -2,7 +2,7 @@
 username = "edidada"
 password = "Pass123Qwe"
 [webapp]
-port = 9001
+port = 9002
 redisurl = "redis://127.0.0.1/"
 [redis]
 ip = "127.0.0.1"

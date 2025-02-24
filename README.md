@@ -380,3 +380,51 @@ error: rustc 1.80.0 is not supported by the following package:
 Either upgrade rustc or select compatible dependency versions with
 `cargo update <name>@<current-ver> --precise <compatible-ver>`
 where `<compatible-ver>` is the latest version supporting rustc 1.80.0
+
+
+
+thread ThreadId(1), 2025-02-24T05:34:31.163070Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread 'main' panicked at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hyper-0.14.32\src\server\server.rs:81:13:
+error binding to 127.0.0.1:9001: error creating server listener: 以一种访问权限不允许的方式做了一个访问套接字的尝试。 (os error 10013)
+stack backtrace:
+0: std::panicking::begin_panic_handler
+at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\std\src\panicking.rs:652
+1: core::panicking::panic_fmt
+at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9/library\core\src\panicking.rs:72
+2: hyper::server::server::impl$1::bind::closure$0
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hyper-0.14.32\src\server\server.rs:81
+3: enum2$<core::result::Result<hyper::server::tcp::AddrIncoming,hyper::error::Error> >::unwrap_or_else<hyper::server::tcp::AddrIncoming,hyper::error::Error,hyper::server::server::impl$1::bind::closure_env$0>
+at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9\library\core\src\result.rs:1456
+4: hyper::server::server::Server<hyper::server::tcp::AddrIncoming,tuple$<>,enum2$<hyper::common::exec::Exec> >::bind
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\hyper-0.14.32\src\server\server.rs:80
+5: main::main::async_block$0
+at .\src\main.rs:79
+6: tokio::runtime::park::impl$4::block_on::closure$0<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\park.rs:284
+7: tokio::runtime::coop::with_budget
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\coop.rs:107
+8: tokio::runtime::coop::budget
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\coop.rs:73
+9: tokio::runtime::park::CachedParkThread::block_on<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\park.rs:284
+10: tokio::runtime::context::blocking::BlockingRegionGuard::block_on<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\context\blocking.rs:66
+11: tokio::runtime::scheduler::multi_thread::impl$0::block_on::closure$0<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\scheduler\multi_thread\mod.rs:87
+12: tokio::runtime::context::runtime::enter_runtime<tokio::runtime::scheduler::multi_thread::impl$0::block_on::closure_env$0<enum2$<main::main::async_block_env$0> >,enum2$<core::result::Result<tuple$<>,alloc::boxed::Box<dyn$<core::error::Error>,alloc::alloc::G
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\context\runtime.rs:65
+13: tokio::runtime::scheduler::multi_thread::MultiThread::block_on<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\scheduler\multi_thread\mod.rs:86
+14: tokio::runtime::runtime::Runtime::block_on_inner<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\runtime.rs:370
+15: tokio::runtime::runtime::Runtime::block_on<enum2$<main::main::async_block_env$0> >
+at C:\Users\edida\.cargo\registry\src\index.crates.io-6f17d22bba15001f\tokio-1.43.0\src\runtime\runtime.rs:342
+16: main::main
+at .\src\main.rs:84
+17: core::ops::function::FnOnce::call_once<enum2$<core::result::Result<tuple$<>,alloc::boxed::Box<dyn$<core::error::Error>,alloc::alloc::Global> > > (*)(),tuple$<> >
+at /rustc/051478957371ee0084a7c0913941d2a8c4757bb9\library\core\src\ops\function.rs:250
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+error: process didn't exit successfully: `target\debug\main.exe` (exit code: 101)
+
+Process finished with exit code 101
+
