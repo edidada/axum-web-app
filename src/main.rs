@@ -56,7 +56,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // 这里可以进行后续的数据库操作
     // 使用唯一的 Rbatis 实例执行 SQL 查询
     let sql = "SELECT * FROM users";
-    let results: Vec<Value> = rb.fetch(sql, vec![]).await?;
+    let results: Vec<Value> = rb.query_decode(sql, vec![]).await?;
 
     for result in results {
         println!("{:?}", result);
