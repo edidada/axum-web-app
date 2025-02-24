@@ -4,12 +4,8 @@ use axum::{
     http::{Request, StatusCode},
     response::IntoResponse,
     middleware::Next,
-    Extension,
 };
 use redis::{AsyncCommands, Client};
-use std::task::{Context, Poll};
-use tower::Service;
-use tracing::{error, info};
 use crate::config::Config;
 
 pub struct ValidSession(pub String);

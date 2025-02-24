@@ -1,4 +1,3 @@
-use std::thread;
 use axum::{response::Html, Json};
 use ammonia::clean;
 use serde::Deserialize;

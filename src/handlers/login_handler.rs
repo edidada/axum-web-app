@@ -1,7 +1,6 @@
 use axum::{response::Html, Json, extract::Extension};
 use serde::Deserialize;
 use redis::AsyncCommands;
-use std::time::{SystemTime, UNIX_EPOCH};
 use crate::config::Config;
 
 #[derive(Deserialize)]
