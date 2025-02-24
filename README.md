@@ -328,3 +328,45 @@ Transfer rate:          22.33 [Kbytes/sec] received
 - **Time per request**：每个请求平均花费的时间，有两个值，第一个是单个请求的平均时间，第二个是所有并发请求的平均时间。
 
 通过分析这些指标，你就能了解目标服务在特定并发情况下的性能表现。 
+
+Cargo.toml里面
+
+rbatis = "4.5.0"
+
+Cargo.lock
+
+[[package]]
+name = "rbatis"
+version = "4.5.50"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ba14362c725503232be91d999f239c81e5de926b7edf63c2719c1380cfa4e855"
+dependencies = [
+ "async-trait",
+ "dark-std",
+ "futures",
+ "futures-core",
+ "hex",
+ "log",
+ "parking_lot",
+ "rand",
+ "rbatis-codegen",
+ "rbatis-macro-driver",
+ "rbdc",
+ "rbdc-pool-fast",
+ "rbs",
+ "serde 1.0.217",
+ "sql-parser",
+]
+
+
+cargo update
+    Updating crates.io index
+error: failed to select a version for the requirement `rbatis = "=4.5.11"`
+candidate versions found which didn't match: 4.5.50, 4.5.49, 4.5.48, ...
+location searched: crates.io index  https://crates.io/crates/rbatis/4.5.11/dependencies存在，如何更新candidate versions
+
+# 删除本地的 crates.io 索引缓存
+Remove-Item -Recurse -Force $env:USERPROFILE\.cargo\git
+Remove-Item -Recurse -Force $env:USERPROFILE\.cargo\registry
+# 重新运行更新命令
+cargo update -p rbatis --precise 4.5.11

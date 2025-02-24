@@ -112,3 +112,13 @@ thread ThreadId(2), 2025-02-21T13:16:57.813490Z DEBUG hyper::proto::h1::io: flus
 thread ThreadId(2), 2025-02-21T13:16:57.816537Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
 thread ThreadId(2), 2025-02-21T13:16:57.817965Z TRACE hyper::proto::h1::conn: Conn::read_head
 thread ThreadId(2), 2025-02-21T13:16:57.818477Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(4), 2025-02-21T13:22:01.674409Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(4), 2025-02-21T13:22:01.674758Z TRACE hyper::proto::h1::io: received 0 bytes
+thread ThreadId(4), 2025-02-21T13:22:01.675035Z TRACE hyper::proto::h1::io: parse eof
+thread ThreadId(4), 2025-02-21T13:22:01.675298Z TRACE hyper::proto::h1::conn: State::close_read()
+thread ThreadId(4), 2025-02-21T13:22:01.675538Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(4), 2025-02-21T13:22:01.675895Z TRACE hyper::proto::h1::conn: State::close_write()
+thread ThreadId(4), 2025-02-21T13:22:01.676115Z TRACE hyper::proto::h1::conn: State::close_read()
+thread ThreadId(4), 2025-02-21T13:22:01.676365Z TRACE hyper::proto::h1::conn: State::close_write()
+thread ThreadId(4), 2025-02-21T13:22:01.676604Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Closed, writing: Closed, keep_alive: Disabled }
+thread ThreadId(4), 2025-02-21T13:22:01.677050Z TRACE hyper::proto::h1::conn: shut down IO complete
