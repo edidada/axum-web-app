@@ -44,6 +44,9 @@ fn get_rbatis() -> &'static RBatis {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    // 初始化 RBatis
+    init_rbatis().await?;
+
     let _guard = set_format_log();
 
     let config_file = Config::from_file();
@@ -54,11 +57,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
         Client::open("redis://127.0.0.1:6379").unwrap()
     });
 
+    // 获取 RBatis 实例
+    let rb = get_rbatis();
+
     let app = Router::new()
         .merge(routes::setup_routes())
         .layer(
             ServiceBuilder::new()
                 .layer(Extension(redis_client))
+                .layer(Extension(rb))
         );
 
     // Change the port number here if necessary
