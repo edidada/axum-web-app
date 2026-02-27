@@ -1,5 +1,27 @@
 # Axum Web Application
 
+```shell
+ibqodeMBP:axum-web-app ibqo$ cargo update -p cpufeatures --precise 0.2.17
+error: There are multiple `cpufeatures` packages in your project, and the specification `cpufeatures` is ambiguous.
+Please re-run this command with one of the following specifications:
+cpufeatures@0.2.17
+cpufeatures@0.3.0
+
+
+
+
+cargo update cpufeatures@0.3.0 --precise 0.2.17
+    Updating crates.io index
+error: failed to select a version for the requirement `cpufeatures = "^0.3"`
+candidate versions found which didn't match: 0.2.17
+location searched: crates.io index
+required by package `chacha20 v0.10.0`
+    ... which satisfies dependency `chacha20 = "^0.10.0"` (locked to 0.10.0) of package `rand v0.10.0`
+    ... which satisfies dependency `rand = "^0.10"` (locked to 0.10.0) of package `rbatis v4.7.2`
+    ... which satisfies dependency `rbatis = "^4.5.33"` (locked to 4.7.2) of package `axum-web-app v0.1.0 (/Users/ibqo/Develop/git/github/rust/axum-web-app)`
+ibqodeMBP:axum-web-app ibqo$ 
+```
+
 This is a simple web application built using the Axum framework in Rust. The application demonstrates how to set up a basic web server, handle requests, and define routes.
 
 ## Project Structure
