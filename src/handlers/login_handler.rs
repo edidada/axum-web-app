@@ -1,6 +1,7 @@
 use axum::{response::Html, Json, extract::Extension};
 use serde::Deserialize;
 use redis::AsyncCommands;
+use uuid::Uuid;
 use crate::config::Config;
 
 #[derive(Deserialize)]
@@ -19,7 +20,7 @@ pub async fn login_handler(
     // Validate username and password
     if payload.username == config.auth.username && payload.password == config.auth.password {
         let mut conn = redis_client.get_async_connection().await.unwrap();
-        let session_id = uuid::Uuid::new_v4().to_string();
+        let session_id = Uuid::new_v4().to_string();
         let expiration = config.redis.expiration;
         let key = format!("{}{}", config.redis.key_prefix, session_id);
 

@@ -1,15 +1,17 @@
 # Axum Web Application
 
+依赖问题：
 ```shell
 ibqodeMBP:axum-web-app ibqo$ cargo update -p cpufeatures --precise 0.2.17
 error: There are multiple `cpufeatures` packages in your project, and the specification `cpufeatures` is ambiguous.
 Please re-run this command with one of the following specifications:
 cpufeatures@0.2.17
 cpufeatures@0.3.0
+```
 
 
-
-
+尝试解决：
+```shell
 cargo update cpufeatures@0.3.0 --precise 0.2.17
     Updating crates.io index
 error: failed to select a version for the requirement `cpufeatures = "^0.3"`
@@ -100,7 +102,7 @@ cargo run --color=always --package axum-web-app --bin main --profile dev
 
 C:/Users/edida/.cargo/bin/cargo.exe run --color=always --package axum-web-app --bin axum-web-app --profile dev
 
-powershell
+```powershell
 $env:RUST_BACKTRACE = "full"
 
 
@@ -125,7 +127,7 @@ C:/Users/edida/.cargo/bin/cargo.exe build --message-format=json-diagnostic-rende
 cargo run --package axum-web-app --bin main --profile dev
 
 cargo test -- --test-threads=1
-
+```
 
 你看到的像 `[2m`、`[0m`、`[32m` 这样的字符序列其实是 ANSI 转义序列（ANSI escape sequences），它们用于在终端中实现文本样式（如颜色、加粗、下划线等）的控制。当这些序列没有被正确处理时，就会以原始的形式显示出来，导致日志中出现这些看起来奇怪的字符。
 
@@ -159,15 +161,11 @@ fn main() {
 
 #### 2. 使用支持 ANSI 转义序列的工具查看日志
 如果你希望保留日志中的样式，可以使用支持 ANSI 转义序列的工具来查看日志。例如，在 Linux 或 macOS 系统中，可以使用 `less -R` 命令来查看包含 ANSI 样式的日志文件：
-
 ```bash
 less -R your_log_file.log
-```
 
 在 Windows 系统中，一些终端模拟器（如 Windows Terminal）也支持 ANSI 转义序列，你可以在这些终端中查看日志以正确显示样式。
-
 如果你想要在配置日志记录器时添加 `.with_ansi(false)` 来禁用 ANSI 样式，并且结合你提供的 `FormatTime` 实现，下面是一个完整的示例，展示了如何使用 `tracing` 和 `tracing-subscriber` 来完成这件事。
-
 ### 完整代码示例
 ```rust
 use chrono::{Local, TimeZone};
@@ -199,25 +197,20 @@ fn main() {
     info!("This is an info log message.");
 }
 ```
-
 ### 代码解释
 1. `LocalTimer` 结构体和 `FormatTime` 实现：
     - 定义了 `LocalTimer` 结构体，用于自定义时间格式化。
     - 实现了 `FormatTime` trait 的 `format_time` 方法，该方法使用 `chrono` 库将当前本地时间格式化为 `%Y-%m-%d %H:%M:%S` 的形式，并写入到 `Writer` 中。
-
 2. 日志记录器配置：
     - 使用 `fmt::Subscriber::builder()` 构建一个日志订阅者。
     - `with_env_filter(EnvFilter::from_default_env())`：根据环境变量配置日志过滤规则。
     - `with_timer(LocalTimer)`：使用自定义的 `LocalTimer` 作为时间格式化器。
     - `with_ansi(false)`：禁用 ANSI 转义序列，这样日志输出就不会包含用于样式控制的特殊字符。
     - `finish()`：完成订阅者的构建。
-
 3. 设置全局日志订阅者：
     - 使用 `tracing::subscriber::set_global_default` 方法将构建好的订阅者设置为全局日志订阅者。
-
 4. 记录日志：
     - 使用 `info!` 宏记录一条信息级别的日志。
-
 ### 依赖添加
 确保在 `Cargo.toml` 文件中添加必要的依赖：
 ```toml
@@ -226,18 +219,14 @@ tracing = "0.1"
 tracing-subscriber = "0.3"
 chrono = "0.4"
 ```
-
 这样，日志输出就不会包含 ANSI 转义序列，并且会使用你自定义的时间格式。 
 
 ```shell
 cargo tree > deps.txt
 ```
-
 ## ammonia v3.3.0库干嘛的？
 `ammonia` 是一个用 Rust 编写的 HTML 清理库，版本 3.3.0 是其特定版本。它的主要作用是对输入的 HTML 字符串进行过滤和清理，以确保输出的 HTML 是安全的，避免潜在的安全风险，如跨站脚本攻击（XSS）。以下详细介绍其功能和使用场景：
-
 ### 主要功能
-
 #### 1. 过滤危险标签和属性
 `ammonia` 可以移除 HTML 中可能包含恶意脚本的标签（如 `<script>`）和危险属性（如 `onclick`、`onload` 等事件处理属性）。例如，以下 HTML 代码包含一个恶意的 `<script>` 标签：
 ```html
@@ -247,7 +236,6 @@ cargo tree > deps.txt
 ```html
 <p>Some text </p>
 ```
-
 #### 2. 允许白名单内的标签和属性
 你可以配置 `ammonia` 允许特定的 HTML 标签和属性通过过滤。默认情况下，`ammonia` 有一个预定义的白名单，包含常见的安全标签（如 `<p>`、`<a>`、`<img>` 等）和属性。你也可以根据需要自定义白名单。例如，允许 `<a>` 标签的 `target` 属性：
 ```rust
@@ -263,18 +251,13 @@ println!("{}", cleaned);
 
 #### 3. 处理 HTML 实体
 `ammonia` 会正确处理 HTML 实体，确保它们在清理过程中不会被破坏。例如，`&lt;` 会被保留为 `&lt;`，而不是被错误地解析或修改。
-
 ### 使用场景
-
 #### 1. 内容管理系统（CMS）
 在 CMS 中，用户可能会输入包含 HTML 代码的内容。为了防止恶意用户注入恶意脚本，需要对用户输入的 HTML 进行清理。`ammonia` 可以确保只有安全的 HTML 内容被保存和显示。
-
 #### 2. 论坛和评论系统
 论坛和评论系统通常允许用户使用 HTML 格式化他们的帖子和评论。使用 `ammonia` 可以过滤掉危险的 HTML 代码，保护其他用户免受 XSS 攻击。
-
 #### 3. 网站表单输入
 当网站接收用户输入的 HTML 内容（如富文本编辑器的输出）时，使用 `ammonia` 可以对输入进行清理，确保网站的安全性。
-
 ### 简单示例代码
 以下是一个简单的使用 `ammonia` 清理 HTML 代码的示例：
 ```rust
@@ -356,7 +339,7 @@ Cargo.toml里面
 rbatis = "4.5.0"
 
 Cargo.lock
-
+```
 [[package]]
 name = "rbatis"
 version = "4.5.50"
@@ -379,7 +362,7 @@ dependencies = [
  "serde 1.0.217",
  "sql-parser",
 ]
-
+```
 
 cargo update
     Updating crates.io index
@@ -392,7 +375,7 @@ Remove-Item -Recurse -Force $env:USERPROFILE\.cargo\git
 Remove-Item -Recurse -Force $env:USERPROFILE\.cargo\registry
 # 重新运行更新命令
 cargo update -p rbatis --precise 4.5.11
-
+```shell
 cargo run --package axum-web-app --bin main --profile dev
     Blocking waiting for file lock on package cache
     Blocking waiting for file lock on package cache
@@ -449,4 +432,4 @@ note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose bac
 error: process didn't exit successfully: `target\debug\main.exe` (exit code: 101)
 
 Process finished with exit code 101
-
+```

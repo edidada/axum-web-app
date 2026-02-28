@@ -9,7 +9,7 @@ pub struct Input {
     custom_password: String,
 }
 
-pub async fn post_handler(Form(input): Form<Input>) -> Html<String> {
+pub async fn post_handler(Form(_input): Form<Input>) -> Html<String> {
     let html_code = "<h1>Hello, World!</h1><script>alert('XSS');</script>";
     let encoded_html = clean(html_code);
     Html(format!(

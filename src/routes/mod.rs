@@ -3,7 +3,7 @@ use crate::handlers::get_handler::{get_handler, get_body_handler};
 use crate::handlers::post_handler::post_handler;
 use crate::handlers::login_handler::login_handler;
 use crate::handlers::logout_handler::logout_handler;
-use crate::handlers::paginate_handler::paginate_handler;
+use crate::handlers::paginate_handler::{paginate_handler, paginate_with_params_handler};
 use crate::middleware::session_validation::validate_session;
 
 pub fn setup_routes() -> Router {
@@ -14,4 +14,5 @@ pub fn setup_routes() -> Router {
         .route("/post", post(post_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/getBody", post(get_body_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/paginate", post(paginate_handler).layer(axum::middleware::from_fn(validate_session)))
+        .route("/paginate-with-params", post(paginate_with_params_handler).layer(axum::middleware::from_fn(validate_session)))
 }
