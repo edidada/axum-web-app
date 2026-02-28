@@ -14,7 +14,6 @@ use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
-use rbatis::LogLevel;
 use rbdc_mysql::driver::MysqlDriver;
 use rbs::Value;
 
@@ -29,8 +28,7 @@ static mut RB: Option<RBatis> = None;
 // 异步初始化函数
 async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let rb = RBatis::new();
-    // 启用 SQL 日志
-    rb.set_log_level(rbatis::LogLevel::Debug);
+    // rbatis 默认已经启用了 SQL 日志，日志级别为 Debug
     rb.init(MysqlDriver {}, "mysql://github:5%25Edidadas@114.55.62.154:3306/testdb")?;
     unsafe {
         RB = Some(rb);

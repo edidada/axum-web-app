@@ -918,3 +918,4 @@ thread ThreadId(17), 2026-02-28T01:23:30.006158Z DEBUG hyper::proto::h1::io: flu
 thread ThreadId(17), 2026-02-28T01:23:30.006371Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
 thread ThreadId(17), 2026-02-28T01:23:30.006605Z TRACE hyper::proto::h1::conn: Conn::read_head
 thread ThreadId(17), 2026-02-28T01:23:30.006812Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(1), 2026-02-28T03:38:57.832895Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
