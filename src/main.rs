@@ -82,6 +82,9 @@ async fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn set_format_log() -> WorkerGuard {
+    // 初始化 log 到 tracing 的桥接
+    tracing_log::LogTracer::init().expect("Failed to init LogTracer");
+    
     // 创建一个滚动文件追加器
     let file_appender = tracing_appender::rolling::daily("logs", "app.log");
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
@@ -91,12 +94,14 @@ fn set_format_log() -> WorkerGuard {
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
         .event_format(ThreadIdFormatter)
         .with_ansi(false) // 禁用 ANSI 样式
-        .with_writer(non_blocking);
+        .with_writer(non_blocking)
+        .with_filter(tracing_subscriber::filter::LevelFilter::DEBUG);
 
     // 创建一个格式化层，将日志输出到控制台
     let console_layer = fmt::layer()
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
-        .event_format(ThreadIdFormatter);
+        .event_format(ThreadIdFormatter)
+        .with_filter(tracing_subscriber::filter::LevelFilter::DEBUG);
 
     // 创建一个订阅者，将文件层和控制台层添加到订阅者中
     let subscriber = Registry::default()
