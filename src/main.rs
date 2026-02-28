@@ -47,28 +47,25 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // 初始化 RBatis
     init_rbatis().await?;
 
-    // 使用单例
-    let rb = get_rbatis();
-    // 这里可以进行后续的数据库操作
-    // 使用唯一的 Rbatis 实例执行 SQL 查询
-    let sql = "SELECT * FROM users1";
-    let results: Vec<Value> = rb.query_decode(sql, vec![]).await?;
-
-    for result in results {
-        println!("{:?}", result);
-    }
-
     let _guard = set_format_log();
 
     let config_file = Config::from_file();
     // Initialize Redis client
-    let redis_client = Client::open(config_file.webapp.redisurl).unwrap();
+    let redis_client = Client::open(config_file.webapp.redisurl).unwrap_or_else(|e| {
+        eprintln!("Warning: Failed to connect to Redis: {}. Using fallback.", e);
+        // 使用本地 Redis 作为 fallback
+        Client::open("redis://127.0.0.1:6379").unwrap()
+    });
+
+    // 获取 RBatis 实例
+    let rb = get_rbatis();
 
     let app = Router::new()
         .merge(routes::setup_routes())
         .layer(
             ServiceBuilder::new()
                 .layer(Extension(redis_client))
+                .layer(Extension(rb))
         );
 
     // Change the port number here if necessary
