@@ -94,14 +94,12 @@ fn set_format_log() -> WorkerGuard {
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
         .event_format(ThreadIdFormatter)
         .with_ansi(false) // 禁用 ANSI 样式
-        .with_writer(non_blocking)
-        .with_filter(tracing_subscriber::filter::LevelFilter::DEBUG);
+        .with_writer(non_blocking);
 
     // 创建一个格式化层，将日志输出到控制台
     let console_layer = fmt::layer()
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
-        .event_format(ThreadIdFormatter)
-        .with_filter(tracing_subscriber::filter::LevelFilter::DEBUG);
+        .event_format(ThreadIdFormatter);
 
     // 创建一个订阅者，将文件层和控制台层添加到订阅者中
     let subscriber = Registry::default()

@@ -1628,3 +1628,4 @@ thread ThreadId(3), 2026-02-28T04:34:59.281774Z TRACE hyper::proto::h1::conn: St
 thread ThreadId(3), 2026-02-28T04:34:59.281890Z TRACE hyper::proto::h1::conn: State::close_write()
 thread ThreadId(3), 2026-02-28T04:34:59.282010Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Closed, writing: Closed, keep_alive: Disabled }
 thread ThreadId(3), 2026-02-28T04:34:59.282129Z TRACE hyper::proto::h1::conn: shut down IO complete
+thread ThreadId(1), 2026-02-28T11:34:18.106592Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
