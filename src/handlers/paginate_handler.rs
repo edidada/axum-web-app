@@ -90,7 +90,7 @@ pub async fn paginate_query_with_params(
     sql: &str,
     page: u32,
     page_size: u32,
-    params: Vec<serde_json::Value>,
+    _params: Vec<serde_json::Value>,
 ) -> Result<PaginateResponse, Box<dyn Error>> {
     // 计算偏移量
     let offset = (page - 1) * page_size;
@@ -111,7 +111,7 @@ pub async fn paginate_query_with_params(
         // 遍历键值对查找 COUNT(*)
         for (key, value) in map {
             if let Value::String(key_str) = key {
-                if *key_str == "COUNT(*)".to_string() {
+                if key_str == "COUNT(*)" {
                     match value {
                         Value::I32(count) => total = *count as u64,
                         Value::I64(count) => total = *count as u64,

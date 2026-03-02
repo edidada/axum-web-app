@@ -3,7 +3,7 @@ use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::thread;
 use chrono::Local;
-use tracing_subscriber::{fmt, Registry};
+use tracing_subscriber::{fmt, Registry, Layer};
 use tracing_subscriber::fmt::format::{Format, Writer};
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
@@ -21,6 +21,7 @@ mod handlers;
 mod routes;
 mod middleware;
 mod config;
+mod domain;
 
 // 定义静态的 RBatis 实例
 static mut RB: Option<RBatis> = None;
