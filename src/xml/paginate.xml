@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="paginate">
+    <select id="paginateQuery" resultType="map">
+        ${sql} LIMIT #{pageSize} OFFSET #{offset}
+    </select>
+    <select id="countQuery" resultType="map">
+        SELECT COUNT(*) FROM (${sql}) as total
+    </select>
+</mapper>
