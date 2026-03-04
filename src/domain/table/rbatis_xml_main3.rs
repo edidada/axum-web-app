@@ -2,23 +2,7 @@ use rbatis::rbatis::RBatis;
 use rbdc_sqlite::driver::SqliteDriver;
 use rbatis::PageRequest;
 
-// 定义本地的 domain 模块结构
-mod domain {
-    pub mod dto {
-        // 包含 dict_dto.rs 文件
-        include!("../dto/dict_dto.rs");
-    }
-    pub mod table {
-        // 包含 sys_dict.rs 文件
-        include!("sys_dict.rs");
-        // 导出 dto 模块
-        pub use super::dto;
-    }
-}
-
-// 使用本地模块中的结构体
-use domain::table::sys_dict::SysDict;
-use domain::table::dto::dict_dto::DictPageDTO;
+mod sys_dict;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -42,7 +26,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // 测试增加数据
     println!("\n=== 测试增加数据 ===");
-    let dict = SysDict {
+    let dict = sys_dict::SysDict {
         id: Some("5".to_string()),
         name: Some("测试字典5".to_string()),
         code: Some("test_dict5".to_string()),
@@ -50,7 +34,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         create_date: Some(rbatis::rbdc::DateTime::now()),
     };
     
-    let result = SysDict::insert(&rb, &dict).await;
+    let result = sys_dict::SysDict::insert(&rb, &dict).await;
     match result {
         Ok(_) => println!("增加数据成功"),
         Err(e) => println!("增加数据失败: {:?}", e),
@@ -58,7 +42,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // 测试查询数据
     println!("\n=== 测试查询数据 ===");
-    let result = SysDict::select_all(&rb).await;
+    let result = sys_dict::SysDict::select_all(&rb).await;
     match result {
         Ok(dicts) => {
             println!("查询到 {} 条数据", dicts.len());
@@ -72,12 +56,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 测试使用 select_page API
     println!("\n=== 测试使用 select_page API ===");
     let page_request = PageRequest::new(1, 10);
-    let dto = DictPageDTO {
+    let dto = sys_dict::DictPageDTO {
         name: None,
         code: None,
     };
     
-    let result = SysDict::select_page(&rb, &page_request, &dto).await;
+    let result = sys_dict::SysDict::select_page(&rb, &page_request, &dto).await;
     match result {
         Ok(page) => {
             println!("总记录数: {}", page.total);
