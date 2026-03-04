@@ -31,6 +31,10 @@ path = "src/bin/rbatis/rbatis_xml_main.rs"
 name = "rbatis_xml_main2"
 path = "src/bin/rbatis/rbatis_xml_main2.rs"
 
+[[bin]]
+name = "rbatis_xml_main3"
+path = "src/domain/table/rbatis_xml_main3.rs"
+
 [dependencies]
 axum = "0.5"
 tokio = { version = "1", features = ["full"] }
