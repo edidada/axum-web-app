@@ -3,7 +3,7 @@ use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::thread;
 use chrono::Local;
-use tracing_subscriber::{fmt, Registry, Layer};
+use tracing_subscriber::{fmt, Registry};
 use tracing_subscriber::fmt::format::{Format, Writer};
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
