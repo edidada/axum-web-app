@@ -4,7 +4,6 @@ use rbatis::{crud, html_sql};
 use rbatis::rbdc::DateTime;
 use rbatis::PageRequest;
 
-///dictionary table
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct SysDict {
     pub id: Option<String>,
