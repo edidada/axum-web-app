@@ -1,8 +1,9 @@
 use std::error::Error;
 use axum::{Extension, Router};
 use std::net::SocketAddr;
-use std::thread;
+use std::{fs, thread};
 use chrono::Local;
+use log::LevelFilter;
 use tracing_subscriber::{fmt, Registry};
 use tracing_subscriber::fmt::format::{Format, Writer};
 use tracing_subscriber::fmt::time::FormatTime;
@@ -16,6 +17,7 @@ use crate::config::Config;
 use rbatis::rbatis::RBatis;
 use rbdc_mysql::driver::MysqlDriver;
 use rbs::Value;
+use simplelog::{CombinedLogger, WriteLogger};
 
 mod handlers;
 mod routes;
@@ -83,6 +85,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn set_format_log() -> WorkerGuard {
+    // Set up logging
+    // fs::create_dir_all("logs").unwrap();
+    // let log_file = std::fs::File::create("logs/rbatis.log").unwrap();
+    // CombinedLogger::init(vec![
+    //     WriteLogger::new(LevelFilter::Debug, simplelog::Config::default(), log_file),
+    // ]).unwrap();
     // 初始化 log 到 tracing 的桥接
     tracing_log::LogTracer::init().expect("Failed to init LogTracer");
     

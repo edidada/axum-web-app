@@ -710,3 +710,37 @@ thread ThreadId(9), 2026-03-05T01:31:47.532548Z TRACE hyper::proto::h1::conn: sh
 2026-03-05T01:32:42.198601Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
 2026-03-05T01:32:42.198608Z  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:31:46.7709253+08:00)) }
 2026-03-05T01:32:42.198614Z  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:32:42.1940588+08:00)) }
+2026-03-05T07:37:14.864422Z  INFO main::tests: === 创建表 ===
+2026-03-05T07:37:14.867679Z  INFO main::tests: === 表创建成功 ===
+2026-03-05T07:37:14.867726Z  INFO main::tests: === 测试增加数据 ===
+2026-03-05T07:37:14.871226Z  INFO main::tests: 增加数据成功
+2026-03-05T07:37:14.871270Z  INFO main::tests: === 测试查询数据 ===
+2026-03-05T07:37:14.872413Z  INFO main::tests: 查询到 11 条数据
+2026-03-05T07:37:14.872434Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T07:37:14.872459Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T07:37:14.872466Z  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:31:46.7709253+08:00)) }
+2026-03-05T07:37:14.872473Z  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:32:42.1940588+08:00)) }
+2026-03-05T07:37:14.872480Z  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:28:09.6261201+08:00)) }
+2026-03-05T07:37:14.872487Z  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:30:41.9572873+08:00)) }
+2026-03-05T07:37:14.872494Z  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:31:05.9101622+08:00)) }
+2026-03-05T07:37:14.872500Z  INFO main::tests: SysDict { id: Some("6351927435104568148"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:14.8723644+08:00)) }
+2026-03-05T07:37:14.872507Z  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("测试字典1"), code: Some("test_dict1"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:28.7939365+08:00)) }
+2026-03-05T07:37:14.872514Z  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
+2026-03-05T07:37:14.872521Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
+2026-03-05T07:37:14.872532Z  INFO main::tests: === 测试使用 select_page API ===
+2026-03-05T07:37:14.874169Z  INFO main::tests: 总记录数: 0
+2026-03-05T07:37:14.874204Z  INFO main::tests: 当前页码: 1
+2026-03-05T07:37:14.874210Z  INFO main::tests: 每页大小: 10
+2026-03-05T07:37:14.874214Z  INFO main::tests: 查询到 11 条数据
+2026-03-05T07:37:14.874223Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T07:37:14.874243Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T07:37:14.874255Z  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:31:46.7709253+08:00)) }
+2026-03-05T07:37:14.874267Z  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:32:42.1940588+08:00)) }
+2026-03-05T07:37:14.874278Z  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:28:09.6261201+08:00)) }
+2026-03-05T07:37:14.874290Z  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:30:41.9572873+08:00)) }
+2026-03-05T07:37:14.874301Z  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:31:05.9101622+08:00)) }
+2026-03-05T07:37:14.874313Z  INFO main::tests: SysDict { id: Some("6351927435104568148"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:14.8723644+08:00)) }
+2026-03-05T07:37:14.874328Z  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("测试字典1"), code: Some("test_dict1"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:28.7939365+08:00)) }
+2026-03-05T07:37:14.874341Z  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
+2026-03-05T07:37:14.874356Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
+thread ThreadId(1), 2026-03-05T07:38:56.131127Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
