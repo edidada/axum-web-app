@@ -152,8 +152,8 @@ mod tests {
     use rbdc_sqlite::SqliteDriver;
     use crate::domain::table::sys_dict;
 
-    #[tokio::main]
-    async fn testmain() -> Result<(), Box<dyn std::error::Error>> {
+    #[tokio::test]
+    async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
         // 初始化 RBatis
         let rb = RBatis::new();
         rb.init(SqliteDriver {}, "sqlite://./test.db")?;
@@ -204,7 +204,7 @@ mod tests {
         // 测试使用 select_page API
         println!("\n=== 测试使用 select_page API ===");
         let page_request = PageRequest::new(1, 10);
-        let dto = sys_dict::DictPageDTO {
+        let dto = crate::domain::dto::dict_dto::DictPageDTO {
             name: None,
             code: None,
         };

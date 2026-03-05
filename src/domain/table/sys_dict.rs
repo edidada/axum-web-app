@@ -1,5 +1,4 @@
-use crate::domain::dict_dto::DictPageDTO;
-use crate::domain::DictPageDTO;  // ✅
+use crate::domain::dto::dict_dto::DictPageDTO;
 
 use rbatis::rbdc::DateTime;
 use rbatis::{crud, html_sql};
