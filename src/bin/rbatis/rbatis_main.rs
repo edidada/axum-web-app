@@ -2,6 +2,8 @@ use rbatis::rbatis::RBatis;
 use rbdc_sqlite::driver::SqliteDriver;
 use rbatis::{crud};
 use rbatis::rbdc::DateTime;
+use std::fs;
+use simplelog::{CombinedLogger, Config, LevelFilter, WriteLogger};
 
 ///dictionary table
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
@@ -17,6 +19,13 @@ crud!(SysDict {});
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Set up logging
+    fs::create_dir_all("logs").unwrap();
+    let log_file = std::fs::File::create("logs/rbatis.log").unwrap();
+    CombinedLogger::init(vec![
+        WriteLogger::new(LevelFilter::Debug, Config::default(), log_file),
+    ]).unwrap();
+
     // 初始化 RBatis
     let rb = RBatis::new();
     rb.init(SqliteDriver {}, "sqlite://./test.db")?;
