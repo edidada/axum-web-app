@@ -356,3 +356,13 @@ thread ThreadId(8), 2026-03-05T00:52:31.668527Z TRACE hyper::proto::h1::conn: sh
 2026-03-05T01:21:58.867535Z  INFO main::tests: 查询到 2 条数据
 2026-03-05T01:21:58.867538Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
 2026-03-05T01:21:58.867550Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T01:23:16.597064Z  INFO main::tests: === 创建表 ===
+2026-03-05T01:23:16.599948Z  INFO main::tests: === 表创建成功 ===
+2026-03-05T01:23:16.599972Z  INFO main::tests: === 测试增加数据 ===
+2026-03-05T01:23:16.602121Z  INFO main::tests: 增加数据失败: E("UNIQUE constraint failed: sys_dict.id")
+2026-03-05T01:23:16.602142Z  INFO main::tests: === 测试查询数据 ===
+2026-03-05T01:23:16.603876Z  INFO main::tests: 查询到 2 条数据
+2026-03-05T01:23:16.603908Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:23:16.603949Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T01:23:16.603966Z  INFO main::tests: === 测试使用 select_page API ===
+2026-03-05T01:23:16.604806Z  INFO main::tests: 分页查询失败: E("no such table: sys_dict_1")
