@@ -153,6 +153,8 @@ mod tests {
     use crate::domain::table::sys_dict;
     use tracing_subscriber::{fmt, EnvFilter, Registry, layer::SubscriberExt};
     use tracing_appender::rolling::{RollingFileAppender, Rotation};
+    use rand::Rng;
+    use uuid::Uuid;
 
     #[tokio::test]
     async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
@@ -196,8 +198,11 @@ mod tests {
 
         // 测试增加数据
         tracing::info!("=== 测试增加数据 ===");
+        let mut rng = rand::thread_rng();
+        let random_id = rng.gen::<u64>();
+        
         let dict = sys_dict::SysDict {
-            id: Some("6".to_string()),
+            id: Some(random_id.to_string()),
             name: Some("测试字典6".to_string()),
             code: Some("test_dict6".to_string()),
             state: Some(0),
