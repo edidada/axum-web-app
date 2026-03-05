@@ -151,15 +151,37 @@ mod tests {
     use rbatis::{PageRequest, RBatis};
     use rbdc_sqlite::SqliteDriver;
     use crate::domain::table::sys_dict;
+    use tracing_subscriber::{fmt, EnvFilter, Registry, layer::SubscriberExt};
+    use tracing_appender::rolling::{RollingFileAppender, Rotation};
 
     #[tokio::test]
     async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
+
+        let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
+        let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
+
+        // 创建一个日志记录器层，将日志输出到文件
+        let file_layer = fmt::layer()
+            .with_ansi(false) // 禁用 ANSI 样式
+            .with_writer(non_blocking);
+
+        // 创建一个基于环境变量的过滤器层
+        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+
+        // 创建一个订阅器，将过滤器层和文件层组合起来
+        let subscriber = Registry::default()
+            .with(env_filter)
+            .with(file_layer);
+
+        // 设置全局订阅器
+        tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+
         // 初始化 RBatis
         let rb = RBatis::new();
         rb.init(SqliteDriver {}, "sqlite://./test.db")?;
 
         // 创建表
-        println!("=== 创建表 ===");
+        tracing::info!("=== 创建表 ===");
         let create_table_sql = r#"
     CREATE TABLE IF NOT EXISTS sys_dict (
         id TEXT PRIMARY KEY,
@@ -170,10 +192,10 @@ mod tests {
     )
     "#;
         rb.exec(create_table_sql, vec![]).await?;
-        println!("表创建成功");
+        tracing::info!("=== 表创建成功 ===");
 
         // 测试增加数据
-        println!("\n=== 测试增加数据 ===");
+        tracing::info!("=== 测试增加数据 ===");
         let dict = sys_dict::SysDict {
             id: Some("5".to_string()),
             name: Some("测试字典5".to_string()),
@@ -184,25 +206,25 @@ mod tests {
 
         let result = sys_dict::SysDict::insert(&rb, &dict).await;
         match result {
-            Ok(_) => println!("增加数据成功"),
-            Err(e) => println!("增加数据失败: {:?}", e),
+            Ok(_) => tracing::info!("增加数据成功"),
+            Err(e) => tracing::info!("增加数据失败: {:?}", e),
         }
 
         // 测试查询数据
-        println!("\n=== 测试查询数据 ===");
+        tracing::info!("\n=== 测试查询数据 ===");
         let result = sys_dict::SysDict::select_all(&rb).await;
         match result {
             Ok(dicts) => {
-                println!("查询到 {} 条数据", dicts.len());
+                tracing::info!("查询到 {} 条数据", dicts.len());
                 for dict in dicts {
-                    println!("{:?}", dict);
+                    tracing::info!("{:?}", dict);
                 }
             }
-            Err(e) => println!("查询数据失败: {:?}", e),
+            Err(e) => tracing::info!("查询数据失败: {:?}", e),
         }
 
         // 测试使用 select_page API
-        println!("\n=== 测试使用 select_page API ===");
+        tracing::info!("\n=== 测试使用 select_page API ===");
         let page_request = PageRequest::new(1, 10);
         let dto = crate::domain::dto::dict_dto::DictPageDTO {
             name: None,
@@ -212,15 +234,15 @@ mod tests {
         let result = sys_dict::SysDict::select_page(&rb, &page_request, &dto).await;
         match result {
             Ok(page) => {
-                println!("总记录数: {}", page.total);
-                println!("当前页码: {}", page.page_no);
-                println!("每页大小: {}", page.page_size);
-                println!("查询到 {} 条数据", page.records.len());
+                tracing::info!("总记录数: {}", page.total);
+                tracing::info!("当前页码: {}", page.page_no);
+                tracing::info!("每页大小: {}", page.page_size);
+                tracing::info!("查询到 {} 条数据", page.records.len());
                 for dict in page.records {
-                    println!("{:?}", dict);
+                    tracing::info!("{:?}", dict);
                 }
             }
-            Err(e) => println!("分页查询失败: {:?}", e),
+            Err(e) => tracing::info!("分页查询失败: {:?}", e),
         }
 
         Ok(())

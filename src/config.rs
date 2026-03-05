@@ -52,7 +52,7 @@ mod tests {
     #[test]
     fn test_config() {
         let config = Config::from_file();
-        // assert_eq!(config.auth.username, "user");
-        // assert_eq!(config.auth.password, "password");
+        assert_eq!(config.auth.username, "user");
+        assert_eq!(config.auth.password, "password");
     }
 }

@@ -309,3 +309,20 @@ thread ThreadId(8), 2026-03-05T00:52:31.667823Z TRACE hyper::proto::h1::conn: St
 thread ThreadId(8), 2026-03-05T00:52:31.668010Z TRACE hyper::proto::h1::conn: State::close_write()
 thread ThreadId(8), 2026-03-05T00:52:31.668267Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Closed, writing: Closed, keep_alive: Disabled }
 thread ThreadId(8), 2026-03-05T00:52:31.668527Z TRACE hyper::proto::h1::conn: shut down IO complete
+2026-03-05T01:13:06.490387Z  INFO log_app: Listening on 127.0.0.1:8080
+2026-03-05T01:15:35.169190Z  INFO main::tests: === 创建表 ===
+2026-03-05T01:16:35.212233Z  INFO main::tests: === 创建表 ===
+2026-03-05T01:16:35.215492Z  INFO main::tests: === 表创建成功 ===
+2026-03-05T01:16:35.215534Z  INFO main::tests: === 测试增加数据 ===
+2026-03-05T01:16:35.218192Z  INFO main::tests: 增加数据失败: E("UNIQUE constraint failed: sys_dict.id")
+2026-03-05T01:16:35.218266Z  INFO main::tests: 
+=== 测试查询数据 ===
+2026-03-05T01:16:35.219514Z  INFO main::tests: 查询到 1 条数据
+2026-03-05T01:16:35.219540Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:16:35.219575Z  INFO main::tests: 
+=== 测试使用 select_page API ===
+2026-03-05T01:16:35.220846Z  INFO main::tests: 总记录数: 1
+2026-03-05T01:16:35.220876Z  INFO main::tests: 当前页码: 1
+2026-03-05T01:16:35.220883Z  INFO main::tests: 每页大小: 10
+2026-03-05T01:16:35.220888Z  INFO main::tests: 查询到 1 条数据
+2026-03-05T01:16:35.220892Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
