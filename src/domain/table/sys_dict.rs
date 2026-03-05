@@ -3,7 +3,6 @@ use crate::domain::dto::dict_dto::DictPageDTO;
 use rbatis::rbdc::DateTime;
 use rbatis::{crud, html_sql};
 
-///dictionary table
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct SysDict {
     pub id: Option<String>,

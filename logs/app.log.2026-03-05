@@ -326,3 +326,33 @@ thread ThreadId(8), 2026-03-05T00:52:31.668527Z TRACE hyper::proto::h1::conn: sh
 2026-03-05T01:16:35.220883Z  INFO main::tests: 每页大小: 10
 2026-03-05T01:16:35.220888Z  INFO main::tests: 查询到 1 条数据
 2026-03-05T01:16:35.220892Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:21:20.443635Z  INFO main::tests: === 创建表 ===
+2026-03-05T01:21:20.446346Z  INFO main::tests: === 表创建成功 ===
+2026-03-05T01:21:20.446368Z  INFO main::tests: === 测试增加数据 ===
+2026-03-05T01:21:20.449587Z  INFO main::tests: 增加数据成功
+2026-03-05T01:21:20.449612Z  INFO main::tests: === 测试查询数据 ===
+2026-03-05T01:21:20.450912Z  INFO main::tests: 查询到 2 条数据
+2026-03-05T01:21:20.450940Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:21:20.450978Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T01:21:20.450998Z  INFO main::tests: === 测试使用 select_page API ===
+2026-03-05T01:21:20.452246Z  INFO main::tests: 总记录数: 2
+2026-03-05T01:21:20.452267Z  INFO main::tests: 当前页码: 1
+2026-03-05T01:21:20.452276Z  INFO main::tests: 每页大小: 10
+2026-03-05T01:21:20.452281Z  INFO main::tests: 查询到 2 条数据
+2026-03-05T01:21:20.452285Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:21:20.452300Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T01:21:58.859008Z  INFO main::tests: === 创建表 ===
+2026-03-05T01:21:58.862742Z  INFO main::tests: === 表创建成功 ===
+2026-03-05T01:21:58.862788Z  INFO main::tests: === 测试增加数据 ===
+2026-03-05T01:21:58.865201Z  INFO main::tests: 增加数据失败: E("UNIQUE constraint failed: sys_dict.id")
+2026-03-05T01:21:58.865254Z  INFO main::tests: === 测试查询数据 ===
+2026-03-05T01:21:58.866257Z  INFO main::tests: 查询到 2 条数据
+2026-03-05T01:21:58.866287Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:21:58.866323Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-05T01:21:58.866342Z  INFO main::tests: === 测试使用 select_page API ===
+2026-03-05T01:21:58.867494Z  INFO main::tests: 总记录数: 2
+2026-03-05T01:21:58.867520Z  INFO main::tests: 当前页码: 1
+2026-03-05T01:21:58.867526Z  INFO main::tests: 每页大小: 10
+2026-03-05T01:21:58.867535Z  INFO main::tests: 查询到 2 条数据
+2026-03-05T01:21:58.867538Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-05T01:21:58.867550Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }

@@ -197,10 +197,10 @@ mod tests {
         // 测试增加数据
         tracing::info!("=== 测试增加数据 ===");
         let dict = sys_dict::SysDict {
-            id: Some("5".to_string()),
-            name: Some("测试字典5".to_string()),
-            code: Some("test_dict5".to_string()),
-            state: Some(1),
+            id: Some("6".to_string()),
+            name: Some("测试字典6".to_string()),
+            code: Some("test_dict6".to_string()),
+            state: Some(0),
             create_date: Some(rbatis::rbdc::DateTime::now()),
         };
 
@@ -211,7 +211,7 @@ mod tests {
         }
 
         // 测试查询数据
-        tracing::info!("\n=== 测试查询数据 ===");
+        tracing::info!("=== 测试查询数据 ===");
         let result = sys_dict::SysDict::select_all(&rb).await;
         match result {
             Ok(dicts) => {
@@ -224,7 +224,7 @@ mod tests {
         }
 
         // 测试使用 select_page API
-        tracing::info!("\n=== 测试使用 select_page API ===");
+        tracing::info!("=== 测试使用 select_page API ===");
         let page_request = PageRequest::new(1, 10);
         let dto = crate::domain::dto::dict_dto::DictPageDTO {
             name: None,
