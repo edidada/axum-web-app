@@ -744,3 +744,4 @@ thread ThreadId(9), 2026-03-05T01:31:47.532548Z TRACE hyper::proto::h1::conn: sh
 2026-03-05T07:37:14.874341Z  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
 2026-03-05T07:37:14.874356Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
 thread ThreadId(1), 2026-03-05T07:38:56.131127Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(1), 2026-03-05T07:41:45.534556Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001

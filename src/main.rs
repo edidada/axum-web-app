@@ -3,8 +3,7 @@ use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
-use log::LevelFilter;
-use tracing_subscriber::{fmt, Registry};
+use tracing_subscriber::{fmt, Registry, EnvFilter};
 use tracing_subscriber::fmt::format::{Format, Writer};
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
@@ -17,7 +16,6 @@ use crate::config::Config;
 use rbatis::rbatis::RBatis;
 use rbdc_mysql::driver::MysqlDriver;
 use rbs::Value;
-use simplelog::{CombinedLogger, WriteLogger};
 
 mod handlers;
 mod routes;
@@ -86,14 +84,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
 fn set_format_log() -> WorkerGuard {
     // Set up logging
-    // fs::create_dir_all("logs").unwrap();
-    // let log_file = std::fs::File::create("logs/rbatis.log").unwrap();
-    // CombinedLogger::init(vec![
-    //     WriteLogger::new(LevelFilter::Debug, simplelog::Config::default(), log_file),
-    // ]).unwrap();
+    fs::create_dir_all("logs").unwrap();
     // 初始化 log 到 tracing 的桥接
     tracing_log::LogTracer::init().expect("Failed to init LogTracer");
     
+    let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
+
     // 创建一个滚动文件追加器
     let file_appender = tracing_appender::rolling::daily("logs", "app.log");
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
@@ -112,6 +108,7 @@ fn set_format_log() -> WorkerGuard {
 
     // 创建一个订阅者，将文件层和控制台层添加到订阅者中
     let subscriber = Registry::default()
+        .with(env_filter)
         .with(console_layer)
         .with(file_layer);
 
