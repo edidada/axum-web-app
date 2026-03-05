@@ -1,4 +1,4 @@
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253953] => `
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556801] => `
     CREATE TABLE IF NOT EXISTS sys_dict (
         id TEXT PRIMARY KEY,
         name TEXT,
@@ -7,14 +7,28 @@
         create_date TEXT
     )
     ` []
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253953] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253955] => `insert into sys_dict (id, name, code, state, create_date ) VALUES (?, ?, ?, ?, ? )` ["1","测试字典","test_dict",1,"2026-03-05T15:28:09.6261201+08:00"]
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253955] <= rows_affected={"rows_affected": 1, "last_insert_id": 5}
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253957] => `select * from sys_dict ` []
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253957] <= len=5
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253958] => `SELECT * FROM sys_dict LIMIT 10 OFFSET 0` []
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253958] <= len=5
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253959] => `SELECT * FROM sys_dict` []
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253959] <= len=5
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253960] => `SELECT COUNT(*) FROM sys_dict` []
-07:28:09 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435224621760253960] <= len=1
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556801] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556803] => `insert into sys_dict (id, name, code, state, create_date ) VALUES (?, ?, ?, ?, ? )` ["1476774092710813388","测试字典3","test_dict3",1,"2026-03-05T15:33:36.1860119+08:00"]
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556803] <= rows_affected={"rows_affected": 1, "last_insert_id": 10}
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556805] => `select * from sys_dict ` []
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556805] <= len=10
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556807] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556807] <= len=10
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556808] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict order by create_date` []
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556808] <= len=10
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556810] => `select * from sys_dict ` []
+07:33:36 [DEBUG] (1) rbatis::plugin::intercept::intercept_log: [rb] [7435225991460556810] <= len=10

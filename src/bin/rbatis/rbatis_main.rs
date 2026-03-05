@@ -3,6 +3,7 @@ use rbdc_sqlite::driver::SqliteDriver;
 use rbatis::{crud};
 use rbatis::rbdc::DateTime;
 use std::fs;
+use rand::Rng;
 use simplelog::{CombinedLogger, Config, LevelFilter, WriteLogger};
 
 ///dictionary table
@@ -46,8 +47,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // 测试增加数据
     println!("\n=== 测试增加数据 ===");
+    let mut rng = rand::thread_rng();
+    let random_id = rng.gen::<u64>();
     let dict = SysDict {
-        id: Some("1".to_string()),
+        id: Some(random_id.to_string()),
         name: Some("测试字典".to_string()),
         code: Some("test_dict".to_string()),
         state: Some(1),

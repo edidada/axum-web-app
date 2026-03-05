@@ -1,8 +1,12 @@
+use std::fs;
+use log::LevelFilter;
+use rand::Rng;
 use rbatis::rbatis::RBatis;
 use rbdc_sqlite::driver::SqliteDriver;
 use rbatis::{crud, html_sql};
 use rbatis::rbdc::DateTime;
 use rbatis::PageRequest;
+use simplelog::{CombinedLogger, Config, WriteLogger};
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct SysDict {
@@ -28,6 +32,12 @@ impl SysDict {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Set up logging
+    fs::create_dir_all("logs").unwrap();
+    let log_file = std::fs::File::create("logs/rbatis.log").unwrap();
+    CombinedLogger::init(vec![
+        WriteLogger::new(LevelFilter::Debug, Config::default(), log_file),
+    ]).unwrap();
     // 初始化 RBatis
     let rb = RBatis::new();
     rb.init(SqliteDriver {}, "sqlite://./test.db")?;
@@ -48,8 +58,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     
     // 测试增加数据
     println!("\n=== 测试增加数据 ===");
+    let mut rng = rand::thread_rng();
+    let random_id = rng.gen::<u64>();
     let dict1 = SysDict {
-        id: Some("1".to_string()),
+        id: Some(random_id.to_string()),
         name: Some("测试字典1".to_string()),
         code: Some("test_dict1".to_string()),
         state: Some(1),
