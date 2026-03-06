@@ -26,7 +26,7 @@ use crate::domain::dto::setmeal_dto::SetmealPageDTO;
 use crate::domain::dto::setmeal_dish_dto::SetmealDishPageDTO;
 use crate::domain::dto::shopping_cart_dto::ShoppingCartPageDTO;
 use crate::domain::dto::user_dto::UserPageDTO;
-use rbatis::{Error, ExecResult}; use rbs::{Value, ValueMap};
+use rbatis::{Error, ExecResult}; use rbs::Value;
 use rand::Rng;fn generate_id() -> String {    let mut rng = rand::thread_rng();    let id: u64 = rng.gen();    id.to_string()}
 
 // SysDict 相关接口
@@ -59,7 +59,7 @@ pub async fn sys_dict_update(
     Json(dict): Json<SysDict>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<SysDict>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = SysDict::update(rb, &dict).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = SysDict::update_by_map(rb, &dict, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(dict)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -70,7 +70,7 @@ pub async fn sys_dict_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = SysDict::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = SysDict::delete_by_id(rb, &id).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -107,7 +107,7 @@ pub async fn address_book_update(
     Json(address_book): Json<AddressBook>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<AddressBook>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = AddressBook::update(rb, &address_book).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = AddressBook::update_by_map(rb, &address_book, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(address_book)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -118,7 +118,7 @@ pub async fn address_book_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = AddressBook::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = AddressBook::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -155,7 +155,7 @@ pub async fn category_update(
     Json(category): Json<Category>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Category>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Category::update(rb, &category).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Category::update_by_map(rb, &category, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(category)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -166,7 +166,7 @@ pub async fn category_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = Category::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Category::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -203,7 +203,7 @@ pub async fn dish_update(
     Json(dish): Json<Dish>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Dish>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Dish::update(rb, &dish).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Dish::update_by_map(rb, &dish, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(dish)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -214,7 +214,7 @@ pub async fn dish_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = Dish::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Dish::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -251,7 +251,7 @@ pub async fn dish_flavor_update(
     Json(dish_flavor): Json<DishFlavor>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<DishFlavor>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::update(rb, &dish_flavor).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::update_by_map(rb, &dish_flavor, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(dish_flavor)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -262,7 +262,7 @@ pub async fn dish_flavor_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -299,7 +299,7 @@ pub async fn employee_update(
     Json(employee): Json<Employee>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Employee>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Employee::update(rb, &employee).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Employee::update_by_map(rb, &employee, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(employee)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -310,7 +310,7 @@ pub async fn employee_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = Employee::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Employee::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -347,7 +347,7 @@ pub async fn order_detail_update(
     Json(order_detail): Json<OrderDetail>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<OrderDetail>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = OrderDetail::update(rb, &order_detail).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = OrderDetail::update_by_map(rb, &order_detail, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(order_detail)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -358,7 +358,7 @@ pub async fn order_detail_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = OrderDetail::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = OrderDetail::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -395,7 +395,7 @@ pub async fn orders_update(
     Json(orders): Json<Orders>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Orders>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Orders::update(rb, &orders).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Orders::update_by_map(rb, &orders, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(orders)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -406,7 +406,7 @@ pub async fn orders_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = Orders::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Orders::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -443,7 +443,7 @@ pub async fn setmeal_update(
     Json(setmeal): Json<Setmeal>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Setmeal>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::update(rb, &setmeal).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::update_by_map(rb, &setmeal, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(setmeal)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -454,7 +454,7 @@ pub async fn setmeal_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -491,7 +491,7 @@ pub async fn setmeal_dish_update(
     Json(setmeal_dish): Json<SetmealDish>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<SetmealDish>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::update(rb, &setmeal_dish).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::update_by_map(rb, &setmeal_dish, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(setmeal_dish)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -502,7 +502,7 @@ pub async fn setmeal_dish_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -539,7 +539,7 @@ pub async fn shopping_cart_update(
     Json(shopping_cart): Json<ShoppingCart>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<ShoppingCart>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::update(rb, &shopping_cart).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::update_by_map(rb, &shopping_cart, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(shopping_cart)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -550,7 +550,7 @@ pub async fn shopping_cart_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -587,7 +587,7 @@ pub async fn user_update(
     Json(user): Json<User>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<User>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = User::update(rb, &user).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = User::update_by_map(rb, &user, &["id"]).await;
     match result {
         Ok(_) => Ok(Json(user)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -598,7 +598,7 @@ pub async fn user_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let mut map = ValueMap::new(); map.insert("id".into(), Value::String(id)); let result: std::result::Result<ExecResult, rbatis::Error> = User::delete_by_map(rb, Value::Map(map)).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = User::delete_by_map(rb, &[("id", id)]).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
