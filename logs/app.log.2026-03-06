@@ -586,3 +586,4 @@
 2026-03-06 11:31:12  INFO main::tests: SysDict { id: Some("17887807012855062217"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:31:12.8418133+08:00)) }
 2026-03-06 11:31:12  INFO main::tests: SysDict { id: Some("11964320033377769524"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:31:12.8418133+08:00)) }
 thread ThreadId(1), 2026-03-06T03:44:11.853659Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(1), 2026-03-06T06:39:06.797378Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001

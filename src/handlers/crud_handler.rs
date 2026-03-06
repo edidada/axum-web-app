@@ -1,8 +1,7 @@
 use axum::{response::Json, extract::Extension, http::StatusCode};
-use serde::{Deserialize, Serialize};
 use rbatis::rbatis::RBatis;
 use rbatis::PageRequest;
-use rbs::{value, Value};
+use rbs::{value};
 
 use crate::domain::table::sys_dict::SysDict;
 use crate::domain::table::address_book::AddressBook;
@@ -28,7 +27,6 @@ use crate::domain::dto::setmeal_dto::SetmealPageDTO;
 use crate::domain::dto::setmeal_dish_dto::SetmealDishPageDTO;
 use crate::domain::dto::shopping_cart_dto::ShoppingCartPageDTO;
 use crate::domain::dto::user_dto::UserPageDTO;
-use rbatis::Error;
 use rand::Rng;
 use rbatis::rbdc::db::ExecResult;
 
