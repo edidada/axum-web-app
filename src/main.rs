@@ -1,5 +1,5 @@
 use std::error::Error;
-use axum::{Extension, Router, routing::post};
+use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
@@ -15,7 +15,6 @@ use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
 use rbdc_mysql::driver::MysqlDriver;
-use rbs::Value;
 
 mod handlers;
 mod routes;
@@ -167,10 +166,10 @@ mod tests {
     use tracing_subscriber::{fmt, EnvFilter, Registry, layer::SubscriberExt};
     use tracing_appender::rolling::{RollingFileAppender, Rotation};
     use rand::Rng;
+    use rbs::value;
     use uuid::Uuid;
 
-    #[tokio::test]
-    async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
+    fn setup_test_logging() {
 
         let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
         let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
@@ -191,7 +190,11 @@ mod tests {
 
         // 设置全局订阅器
         tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+    }
 
+    #[tokio::test]
+    async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
+        // setup_test_logging();
         // 初始化 RBatis
         let rb = RBatis::new();
         rb.init(SqliteDriver {}, "sqlite://./test.db")?;
@@ -269,6 +272,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_sys_dict_crud() -> Result<(), Box<dyn std::error::Error>> {
+        setup_test_logging();
         // Initialize RBatis for test
         let rb = RBatis::new();
         rb.init(SqliteDriver {}, "sqlite://./test.db")?;
@@ -306,7 +310,7 @@ mod tests {
 
         // Update
         let mut updated_dict = dict.clone();
-        updated_dict.name = Some("updated crud test".to_string());
+        updated_dict.name = Some("updated crud testxxx".to_string());
 
         // 使用 update_by_map 方法更新数据
         use rbs::Value;
@@ -322,7 +326,15 @@ mod tests {
         // 使用 delete_by_map 方法删除数据
         let delete_result = sys_dict::SysDict::delete_by_map(&rb, Value::Null).await?;
         tracing::info!("删除结果: {:?}", delete_result);
+        // 假设你已经拿到了要删除的 id（String 类型）
+        let id_to_delete = random_id.to_string(); // 或从请求中获取
 
+        let delete_result = sys_dict::SysDict::delete_by_map(
+            &rb,
+            value!{ "id": id_to_delete },  // 这里 "id" 是你的表主键字段名
+        ).await?;
+
+        tracing::info!("按 id 删除结果: affected rows = {}", delete_result.rows_affected);
         // Verify delete
         let selected_all_after_delete = sys_dict::SysDict::select_all(&rb).await?;
         tracing::info!("删除后查询到 {} 条数据", selected_all_after_delete.len());
