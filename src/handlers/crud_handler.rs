@@ -64,11 +64,17 @@ pub async fn sys_dict_update(
     Json(dict): Json<SysDict>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<SysDict>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = SysDict::update_by_map(rb, &dict, Value::Array(vec!["id".into()])).await;
-    match result {
-        Ok(_) => Ok(Json(dict)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = dict.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少字典 ID".to_string()))?;
+
+    SysDict::update_by_map(
+        rb,
+        &dict,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(dict))
 }
 
 pub async fn sys_dict_delete(
@@ -112,11 +118,17 @@ pub async fn address_book_update(
     Json(address_book): Json<AddressBook>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<AddressBook>, (StatusCode, String)> {
-    let result = AddressBook::update_by_map(rb, &address_book, Value::Null).await;
-    match result {
-        Ok(_) => Ok(Json(address_book)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = address_book.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少地址簿 ID".to_string()))?;
+
+    AddressBook::update_by_map(
+        rb,
+        &address_book,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(address_book))
 }
 
 pub async fn address_book_delete(
@@ -160,11 +172,17 @@ pub async fn category_update(
     Json(category): Json<Category>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Category>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Category::update_by_map(rb, &category, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(category)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = category.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少分类 ID".to_string()))?;
+
+    Category::update_by_map(
+        rb,
+        &category,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(category))
 }
 
 pub async fn category_delete(
@@ -208,11 +226,17 @@ pub async fn dish_update(
     Json(dish): Json<Dish>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Dish>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Dish::update_by_map(rb, &dish, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(dish)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = dish.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少菜品 ID".to_string()))?;
+
+    Dish::update_by_map(
+        rb,
+        &dish,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(dish))
 }
 
 pub async fn dish_delete(
@@ -256,11 +280,17 @@ pub async fn dish_flavor_update(
     Json(dish_flavor): Json<DishFlavor>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<DishFlavor>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::update_by_map(rb, &dish_flavor, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(dish_flavor)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = dish_flavor.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少菜品口味 ID".to_string()))?;
+
+    DishFlavor::update_by_map(
+        rb,
+        &dish_flavor,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(dish_flavor))
 }
 
 pub async fn dish_flavor_delete(
@@ -304,11 +334,17 @@ pub async fn employee_update(
     Json(employee): Json<Employee>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Employee>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Employee::update_by_map(rb, &employee, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(employee)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = employee.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少员工 ID".to_string()))?;
+
+    Employee::update_by_map(
+        rb,
+        &employee,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(employee))
 }
 
 pub async fn employee_delete(
@@ -352,11 +388,17 @@ pub async fn order_detail_update(
     Json(order_detail): Json<OrderDetail>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<OrderDetail>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = OrderDetail::update_by_map(rb, &order_detail, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(order_detail)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = order_detail.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少订单详情 ID".to_string()))?;
+
+    OrderDetail::update_by_map(
+        rb,
+        &order_detail,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(order_detail))
 }
 
 pub async fn order_detail_delete(
@@ -400,18 +442,24 @@ pub async fn orders_update(
     Json(orders): Json<Orders>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Orders>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Orders::update_by_map(rb, &orders, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(orders)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = orders.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少订单 ID".to_string()))?;
+
+    Orders::update_by_map(
+        rb,
+        &orders,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(orders))
 }
 
 pub async fn orders_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Orders::delete_by_map(rb, Value::Null).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Orders::delete_by_map(rb, value!{ "id": id }).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -448,18 +496,24 @@ pub async fn setmeal_update(
     Json(setmeal): Json<Setmeal>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<Setmeal>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::update_by_map(rb, &setmeal, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(setmeal)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = setmeal.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少套餐 ID".to_string()))?;
+
+    Setmeal::update_by_map(
+        rb,
+        &setmeal,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(setmeal))
 }
 
 pub async fn setmeal_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::delete_by_map(rb, Value::Null).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Setmeal::delete_by_map(rb, value!{ "id": id }).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -496,18 +550,24 @@ pub async fn setmeal_dish_update(
     Json(setmeal_dish): Json<SetmealDish>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<SetmealDish>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::update_by_map(rb, &setmeal_dish, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(setmeal_dish)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = setmeal_dish.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少套餐菜品 ID".to_string()))?;
+
+    SetmealDish::update_by_map(
+        rb,
+        &setmeal_dish,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(setmeal_dish))
 }
 
 pub async fn setmeal_dish_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::delete_by_map(rb, Value::Null).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = SetmealDish::delete_by_map(rb, value!{ "id": id }).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -544,18 +604,25 @@ pub async fn shopping_cart_update(
     Json(shopping_cart): Json<ShoppingCart>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<ShoppingCart>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::update_by_map(rb, &shopping_cart, &["id"]).await;
-    match result {
-        Ok(_) => Ok(Json(shopping_cart)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = shopping_cart.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少购物车 ID".to_string()))?;
+
+    ShoppingCart::update_by_map(
+        rb,
+        &shopping_cart,
+        value!{ "id": id }
+        // 如果要限制字段，可加 "column": ["quantity", "status", ...]
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(shopping_cart))
 }
 
 pub async fn shopping_cart_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::delete_by_map(rb, Value::Null).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = ShoppingCart::delete_by_map(rb, value!{ "id": id }).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -592,18 +659,24 @@ pub async fn user_update(
     Json(user): Json<User>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<User>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = User::update_by_map(rb, &user, Value::Null).await;
-    match result {
-        Ok(_) => Ok(Json(user)),
-        Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
-    }
+    let id = user.id.as_ref()
+        .ok_or((StatusCode::BAD_REQUEST, "缺少用户 ID".to_string()))?;
+
+    User::update_by_map(
+        rb,
+        &user,
+        value!{ "id": id }
+    ).await
+        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, format!("数据库更新失败: {:?}", e)))?;
+
+    Ok(Json(user))
 }
 
 pub async fn user_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = User::delete_by_map(rb, Value::Null).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = User::delete_by_map(rb, value!{ "id": id }).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
