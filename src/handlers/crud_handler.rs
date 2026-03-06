@@ -27,7 +27,10 @@ use crate::domain::dto::setmeal_dish_dto::SetmealDishPageDTO;
 use crate::domain::dto::shopping_cart_dto::ShoppingCartPageDTO;
 use crate::domain::dto::user_dto::UserPageDTO;
 use rbatis::{Error, ExecResult}; use rbs::Value;
-use rand::Rng;fn generate_id() -> String {    let mut rng = rand::thread_rng();    let id: u64 = rng.gen();    id.to_string()}
+use rand::Rng;
+use rbatis::rbdc::db::ExecResult;
+
+fn generate_id() -> String {    let mut rng = rand::thread_rng();    let id: u64 = rng.gen();    id.to_string()}
 
 // SysDict 相关接口
 pub async fn sys_dict_select_page(
