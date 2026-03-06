@@ -15,7 +15,6 @@ use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
 use rbdc_mysql::driver::MysqlDriver;
-use rbs::Value;
 
 mod handlers;
 mod routes;

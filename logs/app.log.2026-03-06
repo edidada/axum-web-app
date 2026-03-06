@@ -641,3 +641,22 @@ thread ThreadId(1), 2026-03-06T06:39:06.797378Z  INFO main: thread ThreadId(1),L
 2026-03-06 20:24:15  INFO main::tests: 更新后查询到 1 条数据
 2026-03-06 20:24:15  INFO main::tests: 删除结果: ExecResult { rows_affected: 1, last_insert_id: U64(0) }
 2026-03-06 20:24:15  INFO main::tests: 删除后查询到 0 条数据
+2026-03-06 20:33:12  INFO main::tests: === 创建表 ===
+2026-03-06 20:33:12  INFO main::tests: === 表创建成功 ===
+2026-03-06 20:33:12  INFO main::tests: === 测试增加数据 ===
+2026-03-06 20:33:12  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(1) }
+2026-03-06 20:33:12  INFO main::tests: 增加数据成功
+2026-03-06 20:33:12  INFO main::tests: === 测试查询数据 ===
+2026-03-06 20:33:12  INFO main::tests: 查询到 2 条数据
+2026-03-06 20:33:12  INFO main::tests: 查询到 2 条数据
+2026-03-06 20:33:12  INFO main::tests: SysDict { id: Some("1823984656668027545"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T20:33:12.872853+08:00)) }
+2026-03-06 20:33:12  INFO main::tests: SysDict { id: Some("7465668616149881245"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T20:33:12.877557+08:00)) }
+2026-03-06 20:33:12  INFO main::tests: === 测试使用 select_page API ===
+2026-03-06 20:33:12  INFO main::tests: 更新结果: ExecResult { rows_affected: 2, last_insert_id: U64(1) }
+2026-03-06 20:33:12  INFO main::tests: 更新后查询到 2 条数据
+2026-03-06 20:33:12  INFO main::tests: 总记录数: 0
+2026-03-06 20:33:12  INFO main::tests: 当前页码: 1
+2026-03-06 20:33:12  INFO main::tests: 每页大小: 10
+2026-03-06 20:33:12  INFO main::tests: 查询到 2 条数据
+2026-03-06 20:33:12  INFO main::tests: SysDict { id: Some("1823984656668027545"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T20:33:12.872853+08:00)) }
+2026-03-06 20:33:12  INFO main::tests: SysDict { id: Some("7465668616149881245"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T20:33:12.872853+08:00)) }
