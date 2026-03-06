@@ -475,3 +475,78 @@
 2026-03-06 11:12:39  INFO main::tests: SysDict { id: Some("14403395042845470940"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:08:36.3566915+08:00)) }
 2026-03-06 11:12:39  INFO main::tests: SysDict { id: Some("9076168983939915259"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:12:39.1569787+08:00)) }
 2026-03-06 11:12:39  INFO main::tests: SysDict { id: Some("5692328222625131941"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:12:39.1592489+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: === 创建表 ===
+2026-03-06 11:20:10  INFO main::tests: === 表创建成功 ===
+2026-03-06 11:20:10  INFO main::tests: === 测试增加数据 ===
+2026-03-06 11:20:10  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(29) }
+2026-03-06 11:20:10  INFO main::tests: 增加数据成功
+2026-03-06 11:20:10  INFO main::tests: === 测试查询数据 ===
+2026-03-06 11:20:10  INFO main::tests: 查询到 30 条数据
+2026-03-06 11:20:10  INFO main::tests: 查询到 30 条数据
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:31:46.7709253+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:32:42.1940588+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:28:09.6261201+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:30:41.9572873+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:31:05.9101622+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("6351927435104568148"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:14.8723644+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("测试字典1"), code: Some("test_dict1"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:28.7939365+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("crud_test_id"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:06:22.6258345+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("10805161780496615238"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:06:22.6288078+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("14152826895904680181"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:07:23.4696099+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("13652247745076687751"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:08:36.35476+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("14403395042845470940"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:08:36.3566915+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("9076168983939915259"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:12:39.1569787+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5692328222625131941"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:12:39.1592489+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("12102596831314354805"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("4205233239096236786"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:20:10.7047465+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: === 测试使用 select_page API ===
+2026-03-06 11:20:10  INFO main::tests: 更新结果: ExecResult { rows_affected: 30, last_insert_id: U64(29) }
+2026-03-06 11:20:10  INFO main::tests: 更新后查询到 30 条数据
+2026-03-06 11:20:10  INFO main::tests: 总记录数: 0
+2026-03-06 11:20:10  INFO main::tests: 当前页码: 1
+2026-03-06 11:20:10  INFO main::tests: 每页大小: 10
+2026-03-06 11:20:10  INFO main::tests: 查询到 30 条数据
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("6"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("1"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("2"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("3"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("6351927435104568148"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: None, name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("crud_test_id"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("10805161780496615238"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("14152826895904680181"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("13652247745076687751"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("14403395042845470940"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("9076168983939915259"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5692328222625131941"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("12102596831314354805"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("4205233239096236786"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }

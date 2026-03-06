@@ -296,6 +296,29 @@ mod tests {
         tracing::info!("查询到 {} 条数据", selected_all.len());
         assert!(selected_all.len() > 0);
 
+        // Update
+        let mut updated_dict = dict.clone();
+        updated_dict.name = Some("updated crud test".to_string());
+        
+        // 使用 update_by_map 方法更新数据
+        use rbs::Value;
+        let update_result = sys_dict::SysDict::update_by_map(&rb, &updated_dict, Value::Null).await?;
+        tracing::info!("更新结果: {:?}", update_result);
+
+        // Verify update
+        let selected_all_after_update = sys_dict::SysDict::select_all(&rb).await?;
+        tracing::info!("更新后查询到 {} 条数据", selected_all_after_update.len());
+        assert!(selected_all_after_update.len() > 0);
+
+        // Delete
+        // 使用 delete_by_map 方法删除数据
+        let delete_result = sys_dict::SysDict::delete_by_map(&rb, Value::Null).await?;
+        tracing::info!("删除结果: {:?}", delete_result);
+
+        // Verify delete
+        let selected_all_after_delete = sys_dict::SysDict::select_all(&rb).await?;
+        tracing::info!("删除后查询到 {} 条数据", selected_all_after_delete.len());
+
         Ok(())
     }
 }
