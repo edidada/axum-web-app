@@ -3,8 +3,8 @@
 <select id="select_page">
     select * from category
     <where>
-        <if test="dto.type != null">
-            and type = #{dto.type}
+        <if test="dto.category_type != null">
+            and type = #{dto.category_type}
         </if>
         <if test="dto.name != null">
             and name = #{dto.name}

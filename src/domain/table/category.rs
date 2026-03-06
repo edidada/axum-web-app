@@ -6,7 +6,7 @@ use rbatis::{crud, html_sql};
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Category {
     pub id: Option<String>,
-    pub r#type: Option<i32>,
+    pub category_type: Option<i32>,
     pub name: Option<String>,
     pub sort: Option<i32>,
     pub create_time: Option<DateTime>,
