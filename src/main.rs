@@ -276,8 +276,10 @@ mod tests {
         "#;
         rb.exec(create_table_sql, vec![]).await?;
 
+        let mut rng = rand::thread_rng();
+        let random_id = rng.gen::<u64>();
         let dict = sys_dict::SysDict {
-            id: Some("crud_test_id".to_string()),
+            id: Some(random_id.to_string()),
             name: Some("crud test".to_string()),
             code: Some("crud_code".to_string()),
             state: Some(1),
