@@ -745,3 +745,26 @@ thread ThreadId(9), 2026-03-05T01:31:47.532548Z TRACE hyper::proto::h1::conn: sh
 2026-03-05T07:37:14.874356Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
 thread ThreadId(1), 2026-03-05T07:38:56.131127Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
 thread ThreadId(1), 2026-03-05T07:41:45.534556Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+2026-03-05T13:39:49.796807Z  INFO main::tests: === 创建表 ===
+2026-03-05T13:39:49.801816Z  INFO main::tests: === 表创建成功 ===
+2026-03-05T13:39:49.801867Z  INFO main::tests: === 测试增加数据 ===
+2026-03-05T13:39:49.805311Z  INFO main::tests: 增加数据成功
+2026-03-05T13:39:49.805342Z  INFO main::tests: === 测试查询数据 ===
+2026-03-05T13:39:49.806911Z  INFO main::tests: 查询到 6 条数据
+2026-03-05T13:39:49.806942Z  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-04T23:45:34.118209+08:00)) }
+2026-03-05T13:39:49.806977Z  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-04T23:50:03.07533+08:00)) }
+2026-03-05T13:39:49.806996Z  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T00:03:22.202154+08:00)) }
+2026-03-05T13:39:49.807014Z  INFO main::tests: SysDict { id: Some("4"), name: Some("测试字典4"), code: Some("test_dict4"), state: Some(1), create_date: Some(DateTime(2026-03-05T00:07:33.054331+08:00)) }
+2026-03-05T13:39:49.807031Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T00:10:13.281815+08:00)) }
+2026-03-05T13:39:49.807049Z  INFO main::tests: SysDict { id: Some("3118800880014912506"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T21:39:49.801997+08:00)) }
+2026-03-05T13:39:49.807081Z  INFO main::tests: === 测试使用 select_page API ===
+2026-03-05T13:39:49.808960Z  INFO main::tests: 总记录数: 0
+2026-03-05T13:39:49.809010Z  INFO main::tests: 当前页码: 1
+2026-03-05T13:39:49.809045Z  INFO main::tests: 每页大小: 10
+2026-03-05T13:39:49.809071Z  INFO main::tests: 查询到 6 条数据
+2026-03-05T13:39:49.809090Z  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-04T23:45:34.118209+08:00)) }
+2026-03-05T13:39:49.809139Z  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-04T23:50:03.07533+08:00)) }
+2026-03-05T13:39:49.809160Z  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T00:03:22.202154+08:00)) }
+2026-03-05T13:39:49.809178Z  INFO main::tests: SysDict { id: Some("4"), name: Some("测试字典4"), code: Some("test_dict4"), state: Some(1), create_date: Some(DateTime(2026-03-05T00:07:33.054331+08:00)) }
+2026-03-05T13:39:49.809198Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T00:10:13.281815+08:00)) }
+2026-03-05T13:39:49.809219Z  INFO main::tests: SysDict { id: Some("3118800880014912506"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T21:39:49.801997+08:00)) }
