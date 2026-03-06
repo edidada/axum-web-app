@@ -1,4 +1,11 @@
 # Axum Web Application
+```shell
+cargo test --color=always --package axum-web-app --bin main tests::test_sys_dict_crud
+cargo test --color=always --package axum-web-app --bin main tests::test_sys_dict
+cargo test --color=always --package axum-web-app --bin main tests --profile test 
+```
+
+setup_test_logging不能在cargo test中调用两次
 
 依赖问题：
 ```shell
