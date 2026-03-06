@@ -21,4 +21,16 @@
         order by create_date
     </if>
 </select>
+    <insert id="insert">
+        insert into sys_dict (id, name, code, state, create_date) values (#{id}, #{name}, #{code}, #{state}, #{create_date})
+    </insert>
+    <update id="update_by_id">
+        update sys_dict set name = #{name}, code = #{code}, state = #{state}, create_date = #{create_date} where id = #{id}
+    </update>
+    <delete id="delete_by_id">
+        delete from sys_dict where id = #{id}
+    </delete>
+    <select id="select_by_id">
+        select id, name, code, state, create_date from sys_dict where id = #{id}
+    </select>
 </mapper>

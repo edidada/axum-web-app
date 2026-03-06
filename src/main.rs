@@ -1,5 +1,5 @@
 use std::error::Error;
-use axum::{Extension, Router};
+use axum::{Extension, Router, routing::post};
 use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
@@ -28,9 +28,17 @@ static mut RB: Option<RBatis> = None;
 
 // 异步初始化函数
 async fn init_rbatis() -> Result<(), Box<dyn Error>> {
+    let config = Config::from_file();
     let rb = RBatis::new();
     // rbatis 默认已经启用了 SQL 日志，日志级别为 Debug
-    rb.init(MysqlDriver {}, "mysql://github:5%25Edidadas@114.55.62.154:3306/testdb")?;
+    let mysql_url = format!("mysql://{}:{}@{}:{}/{}", 
+        config.mysql.username,
+        config.mysql.password,
+        config.mysql.host,
+        config.mysql.port,
+        config.mysql.database
+    );
+    rb.init(MysqlDriver {}, &mysql_url)?;
     unsafe {
         RB = Some(rb);
     }
@@ -170,6 +178,7 @@ mod tests {
         // 创建一个日志记录器层，将日志输出到文件
         let file_layer = fmt::layer()
             .with_ansi(false) // 禁用 ANSI 样式
+            .with_timer(super::LocalTimer {}) // 使用本地时间
             .with_writer(non_blocking);
 
         // 创建一个基于环境变量的过滤器层
@@ -205,7 +214,7 @@ mod tests {
         tracing::info!("=== 测试增加数据 ===");
         let mut rng = rand::thread_rng();
         let random_id = rng.gen::<u64>();
-        
+
         let dict = sys_dict::SysDict {
             id: Some(random_id.to_string()),
             name: Some("测试字典6".to_string()),
@@ -254,6 +263,69 @@ mod tests {
             }
             Err(e) => tracing::info!("分页查询失败: {:?}", e),
         }
+
+        Ok(())
+    }
+
+    #[tokio::test]
+    async fn test_sys_dict_crud() -> Result<(), Box<dyn std::error::Error>> {
+        // Initialize RBatis for test
+        let rb = RBatis::new();
+        rb.init(SqliteDriver {}, "sqlite://./test.db")?;
+
+        // Create table
+        let create_table_sql = r#"
+        CREATE TABLE IF NOT EXISTS sys_dict (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            code TEXT,
+            state INTEGER,
+            create_date TEXT
+        )
+        "#;
+        rb.exec(create_table_sql, vec![]).await?;
+
+        let mut rng = rand::thread_rng();
+        let random_id = rng.gen::<u64>();
+        let dict = sys_dict::SysDict {
+            id: Some(random_id.to_string()),
+            name: Some("crud test".to_string()),
+            code: Some("crud_code".to_string()),
+            state: Some(1),
+            create_date: Some(rbatis::rbdc::DateTime::now()),
+        };
+
+        // Insert
+        let affected = sys_dict::SysDict::insert(&rb, &dict).await?;
+        tracing::info!("插入影响行数: {:?}", affected);
+
+        // Select all
+        let selected_all = sys_dict::SysDict::select_all(&rb).await?;
+        tracing::info!("查询到 {} 条数据", selected_all.len());
+        assert!(selected_all.len() > 0);
+
+        // Update
+        let mut updated_dict = dict.clone();
+        updated_dict.name = Some("updated crud test".to_string());
+
+        // 使用 update_by_map 方法更新数据
+        use rbs::Value;
+        let update_result = sys_dict::SysDict::update_by_map(&rb, &updated_dict, Value::Null).await?;
+        tracing::info!("更新结果: {:?}", update_result);
+
+        // Verify update
+        let selected_all_after_update = sys_dict::SysDict::select_all(&rb).await?;
+        tracing::info!("更新后查询到 {} 条数据", selected_all_after_update.len());
+        assert!(selected_all_after_update.len() > 0);
+
+        // Delete
+        // 使用 delete_by_map 方法删除数据
+        let delete_result = sys_dict::SysDict::delete_by_map(&rb, Value::Null).await?;
+        tracing::info!("删除结果: {:?}", delete_result);
+
+        // Verify delete
+        let selected_all_after_delete = sys_dict::SysDict::select_all(&rb).await?;
+        tracing::info!("删除后查询到 {} 条数据", selected_all_after_delete.len());
 
         Ok(())
     }

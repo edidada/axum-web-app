@@ -1,6 +1,7 @@
 use crate::domain::dto::dict_dto::DictPageDTO;
 
 use rbatis::rbdc::DateTime;
+use rbatis::executor::Executor;
 use rbatis::{crud, html_sql};
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]

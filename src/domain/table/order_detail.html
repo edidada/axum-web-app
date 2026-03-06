@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+<select id="select_page">
+    select * from order_detail
+    <where>
+        <if test="dto.order_id != null">
+            and order_id = #{dto.order_id}
+        </if>
+        <if test="dto.dish_id != null">
+            and dish_id = #{dto.dish_id}
+        </if>
+        <if test="dto.setmeal_id != null">
+            and setmeal_id = #{dto.setmeal_id}
+        </if>
+    </where>
+    <if test="do_count == false">
+        order by id
+    </if>
+</select>
+</mapper>

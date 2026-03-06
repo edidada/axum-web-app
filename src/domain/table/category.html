@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+<select id="select_page">
+    select * from category
+    <where>
+        <if test="dto.category_type != null">
+            and type = #{dto.category_type}
+        </if>
+        <if test="dto.name != null">
+            and name = #{dto.name}
+        </if>
+    </where>
+    <if test="do_count == false">
+        order by sort
+    </if>
+</select>
+</mapper>

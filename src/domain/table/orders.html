@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+<select id="select_page">
+    select * from orders
+    <where>
+        <if test="dto.number != null">
+            and number = #{dto.number}
+        </if>
+        <if test="dto.status != null">
+            and status = #{dto.status}
+        </if>
+        <if test="dto.user_id != null">
+            and user_id = #{dto.user_id}
+        </if>
+        <if test="dto.address_book_id != null">
+            and address_book_id = #{dto.address_book_id}
+        </if>
+    </where>
+    <if test="do_count == false">
+        order by order_time desc
+    </if>
+</select>
+</mapper>

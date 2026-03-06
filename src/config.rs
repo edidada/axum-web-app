@@ -17,11 +17,22 @@ pub struct RedisConfig {
     pub expiration: usize,
     pub key_prefix: String,
 }
+
+#[derive(Deserialize)]
+pub struct MysqlConfig {
+    pub host: String,
+    pub port: u16,
+    pub username: String,
+    pub password: String,
+    pub database: String,
+}
+
 #[derive(Deserialize)]
 pub struct Config {
     pub auth: AuthConfig,
     pub webapp: WebappConfig,
     pub redis: RedisConfig,
+    pub mysql: MysqlConfig,
 }
 
 impl Config {
@@ -37,6 +48,11 @@ impl Config {
         settings.set("redis.port", 6379).unwrap();
         settings.set("redis.expiration", 3600).unwrap();
         settings.set("redis.key_prefix", "session:").unwrap();
+        settings.set("mysql.host", "127.0.0.1").unwrap();
+        settings.set("mysql.port", 3306).unwrap();
+        settings.set("mysql.username", "root").unwrap();
+        settings.set("mysql.password", "").unwrap();
+        settings.set("mysql.database", "testdb").unwrap();
         
         // 尝试加载配置文件，如果不存在则使用默认值
         let _ = settings.merge(config::File::with_name("config/default"));

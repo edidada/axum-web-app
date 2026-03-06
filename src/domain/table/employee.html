@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+<select id="select_page">
+    select * from employee
+    <where>
+        <if test="dto.name != null">
+            and name = #{dto.name}
+        </if>
+        <if test="dto.username != null">
+            and username = #{dto.username}
+        </if>
+        <if test="dto.phone != null">
+            and phone = #{dto.phone}
+        </if>
+        <if test="dto.status != null">
+            and status = #{dto.status}
+        </if>
+    </where>
+    <if test="do_count == false">
+        order by create_time
+    </if>
+</select>
+</mapper>

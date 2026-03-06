@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+<select id="select_page">
+    select * from setmeal
+    <where>
+        <if test="dto.name != null">
+            and name = #{dto.name}
+        </if>
+        <if test="dto.category_id != null">
+            and category_id = #{dto.category_id}
+        </if>
+        <if test="dto.status != null">
+            and status = #{dto.status}
+        </if>
+        and is_deleted = 0
+    </where>
+    <if test="do_count == false">
+        order by create_time
+    </if>
+</select>
+</mapper>

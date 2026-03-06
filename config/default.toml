@@ -9,3 +9,9 @@ ip = "127.0.0.1"
 port = 6379
 expiration = 3600  # Expiration time in seconds
 key_prefix = "session:"
+[mysql]
+host = "127.0.0.1"
+port = 3306
+username = "root"
+password = "5Edidada"
+database = "testdb"
