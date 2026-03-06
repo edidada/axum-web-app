@@ -550,3 +550,39 @@
 2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("5692328222625131941"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
 2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("12102596831314354805"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
 2026-03-06 11:20:10  INFO main::tests: SysDict { id: Some("4205233239096236786"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:20:10.7025954+08:00)) }
+2026-03-06 11:23:07  INFO main::tests: === 创建表 ===
+2026-03-06 11:23:07  INFO main::tests: === 表创建成功 ===
+2026-03-06 11:23:07  INFO main::tests: === 测试增加数据 ===
+2026-03-06 11:23:07  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(1) }
+2026-03-06 11:23:07  INFO main::tests: 增加数据成功
+2026-03-06 11:23:07  INFO main::tests: === 测试查询数据 ===
+2026-03-06 11:23:07  INFO main::tests: 查询到 2 条数据
+2026-03-06 11:23:07  INFO main::tests: 查询到 2 条数据
+2026-03-06 11:23:07  INFO main::tests: SysDict { id: Some("5794926002216145001"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:23:07.9936841+08:00)) }
+2026-03-06 11:23:07  INFO main::tests: SysDict { id: Some("6030005708215319523"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:23:07.996076+08:00)) }
+2026-03-06 11:23:07  INFO main::tests: === 测试使用 select_page API ===
+2026-03-06 11:23:08  INFO main::tests: 总记录数: 0
+2026-03-06 11:23:08  INFO main::tests: 当前页码: 1
+2026-03-06 11:23:08  INFO main::tests: 每页大小: 10
+2026-03-06 11:23:08  INFO main::tests: 查询到 2 条数据
+2026-03-06 11:23:08  INFO main::tests: SysDict { id: Some("5794926002216145001"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:23:07.9936841+08:00)) }
+2026-03-06 11:23:08  INFO main::tests: SysDict { id: Some("6030005708215319523"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:23:07.996076+08:00)) }
+2026-03-06 11:31:12  INFO main::tests: === 创建表 ===
+2026-03-06 11:31:12  INFO main::tests: === 表创建成功 ===
+2026-03-06 11:31:12  INFO main::tests: === 测试增加数据 ===
+2026-03-06 11:31:12  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(1) }
+2026-03-06 11:31:12  INFO main::tests: 增加数据成功
+2026-03-06 11:31:12  INFO main::tests: === 测试查询数据 ===
+2026-03-06 11:31:12  INFO main::tests: 查询到 2 条数据
+2026-03-06 11:31:12  INFO main::tests: 查询到 2 条数据
+2026-03-06 11:31:12  INFO main::tests: SysDict { id: Some("17887807012855062217"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:31:12.8418133+08:00)) }
+2026-03-06 11:31:12  INFO main::tests: SysDict { id: Some("11964320033377769524"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:31:12.8436723+08:00)) }
+2026-03-06 11:31:12  INFO main::tests: === 测试使用 select_page API ===
+2026-03-06 11:31:12  INFO main::tests: 更新结果: ExecResult { rows_affected: 2, last_insert_id: U64(1) }
+2026-03-06 11:31:12  INFO main::tests: 总记录数: 0
+2026-03-06 11:31:12  INFO main::tests: 当前页码: 1
+2026-03-06 11:31:12  INFO main::tests: 每页大小: 10
+2026-03-06 11:31:12  INFO main::tests: 查询到 2 条数据
+2026-03-06 11:31:12  INFO main::tests: SysDict { id: Some("17887807012855062217"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:31:12.8418133+08:00)) }
+2026-03-06 11:31:12  INFO main::tests: SysDict { id: Some("11964320033377769524"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:31:12.8418133+08:00)) }
+thread ThreadId(1), 2026-03-06T03:44:11.853659Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001

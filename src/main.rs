@@ -1,5 +1,5 @@
 use std::error::Error;
-use axum::{Extension, Router};
+use axum::{Extension, Router, routing::post};
 use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
@@ -28,9 +28,17 @@ static mut RB: Option<RBatis> = None;
 
 // 异步初始化函数
 async fn init_rbatis() -> Result<(), Box<dyn Error>> {
+    let config = Config::from_file();
     let rb = RBatis::new();
     // rbatis 默认已经启用了 SQL 日志，日志级别为 Debug
-    rb.init(MysqlDriver {}, "mysql://github:5%25Edidadas@114.55.62.154:3306/testdb")?;
+    let mysql_url = format!("mysql://{}:{}@{}:{}/{}", 
+        config.mysql.username,
+        config.mysql.password,
+        config.mysql.host,
+        config.mysql.port,
+        config.mysql.database
+    );
+    rb.init(MysqlDriver {}, &mysql_url)?;
     unsafe {
         RB = Some(rb);
     }
