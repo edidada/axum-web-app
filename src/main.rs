@@ -1,5 +1,5 @@
 use std::error::Error;
-use axum::{Extension, Router, routing::post};
+use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
@@ -167,7 +167,6 @@ mod tests {
     use tracing_subscriber::{fmt, EnvFilter, Registry, layer::SubscriberExt};
     use tracing_appender::rolling::{RollingFileAppender, Rotation};
     use rand::Rng;
-    use uuid::Uuid;
 
     #[tokio::test]
     async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
