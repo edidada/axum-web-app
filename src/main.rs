@@ -257,4 +257,60 @@ mod tests {
 
         Ok(())
     }
+
+    #[tokio::test]
+    async fn test_sys_dict_crud() -> Result<(), Box<dyn std::error::Error>> {
+        // Initialize RBatis for test
+        let rb = RBatis::new();
+        rb.init(SqliteDriver {}, "sqlite://./test.db")?;
+
+        // Create table
+        let create_table_sql = r#"
+        CREATE TABLE IF NOT EXISTS sys_dict (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            code TEXT,
+            state INTEGER,
+            create_date TEXT
+        )
+        "#;
+        rb.exec(create_table_sql, vec![]).await?;
+
+        let dict = sys_dict::SysDict {
+            id: Some("crud_test_id".to_string()),
+            name: Some("crud test".to_string()),
+            code: Some("crud_code".to_string()),
+            state: Some(1),
+            create_date: Some(rbatis::rbdc::DateTime::now()),
+        };
+
+        // Insert
+        let affected = rb.insert(&dict).await?;
+        assert_eq!(affected, 1);
+
+        // Select by id
+        let selected: Vec<sys_dict::SysDict> = rb.select_by_column("id", "crud_test_id").await?;
+        assert_eq!(selected.len(), 1);
+        assert_eq!(selected[0].name, Some("crud test".to_string()));
+
+        // Update
+        let mut updated_dict = dict.clone();
+        updated_dict.name = Some("updated crud test".to_string());
+        let affected = rb.update_by_column("id", &updated_dict).await?;
+        assert_eq!(affected, 1);
+
+        // Verify update
+        let selected: Vec<sys_dict::SysDict> = rb.select_by_column("id", "crud_test_id").await?;
+        assert_eq!(selected[0].name, Some("updated crud test".to_string()));
+
+        // Delete
+        let affected = rb.delete_by_column::<sys_dict::SysDict, _>("id", "crud_test_id").await?;
+        assert_eq!(affected, 1);
+
+        // Verify delete
+        let selected: Vec<sys_dict::SysDict> = rb.select_by_column("id", "crud_test_id").await?;
+        assert_eq!(selected.len(), 0);
+
+        Ok(())
+    }
 }
