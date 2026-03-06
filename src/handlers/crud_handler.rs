@@ -118,7 +118,7 @@ pub async fn address_book_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = AddressBook::delete_by_map(rb, &[("id", id)]).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = AddressBook::delete_by_id(rb, &id).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -166,7 +166,7 @@ pub async fn category_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Category::delete_by_map(rb, &[("id", id)]).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Category::delete_by_id(rb, &id).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -214,7 +214,7 @@ pub async fn dish_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = Dish::delete_by_map(rb, &[("id", id)]).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = Dish::delete_by_id(rb, &id).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
@@ -262,7 +262,7 @@ pub async fn dish_flavor_delete(
     Json(id): Json<String>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::delete_by_map(rb, &[("id", id)]).await;
+    let result: std::result::Result<ExecResult, rbatis::Error> = DishFlavor::delete_by_id(rb, &id).await;
     match result {
         Ok(_) => Ok(Json(serde_json::json!({ "success": true }))),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),

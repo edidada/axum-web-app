@@ -214,7 +214,7 @@ mod tests {
         tracing::info!("=== 测试增加数据 ===");
         let mut rng = rand::thread_rng();
         let random_id = rng.gen::<u64>();
-        
+
         let dict = sys_dict::SysDict {
             id: Some(random_id.to_string()),
             name: Some("测试字典6".to_string()),
@@ -307,7 +307,7 @@ mod tests {
         // Update
         let mut updated_dict = dict.clone();
         updated_dict.name = Some("updated crud test".to_string());
-        
+
         // 使用 update_by_map 方法更新数据
         use rbs::Value;
         let update_result = sys_dict::SysDict::update_by_map(&rb, &updated_dict, Value::Null).await?;
