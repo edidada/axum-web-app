@@ -223,3 +223,62 @@
 2026-03-06T02:53:03.787538Z  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("测试字典1"), code: Some("test_dict1"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:28.7939365+08:00)) }
 2026-03-06T02:53:03.787544Z  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
 2026-03-06T02:53:03.787551Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
+2026-03-06T03:06:22.627075Z  INFO main::tests: === 创建表 ===
+2026-03-06T03:06:22.628379Z  INFO main::tests: === 表创建成功 ===
+2026-03-06T03:06:22.628433Z  INFO main::tests: === 测试增加数据 ===
+2026-03-06T03:06:22.628839Z  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(22) }
+2026-03-06T03:06:22.631307Z  INFO main::tests: 查询到 22 条数据
+2026-03-06T03:06:22.631548Z  INFO main::tests: 增加数据成功
+2026-03-06T03:06:22.631594Z  INFO main::tests: === 测试查询数据 ===
+2026-03-06T03:06:22.634076Z  INFO main::tests: 查询到 23 条数据
+2026-03-06T03:06:22.634130Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-06T03:06:22.634178Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-06T03:06:22.634189Z  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:31:46.7709253+08:00)) }
+2026-03-06T03:06:22.634375Z  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:32:42.1940588+08:00)) }
+2026-03-06T03:06:22.634397Z  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:28:09.6261201+08:00)) }
+2026-03-06T03:06:22.634416Z  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:30:41.9572873+08:00)) }
+2026-03-06T03:06:22.634433Z  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:31:05.9101622+08:00)) }
+2026-03-06T03:06:22.634450Z  INFO main::tests: SysDict { id: Some("6351927435104568148"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:14.8723644+08:00)) }
+2026-03-06T03:06:22.634468Z  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("测试字典1"), code: Some("test_dict1"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:28.7939365+08:00)) }
+2026-03-06T03:06:22.634487Z  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
+2026-03-06T03:06:22.634504Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
+2026-03-06T03:06:22.634523Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634533Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634542Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634552Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634561Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634572Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634583Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634600Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634610Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634620Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.634632Z  INFO main::tests: SysDict { id: Some("crud_test_id"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:06:22.6258345+08:00)) }
+2026-03-06T03:06:22.634656Z  INFO main::tests: SysDict { id: Some("10805161780496615238"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:06:22.6288078+08:00)) }
+2026-03-06T03:06:22.634692Z  INFO main::tests: === 测试使用 select_page API ===
+2026-03-06T03:06:22.637806Z  INFO main::tests: 总记录数: 0
+2026-03-06T03:06:22.637861Z  INFO main::tests: 当前页码: 1
+2026-03-06T03:06:22.637867Z  INFO main::tests: 每页大小: 10
+2026-03-06T03:06:22.637873Z  INFO main::tests: 查询到 23 条数据
+2026-03-06T03:06:22.637879Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637887Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637893Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637899Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637905Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637911Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637917Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637923Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637928Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637933Z  INFO main::tests: SysDict { id: None, name: None, code: None, state: None, create_date: None }
+2026-03-06T03:06:22.637939Z  INFO main::tests: SysDict { id: Some("5"), name: Some("测试字典5"), code: Some("test_dict5"), state: Some(1), create_date: Some(DateTime(2026-03-05T09:09:05.8518199+08:00)) }
+2026-03-06T03:06:22.637957Z  INFO main::tests: SysDict { id: Some("6"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:21:20.4463779+08:00)) }
+2026-03-06T03:06:22.637968Z  INFO main::tests: SysDict { id: Some("7452126803597297211"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:31:46.7709253+08:00)) }
+2026-03-06T03:06:22.637980Z  INFO main::tests: SysDict { id: Some("12555077708665147270"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T09:32:42.1940588+08:00)) }
+2026-03-06T03:06:22.637992Z  INFO main::tests: SysDict { id: Some("1"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:28:09.6261201+08:00)) }
+2026-03-06T03:06:22.638002Z  INFO main::tests: SysDict { id: Some("2"), name: Some("测试字典2"), code: Some("test_dict2"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:30:41.9572873+08:00)) }
+2026-03-06T03:06:22.638013Z  INFO main::tests: SysDict { id: Some("3"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:31:05.9101622+08:00)) }
+2026-03-06T03:06:22.638023Z  INFO main::tests: SysDict { id: Some("6351927435104568148"), name: Some("测试字典"), code: Some("test_dict"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:14.8723644+08:00)) }
+2026-03-06T03:06:22.638040Z  INFO main::tests: SysDict { id: Some("5388060173808330817"), name: Some("测试字典1"), code: Some("test_dict1"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:28.7939365+08:00)) }
+2026-03-06T03:06:22.638052Z  INFO main::tests: SysDict { id: Some("1476774092710813388"), name: Some("测试字典3"), code: Some("test_dict3"), state: Some(1), create_date: Some(DateTime(2026-03-05T15:33:36.1860119+08:00)) }
+2026-03-06T03:06:22.638067Z  INFO main::tests: SysDict { id: Some("18294800398940916090"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-05T15:37:14.8679655+08:00)) }
+2026-03-06T03:06:22.638079Z  INFO main::tests: SysDict { id: Some("crud_test_id"), name: Some("crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-06T11:06:22.6258345+08:00)) }
+2026-03-06T03:06:22.638089Z  INFO main::tests: SysDict { id: Some("10805161780496615238"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-06T11:06:22.6288078+08:00)) }
