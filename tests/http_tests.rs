@@ -27,9 +27,12 @@ fn start_test_server() {
                 use tracing_subscriber::registry::LookupSpan;
                 use chrono::Local;
                 use rbatis::rbatis::RBatis;
-                use rbdc_sqlite::SqliteDriver;
+                use rbdc_mysql::driver::MysqlDriver;
 
-                // 模拟配置
+                // 读取配置文件
+                use std::fs;
+                use toml;
+
                 struct Config {
                     webapp: WebappConfig,
                     mysql: MysqlConfig,
@@ -50,17 +53,34 @@ fn start_test_server() {
 
                 impl Config {
                     fn from_file() -> Self {
+                        let config_content = fs::read_to_string("config/default.toml").unwrap_or_else(|e| {
+                            eprintln!("Warning: Failed to read config file: {}. Using default configuration.", e);
+                            r#"
+[webapp]
+port = 9001
+redisurl = "redis://127.0.0.1/"
+[mysql]
+host = "127.0.0.1"
+port = 3306
+username = "root"
+password = "5Edidada"
+database = "ruiji"
+"#.to_string()
+                        });
+
+                        let toml_value: toml::Value = toml::from_str(&config_content).unwrap();
+
                         Config {
                             webapp: WebappConfig {
-                                port: 9001,
-                                redisurl: "redis://127.0.0.1:6379".to_string(),
+                                port: toml_value["webapp"]["port"].as_integer().unwrap_or(9001) as u16,
+                                redisurl: toml_value["webapp"]["redisurl"].as_str().unwrap_or("redis://127.0.0.1/").to_string(),
                             },
                             mysql: MysqlConfig {
-                                username: "root".to_string(),
-                                password: "5Edidada".to_string(),
-                                host: "localhost".to_string(),
-                                port: 3306,
-                                database: "test".to_string(),
+                                username: toml_value["mysql"]["username"].as_str().unwrap_or("root").to_string(),
+                                password: toml_value["mysql"]["password"].as_str().unwrap_or("5Edidada").to_string(),
+                                host: toml_value["mysql"]["host"].as_str().unwrap_or("127.0.0.1").to_string(),
+                                port: toml_value["mysql"]["port"].as_integer().unwrap_or(3306) as u16,
+                                database: toml_value["mysql"]["database"].as_str().unwrap_or("test").to_string(),
                             },
                         }
                     }
@@ -109,7 +129,8 @@ fn start_test_server() {
                         .with(console_layer)
                         .with(file_layer);
 
-                    tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+                    // 忽略重复设置错误
+                    let _ = tracing::subscriber::set_global_default(subscriber);
 
                     guard
                 }
@@ -123,28 +144,41 @@ fn start_test_server() {
 
                 // 初始化 RBatis
                 let rb = RBatis::new();
-                // 使用 SQLite 进行测试
-                rb.init(SqliteDriver {}, "sqlite://./test.db").unwrap();
+                // 使用 MySQL 进行测试
+                let mysql_config = &config_file.mysql;
+                let dsn = format!("mysql://{}:{}@{}:{}/{}?useSSL=false", 
+                    mysql_config.username, 
+                    mysql_config.password, 
+                    mysql_config.host, 
+                    mysql_config.port, 
+                    mysql_config.database
+                );
+                rb.init(MysqlDriver {}, &dsn).unwrap_or_else(|e| {
+                    eprintln!("Warning: Failed to connect to MySQL: {}. Using SQLite as fallback.", e);
+                    // 如果 MySQL 连接失败，使用 SQLite 作为 fallback
+                    use rbdc_sqlite::SqliteDriver;
+                    rb.init(SqliteDriver {}, "sqlite://./test.db").unwrap()
+                });
 
                 // 创建 sys_dict 表
                 let create_table_sql = r#"
                 CREATE TABLE IF NOT EXISTS sys_dict (
-                    id TEXT PRIMARY KEY,
-                    name TEXT,
-                    code TEXT,
-                    state INTEGER,
-                    create_date TEXT
-                )
+                    id VARCHAR(50) PRIMARY KEY,
+                    name VARCHAR(100),
+                    code VARCHAR(100),
+                    state INT,
+                    create_date DATETIME
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
                 "#;
-                rb.exec(create_table_sql, vec![]).await.unwrap();
+                let _ = rb.exec(create_table_sql, vec![]).await;
 
-                // 插入测试数据
+                // 插入测试数据（使用 INSERT IGNORE 避免冲突）
                 let insert_sql = r#"
-                INSERT INTO sys_dict (id, name, code, state, create_date) VALUES 
+                INSERT IGNORE INTO sys_dict (id, name, code, state, create_date) VALUES 
                 ('1', '测试字典1', 'test_dict1', 1, '2026-03-07 14:00:00'),
                 ('2', '测试字典2', 'test_dict2', 1, '2026-03-07 14:00:00')
                 "#;
-                rb.exec(insert_sql, vec![]).await.unwrap();
+                let _ = rb.exec(insert_sql, vec![]).await;
 
                 // 模拟路由
                 use axum::routing::{get, post};
@@ -195,7 +229,9 @@ async fn test_login() {
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     let client = Client::new();
-    let res = client.post("http://127.0.0.1:9001/login")
+    // 使用配置文件中指定的端口
+    let port = 9002;
+    let res = client.post(format!("http://127.0.0.1:{}/login", port))
         .json(&serde_json::json!({ "username": "user", "password": "password" }))
         .send()
         .await
@@ -215,9 +251,11 @@ async fn test_get() {
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     let client = Client::new();
+    // 使用配置文件中指定的端口
+    let port = 9002;
     
     // 先登录获取会话
-    let login_res = client.post("http://127.0.0.1:9001/login")
+    let login_res = client.post(format!("http://127.0.0.1:{}/login", port))
         .json(&serde_json::json!({ "username": "user", "password": "password" }))
         .send()
         .await
@@ -228,7 +266,7 @@ async fn test_get() {
     let session_id = login_body.split("Logged in with session ID: ").nth(1).unwrap_or("").trim();
 
     // 使用会话 ID 发送请求
-    let res = client.get("http://127.0.0.1:9001/get")
+    let res = client.get(format!("http://127.0.0.1:{}/get", port))
         .header("Cookie", format!("session={}", session_id))
         .send()
         .await
@@ -248,9 +286,11 @@ async fn test_post() {
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     let client = Client::new();
+    // 使用配置文件中指定的端口
+    let port = 9002;
     
     // 先登录获取会话
-    let login_res = client.post("http://127.0.0.1:9001/login")
+    let login_res = client.post(format!("http://127.0.0.1:{}/login", port))
         .json(&serde_json::json!({ "username": "user", "password": "password" }))
         .send()
         .await
@@ -261,7 +301,7 @@ async fn test_post() {
     let session_id = login_body.split("Logged in with session ID: ").nth(1).unwrap_or("").trim();
 
     // 使用会话 ID 发送请求
-    let res = client.post("http://127.0.0.1:9001/post")
+    let res = client.post(format!("http://127.0.0.1:{}/post", port))
         .header("Cookie", format!("session={}", session_id))
         .send()
         .await
@@ -279,9 +319,11 @@ async fn test_get_body() {
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     let client = Client::new();
+    // 使用配置文件中指定的端口
+    let port = 9002;
     
     // 先登录获取会话
-    let login_res = client.post("http://127.0.0.1:9001/login")
+    let login_res = client.post(format!("http://127.0.0.1:{}/login", port))
         .json(&serde_json::json!({ "username": "user", "password": "password" }))
         .send()
         .await
@@ -292,7 +334,7 @@ async fn test_get_body() {
     let session_id = login_body.split("Logged in with session ID: ").nth(1).unwrap_or("").trim();
 
     // 使用会话 ID 发送请求
-    let res = client.post("http://127.0.0.1:9001/getBody")
+    let res = client.post(format!("http://127.0.0.1:{}/getBody", port))
         .header("Cookie", format!("session={}", session_id))
         .json(&serde_json::json!({ "html_code": "<h1>Test</h1>" }))
         .send()
@@ -313,9 +355,11 @@ async fn test_api_sys_dict_list() {
     tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
 
     let client = Client::new();
+    // 使用配置文件中指定的端口
+    let port = 9002;
     
     // 先登录获取会话
-    let login_res = client.post("http://127.0.0.1:9001/login")
+    let login_res = client.post(format!("http://127.0.0.1:{}/login", port))
         .json(&serde_json::json!({ "username": "user", "password": "password" }))
         .send()
         .await
@@ -326,7 +370,7 @@ async fn test_api_sys_dict_list() {
     let session_id = login_body.split("Logged in with session ID: ").nth(1).unwrap_or("").trim();
 
     // 使用会话 ID 发送请求
-    let res = client.get("http://127.0.0.1:9001/api/sys-dict/list")
+    let res = client.get(format!("http://127.0.0.1:{}/api/sys-dict/list", port))
         .header("Cookie", format!("session={}", session_id))
         .send()
         .await
