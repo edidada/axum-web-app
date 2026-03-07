@@ -176,6 +176,9 @@ mod tests {
         let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
         let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
 
+        // 初始化 log 到 tracing 的桥接
+        tracing_log::LogTracer::init().unwrap_or(());
+
         // 创建一个日志记录器层，将日志输出到文件
         let file_layer = fmt::layer()
             .with_ansi(false) // 禁用 ANSI 样式
@@ -274,6 +277,9 @@ mod tests {
         let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
         let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
 
+        // 初始化 log 到 tracing 的桥接
+        tracing_log::LogTracer::init().unwrap_or(());
+
         // 创建一个日志记录器层，将日志输出到文件
         let file_layer = fmt::layer()
             .with_ansi(false) // 禁用 ANSI 样式
@@ -360,6 +366,9 @@ mod tests {
         // 设置日志
         let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
         let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
+
+        // 初始化 log 到 tracing 的桥接
+        tracing_log::LogTracer::init().unwrap_or(());
 
         // 创建一个日志记录器层，将日志输出到文件
         let file_layer = fmt::layer()

@@ -376,3 +376,419 @@ thread ThreadId(7), 2026-03-07T06:02:17.727015Z TRACE hyper::proto::h1::conn: St
 2026-03-07 14:03:43  INFO main::tests: === 测试 select_order_with_details API ===
 2026-03-07 14:03:43  INFO main::tests: 查询到 1 条关联数据
 2026-03-07 14:03:43  INFO main::tests: 订单信息: OrderWithDetail { id: Some("348e34df-c5d0-446c-8920-8e6a5811f0c1"), number: Some("ORD-20240101-001"), status: Some(1), user_id: Some("user123"), address_book_id: Some("addr123"), order_time: Some(DateTime(2026-03-07T14:03:43.3840898+08:00)), checkout_time: Some(DateTime(2026-03-07T14:03:43.3840983+08:00)), pay_method: Some(1), amount: Some(100.5), remark: Some("测试订单"), phone: Some("13800138000"), address: Some("北京市朝阳区"), user_name: Some("张三"), consignee: Some("李四"), detail_id: Some("8ca685e6-a53c-4c44-89a9-10e280d4f93e"), detail_name: Some("宫保鸡丁"), detail_image: Some("dish1.jpg"), dish_id: Some("dish123"), setmeal_id: None, dish_flavor: Some("中辣"), detail_number: Some(2), detail_amount: Some(38.0) }
+2026-03-07 14:08:27  INFO main::tests: === 创建表 ===
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965761] => `
+        CREATE TABLE IF NOT EXISTS sys_dict (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            code TEXT,
+            state INTEGER,
+            create_date TEXT
+        )
+        ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965761] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965763] => `insert into sys_dict (id, name, code, state, create_date ) VALUES (?, ?, ?, ?, ? )` ["8097130024622055564","crud test","crud_code",1,"2026-03-07T14:08:27.3022077+08:00"]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965763] <= rows_affected={"rows_affected": 1, "last_insert_id": 7}
+2026-03-07 14:08:27  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(7) }
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965765] => `select * from sys_dict ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965765] <= len=6
+2026-03-07 14:08:27  INFO main::tests: 查询到 6 条数据
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965767] => `update sys_dict set name=?, code=?, state=?, create_date=? ` ["updated crud test","crud_code",1,"2026-03-07T14:08:27.3022077+08:00"]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965767] <= rows_affected={"rows_affected": 6, "last_insert_id": 7}
+2026-03-07 14:08:27  INFO main::tests: 更新结果: ExecResult { rows_affected: 6, last_insert_id: U64(7) }
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965769] => `select * from sys_dict ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965769] <= len=6
+2026-03-07 14:08:27  INFO main::tests: 更新后查询到 6 条数据
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965761] => `
+        CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            number TEXT,
+            status INTEGER,
+            user_id TEXT,
+            address_book_id TEXT,
+            order_time TEXT,
+            checkout_time TEXT,
+            pay_method INTEGER,
+            amount REAL,
+            remark TEXT,
+            phone TEXT,
+            address TEXT,
+            user_name TEXT,
+            consignee TEXT
+        )
+        ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965771] => `delete from sys_dict where id = ?` [8097130024622055564]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965761] => `
+    CREATE TABLE IF NOT EXISTS sys_dict (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        code TEXT,
+        state INTEGER,
+        create_date TEXT
+    )
+    ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965761] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965761] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:08:27  INFO main::tests: === 表创建成功 ===
+2026-03-07 14:08:27  INFO main::tests: === 测试增加数据 ===
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965771] <= rows_affected={"rows_affected": 1, "last_insert_id": 0}
+2026-03-07 14:08:27  INFO main::tests: 删除结果: ExecResult { rows_affected: 1, last_insert_id: U64(0) }
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965763] => `
+        CREATE TABLE IF NOT EXISTS order_detail (
+            id TEXT PRIMARY KEY,
+            order_id TEXT,
+            name TEXT,
+            image TEXT,
+            dish_id TEXT,
+            setmeal_id TEXT,
+            dish_flavor TEXT,
+            number INTEGER,
+            amount REAL
+        )
+        ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965763] => `insert into sys_dict (id, name, code, state, create_date ) VALUES (?, ?, ?, ?, ? )` ["16288630681015597367","测试字典6","test_dict6",0,"2026-03-07T14:08:27.3140762+08:00"]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965773] => `select * from sys_dict ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965763] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965773] <= len=5
+2026-03-07 14:08:27  INFO main::tests: 删除后查询到 5 条数据
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965763] <= rows_affected={"rows_affected": 1, "last_insert_id": 7}
+2026-03-07 14:08:27  INFO main::tests: 增加数据成功
+2026-03-07 14:08:27  INFO main::tests: === 测试查询数据 ===
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965765] => `insert into orders (id, number, status, user_id, address_book_id, order_time, checkout_time, pay_method, amount, remark, phone, address, user_name, consignee ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )` ["9b07c182-e012-4476-a9f3-c8dcdc10361c","ORD-20240101-001",1,"user123","addr123","2026-03-07T14:08:27.316003+08:00","2026-03-07T14:08:27.3160119+08:00",1,100.5,"测试订单","13800138000","北京市朝阳区","张三","李四"]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965765] => `select * from sys_dict ` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965765] <= len=6
+2026-03-07 14:08:27  INFO main::tests: 查询到 6 条数据
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("13971402166223601940"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("18157145057910953316"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("14685051993391533777"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("14286270287534497876"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("17167282144442119220"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("16288630681015597367"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T14:08:27.3140762+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: === 测试使用 select_page API ===
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965765] <= rows_affected={"rows_affected": 1, "last_insert_id": 6}
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965767] => `insert into order_detail (id, name, image, order_id, dish_id, dish_flavor, number, amount ) VALUES (?, ?, ?, ?, ?, ?, ?, ? )` ["0aa5df6b-2d96-4dc1-a86f-d8dd78792021","宫保鸡丁","dish1.jpg","9b07c182-e012-4476-a9f3-c8dcdc10361c","dish123","中辣",2,38]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965767] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965767] <= len=6
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965768] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict order by create_date` []
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965768] <= len=6
+2026-03-07 14:08:27  INFO main::tests: 总记录数: 0
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965767] <= rows_affected={"rows_affected": 1, "last_insert_id": 6}
+2026-03-07 14:08:27  INFO main::tests: 当前页码: 1
+2026-03-07 14:08:27  INFO main::tests: === 测试 select_order_with_details API ===
+2026-03-07 14:08:27  INFO main::tests: 每页大小: 10
+2026-03-07 14:08:27  INFO main::tests: 查询到 6 条数据
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("13971402166223601940"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("18157145057910953316"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("14685051993391533777"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("14286270287534497876"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("17167282144442119220"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:08:27  INFO main::tests: SysDict { id: Some("16288630681015597367"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T14:08:27.3140762+08:00)) }
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965769] => `select o.*, od.id as detail_id, od.name as detail_name, od.image as detail_image, od.dish_id, od.setmeal_id, od.dish_flavor, od.number as detail_number, od.amount as detail_amount
+from orders o
+left join order_detail od on o.id = od.order_id where o.id = ?` ["9b07c182-e012-4476-a9f3-c8dcdc10361c"]
+2026-03-07 14:08:27 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435929338974965769] <= len=1
+2026-03-07 14:08:27  INFO main::tests: 查询到 1 条关联数据
+2026-03-07 14:08:27  INFO main::tests: 订单信息: OrderWithDetail { id: Some("9b07c182-e012-4476-a9f3-c8dcdc10361c"), number: Some("ORD-20240101-001"), status: Some(1), user_id: Some("user123"), address_book_id: Some("addr123"), order_time: Some(DateTime(2026-03-07T14:08:27.316003+08:00)), checkout_time: Some(DateTime(2026-03-07T14:08:27.3160119+08:00)), pay_method: Some(1), amount: Some(100.5), remark: Some("测试订单"), phone: Some("13800138000"), address: Some("北京市朝阳区"), user_name: Some("张三"), consignee: Some("李四"), detail_id: Some("0aa5df6b-2d96-4dc1-a86f-d8dd78792021"), detail_name: Some("宫保鸡丁"), detail_image: Some("dish1.jpg"), dish_id: Some("dish123"), setmeal_id: None, dish_flavor: Some("中辣"), detail_number: Some(2), detail_amount: Some(38.0) }
+thread ThreadId(3), 2026-03-07T06:08:28.063729Z TRACE hyper::client::pool: checkout waiting for idle connection: ("http", 127.0.0.1:9001)
+thread ThreadId(5), 2026-03-07T06:08:28.063826Z TRACE hyper::client::pool: checkout waiting for idle connection: ("http", 127.0.0.1:9001)
+thread ThreadId(4), 2026-03-07T06:08:28.063943Z TRACE hyper::client::pool: checkout waiting for idle connection: ("http", 127.0.0.1:9001)
+thread ThreadId(2), 2026-03-07T06:08:28.064020Z TRACE hyper::client::pool: checkout waiting for idle connection: ("http", 127.0.0.1:9001)
+thread ThreadId(5), 2026-03-07T06:08:28.064108Z TRACE hyper::client::connect::http: Http::connect; scheme=Some("http"), host=Some("127.0.0.1"), port=Some(Port(9001))
+thread ThreadId(3), 2026-03-07T06:08:28.064202Z TRACE hyper::client::connect::http: Http::connect; scheme=Some("http"), host=Some("127.0.0.1"), port=Some(Port(9001))
+thread ThreadId(4), 2026-03-07T06:08:28.064284Z TRACE hyper::client::connect::http: Http::connect; scheme=Some("http"), host=Some("127.0.0.1"), port=Some(Port(9001))
+thread ThreadId(2), 2026-03-07T06:08:28.064382Z TRACE hyper::client::connect::http: Http::connect; scheme=Some("http"), host=Some("127.0.0.1"), port=Some(Port(9001))
+thread ThreadId(5), 2026-03-07T06:08:28.064526Z DEBUG hyper::client::connect::http: connecting to 127.0.0.1:9001
+thread ThreadId(3), 2026-03-07T06:08:28.064627Z DEBUG hyper::client::connect::http: connecting to 127.0.0.1:9001
+thread ThreadId(4), 2026-03-07T06:08:28.064720Z DEBUG hyper::client::connect::http: connecting to 127.0.0.1:9001
+thread ThreadId(2), 2026-03-07T06:08:28.064805Z DEBUG hyper::client::connect::http: connecting to 127.0.0.1:9001
+thread ThreadId(4), 2026-03-07T06:08:28.065267Z DEBUG hyper::client::connect::http: connected to 127.0.0.1:9001
+thread ThreadId(5), 2026-03-07T06:08:28.065354Z DEBUG hyper::client::connect::http: connected to 127.0.0.1:9001
+thread ThreadId(3), 2026-03-07T06:08:28.065420Z DEBUG hyper::client::connect::http: connected to 127.0.0.1:9001
+thread ThreadId(2), 2026-03-07T06:08:28.065498Z DEBUG hyper::client::connect::http: connected to 127.0.0.1:9001
+thread ThreadId(4), 2026-03-07T06:08:28.065578Z TRACE hyper::client::conn: client handshake Http1
+thread ThreadId(5), 2026-03-07T06:08:28.065665Z TRACE hyper::client::conn: client handshake Http1
+thread ThreadId(6), 2026-03-07T06:08:28.065741Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(3), 2026-03-07T06:08:28.065816Z TRACE hyper::client::conn: client handshake Http1
+thread ThreadId(2), 2026-03-07T06:08:28.065890Z TRACE hyper::client::conn: client handshake Http1
+thread ThreadId(4), 2026-03-07T06:08:28.065971Z TRACE hyper::client::client: handshake complete, spawning background dispatcher task
+thread ThreadId(5), 2026-03-07T06:08:28.066040Z TRACE hyper::client::client: handshake complete, spawning background dispatcher task
+thread ThreadId(6), 2026-03-07T06:08:28.066126Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(3), 2026-03-07T06:08:28.066254Z TRACE hyper::client::client: handshake complete, spawning background dispatcher task
+thread ThreadId(2), 2026-03-07T06:08:28.066336Z TRACE hyper::client::client: handshake complete, spawning background dispatcher task
+thread ThreadId(5), 2026-03-07T06:08:28.066423Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(4), 2026-03-07T06:08:28.066505Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(5), 2026-03-07T06:08:28.066608Z TRACE hyper::client::pool: checkout dropped for ("http", 127.0.0.1:9001)
+thread ThreadId(3), 2026-03-07T06:08:28.066697Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(2), 2026-03-07T06:08:28.066787Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(6), 2026-03-07T06:08:28.066869Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(4), 2026-03-07T06:08:28.066949Z TRACE hyper::client::pool: checkout dropped for ("http", 127.0.0.1:9001)
+thread ThreadId(3), 2026-03-07T06:08:28.067038Z TRACE hyper::client::pool: checkout dropped for ("http", 127.0.0.1:9001)
+thread ThreadId(5), 2026-03-07T06:08:28.067127Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=POST, body=Some(Known(41))
+thread ThreadId(2), 2026-03-07T06:08:28.067218Z TRACE hyper::client::pool: checkout dropped for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.067306Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(4), 2026-03-07T06:08:28.067390Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=POST, body=Some(Known(41))
+thread ThreadId(3), 2026-03-07T06:08:28.067480Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=POST, body=Some(Known(41))
+thread ThreadId(5), 2026-03-07T06:08:28.067564Z TRACE hyper::proto::h1::encode: sized write, len = 41
+thread ThreadId(2), 2026-03-07T06:08:28.067641Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=POST, body=Some(Known(41))
+thread ThreadId(6), 2026-03-07T06:08:28.067726Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(4), 2026-03-07T06:08:28.067804Z TRACE hyper::proto::h1::encode: sized write, len = 41
+thread ThreadId(3), 2026-03-07T06:08:28.067885Z TRACE hyper::proto::h1::encode: sized write, len = 41
+thread ThreadId(5), 2026-03-07T06:08:28.067977Z TRACE hyper::proto::h1::io: buffer.queue self.len=111 buf.len=41
+thread ThreadId(2), 2026-03-07T06:08:28.068056Z TRACE hyper::proto::h1::encode: sized write, len = 41
+thread ThreadId(6), 2026-03-07T06:08:28.068163Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(4), 2026-03-07T06:08:28.068257Z TRACE hyper::proto::h1::io: buffer.queue self.len=111 buf.len=41
+thread ThreadId(3), 2026-03-07T06:08:28.068348Z TRACE hyper::proto::h1::io: buffer.queue self.len=111 buf.len=41
+thread ThreadId(2), 2026-03-07T06:08:28.068455Z TRACE hyper::proto::h1::io: buffer.queue self.len=111 buf.len=41
+thread ThreadId(3), 2026-03-07T06:08:28.068554Z DEBUG hyper::proto::h1::io: flushed 152 bytes
+thread ThreadId(2), 2026-03-07T06:08:28.068637Z DEBUG hyper::proto::h1::io: flushed 152 bytes
+thread ThreadId(4), 2026-03-07T06:08:28.068716Z DEBUG hyper::proto::h1::io: flushed 152 bytes
+thread ThreadId(5), 2026-03-07T06:08:28.068794Z DEBUG hyper::proto::h1::io: flushed 152 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.068876Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(3), 2026-03-07T06:08:28.068959Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(2), 2026-03-07T06:08:28.069037Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(4), 2026-03-07T06:08:28.069113Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(5), 2026-03-07T06:08:28.069210Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(6), 2026-03-07T06:08:28.069302Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Busy }
+thread ThreadId(6), 2026-03-07T06:08:28.069470Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.069590Z TRACE hyper::proto::h1::io: received 152 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.069764Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=152
+thread ThreadId(6), 2026-03-07T06:08:28.069917Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(111)
+thread ThreadId(6), 2026-03-07T06:08:28.070133Z DEBUG hyper::proto::h1::io: parsed 4 headers
+thread ThreadId(6), 2026-03-07T06:08:28.070242Z DEBUG hyper::proto::h1::conn: incoming body is content-length (41 bytes)
+thread ThreadId(6), 2026-03-07T06:08:28.070467Z TRACE hyper::proto::h1::decode: decode; state=Length(41)
+thread ThreadId(6), 2026-03-07T06:08:28.070592Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T06:08:28.070842Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(39)), req_method=Some(POST)
+thread ThreadId(6), 2026-03-07T06:08:28.071000Z TRACE hyper::proto::h1::encode: sized write, len = 39
+thread ThreadId(6), 2026-03-07T06:08:28.071126Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=39
+thread ThreadId(6), 2026-03-07T06:08:28.071351Z DEBUG hyper::proto::h1::io: flushed 155 bytes
+thread ThreadId(5), 2026-03-07T06:08:28.071442Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.071533Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(5), 2026-03-07T06:08:28.071638Z TRACE hyper::proto::h1::io: received 155 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.071838Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(5), 2026-03-07T06:08:28.071979Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=155
+thread ThreadId(6), 2026-03-07T06:08:28.072107Z TRACE hyper::proto::h1::io: received 152 bytes
+thread ThreadId(5), 2026-03-07T06:08:28.072224Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(6), 2026-03-07T06:08:28.072350Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=152
+thread ThreadId(5), 2026-03-07T06:08:28.072423Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(6), 2026-03-07T06:08:28.072497Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(111)
+thread ThreadId(5), 2026-03-07T06:08:28.072672Z DEBUG hyper::proto::h1::conn: incoming body is content-length (39 bytes)
+thread ThreadId(6), 2026-03-07T06:08:28.072828Z DEBUG hyper::proto::h1::io: parsed 4 headers
+thread ThreadId(5), 2026-03-07T06:08:28.072889Z TRACE hyper::proto::h1::decode: decode; state=Length(39)
+thread ThreadId(6), 2026-03-07T06:08:28.073062Z DEBUG hyper::proto::h1::conn: incoming body is content-length (41 bytes)
+thread ThreadId(5), 2026-03-07T06:08:28.073143Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T06:08:28.073235Z TRACE hyper::proto::h1::decode: decode; state=Length(41)
+thread ThreadId(5), 2026-03-07T06:08:28.073317Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(6), 2026-03-07T06:08:28.073385Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(5), 2026-03-07T06:08:28.073449Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.073594Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(39)), req_method=Some(POST)
+thread ThreadId(5), 2026-03-07T06:08:28.073717Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.073825Z TRACE hyper::proto::h1::encode: sized write, len = 39
+thread ThreadId(5), 2026-03-07T06:08:28.073930Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.074018Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=39
+thread ThreadId(5), 2026-03-07T06:08:28.074083Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.074284Z DEBUG hyper::proto::h1::io: flushed 155 bytes
+thread ThreadId(3), 2026-03-07T06:08:28.074386Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.074472Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(5), 2026-03-07T06:08:28.074537Z TRACE hyper::client::pool: take? ("http", 127.0.0.1:9001): expiration = Some(90s)
+thread ThreadId(3), 2026-03-07T06:08:28.074595Z TRACE hyper::proto::h1::io: received 155 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.074670Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(5), 2026-03-07T06:08:28.074751Z DEBUG hyper::client::pool: reuse idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(3), 2026-03-07T06:08:28.074846Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=155
+thread ThreadId(5), 2026-03-07T06:08:28.074923Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=POST, body=None
+thread ThreadId(6), 2026-03-07T06:08:28.074985Z TRACE hyper::proto::h1::io: received 152 bytes
+thread ThreadId(3), 2026-03-07T06:08:28.075087Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(5), 2026-03-07T06:08:28.075149Z DEBUG hyper::proto::h1::io: flushed 88 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.075258Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=152
+thread ThreadId(3), 2026-03-07T06:08:28.075340Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(5), 2026-03-07T06:08:28.075437Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(6), 2026-03-07T06:08:28.075590Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(111)
+thread ThreadId(3), 2026-03-07T06:08:28.075675Z DEBUG hyper::proto::h1::conn: incoming body is content-length (39 bytes)
+thread ThreadId(5), 2026-03-07T06:08:28.075738Z TRACE hyper::client::pool: idle interval checking for expired
+thread ThreadId(6), 2026-03-07T06:08:28.075849Z DEBUG hyper::proto::h1::io: parsed 4 headers
+thread ThreadId(3), 2026-03-07T06:08:28.075924Z TRACE hyper::proto::h1::decode: decode; state=Length(39)
+thread ThreadId(6), 2026-03-07T06:08:28.075990Z DEBUG hyper::proto::h1::conn: incoming body is content-length (41 bytes)
+thread ThreadId(3), 2026-03-07T06:08:28.076127Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T06:08:28.076201Z TRACE hyper::proto::h1::decode: decode; state=Length(41)
+thread ThreadId(3), 2026-03-07T06:08:28.076292Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(3), 2026-03-07T06:08:28.076390Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.076473Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T06:08:28.076607Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.076687Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(39)), req_method=Some(POST)
+thread ThreadId(3), 2026-03-07T06:08:28.077234Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.077413Z TRACE hyper::proto::h1::encode: sized write, len = 39
+thread ThreadId(3), 2026-03-07T06:08:28.077507Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.077593Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=39
+thread ThreadId(6), 2026-03-07T06:08:28.077748Z DEBUG hyper::proto::h1::io: flushed 155 bytes
+thread ThreadId(3), 2026-03-07T06:08:28.077838Z TRACE hyper::client::pool: take? ("http", 127.0.0.1:9001): expiration = Some(90s)
+thread ThreadId(2), 2026-03-07T06:08:28.078148Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.078282Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(3), 2026-03-07T06:08:28.078346Z DEBUG hyper::client::pool: reuse idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(2), 2026-03-07T06:08:28.078435Z TRACE hyper::proto::h1::io: received 155 bytes
+thread ThreadId(3), 2026-03-07T06:08:28.078560Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=POST, body=Some(Known(29))
+thread ThreadId(6), 2026-03-07T06:08:28.078651Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(2), 2026-03-07T06:08:28.078747Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=155
+thread ThreadId(3), 2026-03-07T06:08:28.078843Z TRACE hyper::proto::h1::encode: sized write, len = 29
+thread ThreadId(6), 2026-03-07T06:08:28.078909Z TRACE hyper::proto::h1::io: received 152 bytes
+thread ThreadId(2), 2026-03-07T06:08:28.079001Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(3), 2026-03-07T06:08:28.079087Z TRACE hyper::proto::h1::io: buffer.queue self.len=143 buf.len=29
+thread ThreadId(6), 2026-03-07T06:08:28.079194Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=152
+thread ThreadId(2), 2026-03-07T06:08:28.079467Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(3), 2026-03-07T06:08:28.079606Z DEBUG hyper::proto::h1::io: flushed 172 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.079751Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(111)
+thread ThreadId(2), 2026-03-07T06:08:28.079847Z DEBUG hyper::proto::h1::conn: incoming body is content-length (39 bytes)
+thread ThreadId(3), 2026-03-07T06:08:28.079932Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(6), 2026-03-07T06:08:28.079989Z DEBUG hyper::proto::h1::io: parsed 4 headers
+thread ThreadId(2), 2026-03-07T06:08:28.080391Z TRACE hyper::proto::h1::decode: decode; state=Length(39)
+thread ThreadId(2), 2026-03-07T06:08:28.080863Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T06:08:28.080957Z TRACE hyper::client::pool: idle interval checking for expired
+thread ThreadId(6), 2026-03-07T06:08:28.081134Z DEBUG hyper::proto::h1::conn: incoming body is content-length (41 bytes)
+thread ThreadId(2), 2026-03-07T06:08:28.081372Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(6), 2026-03-07T06:08:28.081463Z TRACE hyper::proto::h1::decode: decode; state=Length(41)
+thread ThreadId(2), 2026-03-07T06:08:28.081582Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.081660Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-07T06:08:28.081734Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.081884Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(39)), req_method=Some(POST)
+thread ThreadId(2), 2026-03-07T06:08:28.081985Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.082064Z TRACE hyper::proto::h1::encode: sized write, len = 39
+thread ThreadId(2), 2026-03-07T06:08:28.082156Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.082258Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=39
+thread ThreadId(6), 2026-03-07T06:08:28.082407Z DEBUG hyper::proto::h1::io: flushed 155 bytes
+thread ThreadId(2), 2026-03-07T06:08:28.082523Z TRACE hyper::client::pool: take? ("http", 127.0.0.1:9001): expiration = Some(90s)
+thread ThreadId(4), 2026-03-07T06:08:28.082625Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.082683Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(2), 2026-03-07T06:08:28.082824Z DEBUG hyper::client::pool: reuse idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(4), 2026-03-07T06:08:28.082919Z TRACE hyper::proto::h1::io: received 155 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.083065Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(2), 2026-03-07T06:08:28.083167Z TRACE encode_headers: hyper::proto::h1::role: Client::encode method=GET, body=None
+thread ThreadId(4), 2026-03-07T06:08:28.083247Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=155
+thread ThreadId(6), 2026-03-07T06:08:28.083341Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.083462Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.083721Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(4), 2026-03-07T06:08:28.083812Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(2), 2026-03-07T06:08:28.083914Z DEBUG hyper::proto::h1::io: flushed 86 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.084067Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(4), 2026-03-07T06:08:28.084234Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(2), 2026-03-07T06:08:28.084394Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: KeepAlive, keep_alive: Busy }
+thread ThreadId(6), 2026-03-07T06:08:28.084484Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(2), 2026-03-07T06:08:28.084562Z TRACE hyper::client::pool: idle interval checking for expired
+thread ThreadId(4), 2026-03-07T06:08:28.084635Z DEBUG hyper::proto::h1::conn: incoming body is content-length (39 bytes)
+thread ThreadId(6), 2026-03-07T06:08:28.084703Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(4), 2026-03-07T06:08:28.084835Z TRACE hyper::proto::h1::decode: decode; state=Length(39)
+thread ThreadId(6), 2026-03-07T06:08:28.084942Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.085072Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.085134Z TRACE hyper::proto::h1::io: received 88 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.085279Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=88
+thread ThreadId(4), 2026-03-07T06:08:28.085417Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T06:08:28.085488Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(88)
+thread ThreadId(6), 2026-03-07T06:08:28.085637Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(4), 2026-03-07T06:08:28.085689Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(6), 2026-03-07T06:08:28.085786Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(4), 2026-03-07T06:08:28.085850Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(4), 2026-03-07T06:08:28.085935Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.086019Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(21)), req_method=Some(POST)
+thread ThreadId(4), 2026-03-07T06:08:28.086092Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.086163Z TRACE hyper::proto::h1::encode: sized write, len = 21
+thread ThreadId(4), 2026-03-07T06:08:28.086261Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.086321Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=21
+thread ThreadId(6), 2026-03-07T06:08:28.086668Z DEBUG hyper::proto::h1::io: flushed 137 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.087354Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(5), 2026-03-07T06:08:28.087428Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(5), 2026-03-07T06:08:28.087542Z TRACE hyper::proto::h1::io: received 137 bytes
+thread ThreadId(5), 2026-03-07T06:08:28.087672Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=137
+thread ThreadId(5), 2026-03-07T06:08:28.087762Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(6), 2026-03-07T06:08:28.087903Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.088317Z TRACE hyper::proto::h1::io: received 172 bytes
+thread ThreadId(5), 2026-03-07T06:08:28.088513Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(6), 2026-03-07T06:08:28.088724Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=172
+thread ThreadId(5), 2026-03-07T06:08:28.088818Z DEBUG hyper::proto::h1::conn: incoming body is content-length (21 bytes)
+thread ThreadId(6), 2026-03-07T06:08:28.089058Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(143)
+thread ThreadId(5), 2026-03-07T06:08:28.089113Z TRACE hyper::proto::h1::decode: decode; state=Length(21)
+thread ThreadId(5), 2026-03-07T06:08:28.089335Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T06:08:28.089459Z DEBUG hyper::proto::h1::io: parsed 5 headers
+thread ThreadId(5), 2026-03-07T06:08:28.089773Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(6), 2026-03-07T06:08:28.090143Z DEBUG hyper::proto::h1::conn: incoming body is content-length (29 bytes)
+thread ThreadId(5), 2026-03-07T06:08:28.090419Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.090612Z TRACE hyper::proto::h1::decode: decode; state=Length(29)
+thread ThreadId(5), 2026-03-07T06:08:28.090971Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.091148Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(5), 2026-03-07T06:08:28.091450Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.091558Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(25)), req_method=Some(POST)
+thread ThreadId(5), 2026-03-07T06:08:28.091681Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.091802Z TRACE hyper::proto::h1::encode: sized write, len = 25
+thread ThreadId(6), 2026-03-07T06:08:28.091990Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=25
+thread ThreadId(6), 2026-03-07T06:08:28.092271Z DEBUG hyper::proto::h1::io: flushed 141 bytes
+thread ThreadId(3), 2026-03-07T06:08:28.092387Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.092482Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(3), 2026-03-07T06:08:28.092683Z TRACE hyper::proto::h1::io: received 141 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.092768Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(3), 2026-03-07T06:08:28.092969Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=141
+thread ThreadId(6), 2026-03-07T06:08:28.093064Z TRACE hyper::proto::h1::io: received 86 bytes
+thread ThreadId(3), 2026-03-07T06:08:28.093319Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(6), 2026-03-07T06:08:28.093471Z TRACE parse_headers: hyper::proto::h1::role: Request.parse bytes=86
+thread ThreadId(3), 2026-03-07T06:08:28.093710Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(6), 2026-03-07T06:08:28.093805Z TRACE parse_headers: hyper::proto::h1::role: Request.parse Complete(86)
+thread ThreadId(3), 2026-03-07T06:08:28.093910Z DEBUG hyper::proto::h1::conn: incoming body is content-length (25 bytes)
+thread ThreadId(6), 2026-03-07T06:08:28.093994Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(3), 2026-03-07T06:08:28.094075Z TRACE hyper::proto::h1::decode: decode; state=Length(25)
+thread ThreadId(6), 2026-03-07T06:08:28.094180Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(3), 2026-03-07T06:08:28.094270Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T06:08:28.094425Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(6), 2026-03-07T06:08:28.095175Z TRACE encode_headers: hyper::proto::h1::role: Server::encode status=200, body=Some(Known(13)), req_method=Some(GET)
+thread ThreadId(3), 2026-03-07T06:08:28.096088Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.096204Z TRACE hyper::proto::h1::encode: sized write, len = 13
+thread ThreadId(3), 2026-03-07T06:08:28.096323Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.096420Z TRACE hyper::proto::h1::io: buffer.queue self.len=116 buf.len=13
+thread ThreadId(3), 2026-03-07T06:08:28.096595Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.096697Z DEBUG hyper::proto::h1::io: flushed 129 bytes
+thread ThreadId(2), 2026-03-07T06:08:28.096791Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(3), 2026-03-07T06:08:28.096890Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.096980Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(2), 2026-03-07T06:08:28.097068Z TRACE hyper::proto::h1::io: received 129 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.097191Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(2), 2026-03-07T06:08:28.097316Z TRACE parse_headers: hyper::proto::h1::role: Response.parse bytes=129
+thread ThreadId(6), 2026-03-07T06:08:28.097386Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(2), 2026-03-07T06:08:28.097482Z TRACE parse_headers: hyper::proto::h1::role: Response.parse Complete(116)
+thread ThreadId(6), 2026-03-07T06:08:28.097622Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(2), 2026-03-07T06:08:28.097714Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(6), 2026-03-07T06:08:28.097939Z TRACE hyper::proto::h1::io: received 0 bytes
+thread ThreadId(2), 2026-03-07T06:08:28.098039Z DEBUG hyper::proto::h1::conn: incoming body is content-length (13 bytes)
+thread ThreadId(6), 2026-03-07T06:08:28.098210Z TRACE hyper::proto::h1::io: parse eof
+thread ThreadId(2), 2026-03-07T06:08:28.098314Z TRACE hyper::proto::h1::decode: decode; state=Length(13)
+thread ThreadId(6), 2026-03-07T06:08:28.098461Z TRACE hyper::proto::h1::conn: State::close_read()
+thread ThreadId(2), 2026-03-07T06:08:28.098566Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T06:08:28.098636Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(2), 2026-03-07T06:08:28.098721Z TRACE hyper::proto::h1::conn: maybe_notify; read_from_io blocked
+thread ThreadId(6), 2026-03-07T06:08:28.098835Z TRACE hyper::proto::h1::conn: State::close_write()
+thread ThreadId(2), 2026-03-07T06:08:28.098945Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.099038Z TRACE hyper::proto::h1::conn: State::close_read()
+thread ThreadId(2), 2026-03-07T06:08:28.099116Z TRACE hyper::proto::h1::conn: flushed({role=client}): State { reading: Init, writing: Init, keep_alive: Idle }
+thread ThreadId(6), 2026-03-07T06:08:28.099217Z TRACE hyper::proto::h1::conn: State::close_write()
+thread ThreadId(2), 2026-03-07T06:08:28.099304Z TRACE hyper::client::pool: put; add idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.099400Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Closed, writing: Closed, keep_alive: Disabled }
+thread ThreadId(2), 2026-03-07T06:08:28.099461Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9001)
+thread ThreadId(6), 2026-03-07T06:08:28.099616Z TRACE hyper::proto::h1::conn: shut down IO complete
+thread ThreadId(6), 2026-03-07T06:08:28.099786Z TRACE hyper::proto::h1::conn: Conn::read_head
+thread ThreadId(6), 2026-03-07T06:08:28.099891Z TRACE hyper::proto::h1::io: received 0 bytes
+thread ThreadId(6), 2026-03-07T06:08:28.100010Z TRACE hyper::proto::h1::io: parse eof
+thread ThreadId(6), 2026-03-07T06:08:28.100125Z TRACE hyper::proto::h1::conn: State::close_read()
+thread ThreadId(6), 2026-03-07T06:08:28.100262Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(6), 2026-03-07T06:08:28.100436Z TRACE hyper::proto::h1::conn: State::close_write()
+thread ThreadId(6), 2026-03-07T06:08:28.100556Z TRACE hyper::proto::h1::conn: State::close_read()
+thread ThreadId(6), 2026-03-07T06:08:28.100673Z TRACE hyper::proto::h1::conn: State::close_write()
+thread ThreadId(6), 2026-03-07T06:08:28.100851Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Closed, writing: Closed, keep_alive: Disabled }
+thread ThreadId(6), 2026-03-07T06:08:28.101020Z TRACE hyper::proto::h1::conn: shut down IO complete
+thread ThreadId(6), 2026-03-07T06:08:28.101193Z TRACE hyper::proto::h1::conn: Conn::read_head
