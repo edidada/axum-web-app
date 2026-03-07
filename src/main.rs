@@ -332,4 +332,105 @@ mod tests {
 
         Ok(())
     }
+
+    #[tokio::test]
+    async fn test_select_order_with_details() -> Result<(), Box<dyn std::error::Error>> {
+        // Initialize RBatis for test
+        let rb = RBatis::new();
+        rb.init(SqliteDriver {}, "sqlite://./test.db")?;
+
+        // Create orders table
+        let create_orders_table = r#"
+        CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            number TEXT,
+            status INTEGER,
+            user_id TEXT,
+            address_book_id TEXT,
+            order_time TEXT,
+            checkout_time TEXT,
+            pay_method INTEGER,
+            amount REAL,
+            remark TEXT,
+            phone TEXT,
+            address TEXT,
+            user_name TEXT,
+            consignee TEXT
+        )
+        "#;
+        rb.exec(create_orders_table, vec![]).await?;
+
+        // Create order_detail table
+        let create_order_detail_table = r#"
+        CREATE TABLE IF NOT EXISTS order_detail (
+            id TEXT PRIMARY KEY,
+            order_id TEXT,
+            name TEXT,
+            image TEXT,
+            dish_id TEXT,
+            setmeal_id TEXT,
+            dish_flavor TEXT,
+            number INTEGER,
+            amount REAL
+        )
+        "#;
+        rb.exec(create_order_detail_table, vec![]).await?;
+
+        // Insert test data
+        let order_id = Uuid::new_v4().to_string();
+        let order = crate::domain::table::orders::Orders {
+            id: Some(order_id.clone()),
+            number: Some("ORD-20240101-001".to_string()),
+            status: Some(1),
+            user_id: Some("user123".to_string()),
+            address_book_id: Some("addr123".to_string()),
+            order_time: Some(rbatis::rbdc::DateTime::now()),
+            checkout_time: Some(rbatis::rbdc::DateTime::now()),
+            pay_method: Some(1),
+            amount: Some(100.50),
+            remark: Some("测试订单".to_string()),
+            phone: Some("13800138000".to_string()),
+            address: Some("北京市朝阳区".to_string()),
+            user_name: Some("张三".to_string()),
+            consignee: Some("李四".to_string()),
+        };
+
+        // Insert order
+        let _ = crate::domain::table::orders::Orders::insert(&rb, &order).await?;
+
+        // Insert order detail
+        let detail_id = Uuid::new_v4().to_string();
+        let order_detail = crate::domain::table::order_detail::OrderDetail {
+            id: Some(detail_id),
+            order_id: Some(order_id.clone()),
+            name: Some("宫保鸡丁".to_string()),
+            image: Some("dish1.jpg".to_string()),
+            dish_id: Some("dish123".to_string()),
+            setmeal_id: None,
+            dish_flavor: Some("中辣".to_string()),
+            number: Some(2),
+            amount: Some(38.0),
+        };
+
+        let _ = crate::domain::table::order_detail::OrderDetail::insert(&rb, &order_detail).await?;
+
+        // Test select_order_with_details API
+        tracing::info!("=== 测试 select_order_with_details API ===");
+        let result = crate::domain::table::orders::Orders::select_order_with_details(&rb, Some(&order_id), None).await;
+        match result {
+            Ok(order_with_details) => {
+                tracing::info!("查询到 {} 条关联数据", order_with_details.len());
+                for item in &order_with_details {
+                    tracing::info!("订单信息: {:?}", item);
+                }
+                assert!(!order_with_details.is_empty());
+            }
+            Err(e) => {
+                tracing::error!("查询失败: {:?}", e);
+                return Err(e.into());
+            }
+        }
+
+        Ok(())
+    }
 }
