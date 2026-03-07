@@ -3835,3 +3835,190 @@ thread ThreadId(2), 2026-03-07T15:51:24.825073Z DEBUG main::routes: Response bod
 thread ThreadId(2), 2026-03-07T15:51:24.825961Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 35.3029ms
 thread ThreadId(2), 2026-03-07T15:51:24.826220Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1506"}
 thread ThreadId(2), 2026-03-07T15:51:24.826687Z DEBUG hyper::proto::h1::io: flushed 1616 bytes
+thread ThreadId(1), 2026-03-07T15:52:23.809421Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(11), 2026-03-07T15:52:26.916555Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(11), 2026-03-07T15:52:26.916870Z DEBUG hyper::proto::h1::conn: incoming body is content-length (28 bytes)
+thread ThreadId(11), 2026-03-07T15:52:26.917284Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(11), 2026-03-07T15:52:26.917702Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(11), 2026-03-07T15:52:26.917983Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "28", "reqable-id": "reqable-id-f0b3d2ed-1a9b-4707-a5f9-610f36de10eb", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(2), 2026-03-07T15:52:26.922005Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":null,"name":null}
+thread ThreadId(2), 2026-03-07T15:52:26.941105Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076292690284545] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+thread ThreadId(2), 2026-03-07T15:52:26.943085Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076292690284545] <= len=14
+thread ThreadId(2), 2026-03-07T15:52:26.943814Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076292690284546] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+thread ThreadId(16), 2026-03-07T15:52:26.945778Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076292690284546] <= len=14
+thread ThreadId(16), 2026-03-07T15:52:26.947241Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"1","name":"zhangsan","code":"test_dict1","state":1,"create_date":"2026-03-06T14:00:00+08:00"},{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"11","name":"zhangsan11","code":"test_dict1","state":1,"create_date":"2026-03-11T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"13","name":"zhangsan13","code":"test_dict1","state":1,"create_date":"2026-03-10T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"2","name":"测试字典2","code":"test_dict2","state":1,"create_date":"2026-03-02T14:00:00+08:00"},{"id":"3","name":"zhangsan3","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"4","name":"zhangsan4","code":"test_dict1","state":1,"create_date":"2026-03-25T14:00:00+08:00"},{"id":"5","name":"zhangsan5","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"6","name":"zhangsan6","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"7","name":"zhangsan7","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"8","name":"zhangsan8","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"9","name":"zhangsan9","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":0,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(16), 2026-03-07T15:52:26.948069Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 30.387ms
+thread ThreadId(16), 2026-03-07T15:52:26.948631Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1506"}
+thread ThreadId(16), 2026-03-07T15:52:26.949339Z DEBUG hyper::proto::h1::io: flushed 1616 bytes
+thread ThreadId(1), 2026-03-07T15:53:20.353035Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(16), 2026-03-07T15:53:23.599131Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(16), 2026-03-07T15:53:23.599446Z DEBUG hyper::proto::h1::conn: incoming body is content-length (28 bytes)
+thread ThreadId(16), 2026-03-07T15:53:23.600003Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(16), 2026-03-07T15:53:23.600313Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(16), 2026-03-07T15:53:23.600508Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "28", "reqable-id": "reqable-id-a1e7d931-1f88-4b44-a8b3-6ce67cf2eb72", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(2), 2026-03-07T15:53:23.603516Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":null,"name":null}
+thread ThreadId(2), 2026-03-07T15:53:23.625254Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076529882370049] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+thread ThreadId(2), 2026-03-07T15:53:23.626901Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076529882370049] <= len=14
+thread ThreadId(2), 2026-03-07T15:53:23.627586Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076529882370050] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+thread ThreadId(17), 2026-03-07T15:53:23.629053Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076529882370050] <= len=14
+thread ThreadId(17), 2026-03-07T15:53:23.630549Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"1","name":"zhangsan","code":"test_dict1","state":1,"create_date":"2026-03-06T14:00:00+08:00"},{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"11","name":"zhangsan11","code":"test_dict1","state":1,"create_date":"2026-03-11T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"13","name":"zhangsan13","code":"test_dict1","state":1,"create_date":"2026-03-10T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"2","name":"测试字典2","code":"test_dict2","state":1,"create_date":"2026-03-02T14:00:00+08:00"},{"id":"3","name":"zhangsan3","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"4","name":"zhangsan4","code":"test_dict1","state":1,"create_date":"2026-03-25T14:00:00+08:00"},{"id":"5","name":"zhangsan5","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"6","name":"zhangsan6","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"7","name":"zhangsan7","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"8","name":"zhangsan8","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"9","name":"zhangsan9","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":0,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(17), 2026-03-07T15:53:23.631940Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 31.4138ms
+thread ThreadId(17), 2026-03-07T15:53:23.632401Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1506"}
+thread ThreadId(17), 2026-03-07T15:53:23.632965Z DEBUG hyper::proto::h1::io: flushed 1616 bytes
+thread ThreadId(1), 2026-03-07T15:54:34.892203Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(17), 2026-03-07T15:54:37.787147Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(17), 2026-03-07T15:54:37.787278Z DEBUG hyper::proto::h1::conn: incoming body is content-length (28 bytes)
+thread ThreadId(17), 2026-03-07T15:54:37.787492Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(17), 2026-03-07T15:54:37.787777Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(17), 2026-03-07T15:54:37.787922Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "28", "reqable-id": "reqable-id-0f08bf00-c393-47bb-a294-bc43661b269b", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(6), 2026-03-07T15:54:37.789962Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":null,"name":null}
+thread ThreadId(6), 2026-03-07T15:54:37.802656Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595905] => `select count(1) as count from sys_dict` []
+thread ThreadId(6), 2026-03-07T15:54:37.809501Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595905] <= len=1
+thread ThreadId(6), 2026-03-07T15:54:37.810061Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595906] => `select id ,name ,code ,state ,create_date from sys_dict order by create_date desc limit 3,3 ` []
+thread ThreadId(14), 2026-03-07T15:54:37.811178Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595906] <= len=3
+thread ThreadId(14), 2026-03-07T15:54:37.811514Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":14,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(14), 2026-03-07T15:54:37.812064Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 24.2463ms
+thread ThreadId(14), 2026-03-07T15:54:37.812247Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "378"}
+thread ThreadId(14), 2026-03-07T15:54:37.812948Z DEBUG hyper::proto::h1::io: flushed 487 bytes
+thread ThreadId(14), 2026-03-07T15:55:59.788774Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(14), 2026-03-07T15:55:59.789231Z DEBUG hyper::proto::h1::conn: incoming body is content-length (52 bytes)
+thread ThreadId(14), 2026-03-07T15:55:59.789928Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(14), 2026-03-07T15:55:59.790232Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "52", "reqable-id": "reqable-id-de16afd9-b7c3-40c4-8bcf-cec73aa901a2", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(14), 2026-03-07T15:55:59.795803Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(14), 2026-03-07T15:55:59.797303Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":"test_dict1","name":null}
+thread ThreadId(6), 2026-03-07T15:55:59.827804Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595908] => `select count(1) as count from sys_dict where code = ?` ["test_dict1"]
+thread ThreadId(6), 2026-03-07T15:55:59.833665Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595908] <= len=1
+thread ThreadId(6), 2026-03-07T15:55:59.835046Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595909] => `select id ,name ,code ,state ,create_date from sys_dict where code = ? order by create_date desc limit 3,3 ` ["test_dict1"]
+thread ThreadId(14), 2026-03-07T15:55:59.842802Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595909] <= len=3
+thread ThreadId(14), 2026-03-07T15:55:59.843644Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":13,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(14), 2026-03-07T15:55:59.844558Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 54.6306ms
+thread ThreadId(14), 2026-03-07T15:55:59.845020Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "378"}
+thread ThreadId(14), 2026-03-07T15:55:59.845495Z DEBUG hyper::proto::h1::io: flushed 487 bytes
+thread ThreadId(6), 2026-03-07T15:56:13.359620Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(6), 2026-03-07T15:56:13.359908Z DEBUG hyper::proto::h1::conn: incoming body is content-length (52 bytes)
+thread ThreadId(6), 2026-03-07T15:56:13.360206Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T15:56:13.360526Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(6), 2026-03-07T15:56:13.360776Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "52", "reqable-id": "reqable-id-ad1c833f-420b-4136-9cf9-8296ce422075", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(6), 2026-03-07T15:56:13.363670Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":null,"name":"zhangsan10"}
+thread ThreadId(6), 2026-03-07T15:56:13.380645Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595911] => `select count(1) as count from sys_dict where name = ?` ["zhangsan10"]
+thread ThreadId(6), 2026-03-07T15:56:13.382723Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595911] <= len=1
+thread ThreadId(6), 2026-03-07T15:56:13.383196Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595912] => `select id ,name ,code ,state ,create_date from sys_dict where name = ? order by create_date desc limit 3,3 ` ["zhangsan10"]
+thread ThreadId(6), 2026-03-07T15:56:13.385257Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595912] <= len=0
+thread ThreadId(6), 2026-03-07T15:56:13.385508Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[],"total":1,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(6), 2026-03-07T15:56:13.385866Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 25.3849ms
+thread ThreadId(6), 2026-03-07T15:56:13.386341Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "66"}
+thread ThreadId(6), 2026-03-07T15:56:13.386765Z DEBUG hyper::proto::h1::io: flushed 174 bytes
+thread ThreadId(14), 2026-03-07T15:57:13.439321Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(14), 2026-03-07T15:57:13.439519Z DEBUG hyper::proto::h1::conn: incoming body is content-length (28 bytes)
+thread ThreadId(14), 2026-03-07T15:57:13.439793Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(14), 2026-03-07T15:57:13.440079Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(14), 2026-03-07T15:57:13.440275Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "28", "reqable-id": "reqable-id-709c1c52-82ca-4c40-b129-b1fdd07dcd32", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(14), 2026-03-07T15:57:13.443210Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":null,"name":null}
+thread ThreadId(14), 2026-03-07T15:57:13.468907Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595914] => `select count(1) as count from sys_dict` []
+thread ThreadId(14), 2026-03-07T15:57:13.471156Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595914] <= len=1
+thread ThreadId(14), 2026-03-07T15:57:13.471566Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595915] => `select id ,name ,code ,state ,create_date from sys_dict order by create_date desc limit 3,3 ` []
+thread ThreadId(6), 2026-03-07T15:57:13.472675Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595915] <= len=3
+thread ThreadId(6), 2026-03-07T15:57:13.473164Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":14,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(6), 2026-03-07T15:57:13.473752Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 33.6154ms
+thread ThreadId(6), 2026-03-07T15:57:13.473978Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "378"}
+thread ThreadId(6), 2026-03-07T15:57:13.474422Z DEBUG hyper::proto::h1::io: flushed 487 bytes
+thread ThreadId(14), 2026-03-07T15:57:30.103045Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(14), 2026-03-07T15:57:30.103373Z DEBUG hyper::proto::h1::conn: incoming body is content-length (52 bytes)
+thread ThreadId(14), 2026-03-07T15:57:30.103778Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(14), 2026-03-07T15:57:30.104248Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(14), 2026-03-07T15:57:30.104628Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "52", "reqable-id": "reqable-id-5e71dd1a-d259-4a9e-b7bc-441a6a3367ad", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(14), 2026-03-07T15:57:30.107677Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":"test_dict1","name":null}
+thread ThreadId(6), 2026-03-07T15:57:30.128988Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595917] => `select count(1) as count from sys_dict where code = ?` ["test_dict1"]
+thread ThreadId(6), 2026-03-07T15:57:30.130302Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595917] <= len=1
+thread ThreadId(6), 2026-03-07T15:57:30.130678Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595918] => `select id ,name ,code ,state ,create_date from sys_dict where code = ? order by create_date desc limit 3,3 ` ["test_dict1"]
+thread ThreadId(14), 2026-03-07T15:57:30.132304Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595918] <= len=3
+thread ThreadId(14), 2026-03-07T15:57:30.132782Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":13,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(14), 2026-03-07T15:57:30.133750Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 29.2361ms
+thread ThreadId(14), 2026-03-07T15:57:30.134040Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "378"}
+thread ThreadId(14), 2026-03-07T15:57:30.135269Z DEBUG hyper::proto::h1::io: flushed 487 bytes
+thread ThreadId(6), 2026-03-07T15:57:37.908688Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(6), 2026-03-07T15:57:37.908934Z DEBUG hyper::proto::h1::conn: incoming body is content-length (28 bytes)
+thread ThreadId(6), 2026-03-07T15:57:37.909268Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T15:57:37.909545Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(6), 2026-03-07T15:57:37.909835Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "28", "reqable-id": "reqable-id-a8167957-0a89-4ec8-a391-2afbb956f1d7", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(6), 2026-03-07T15:57:37.912527Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":null,"name":null}
+thread ThreadId(6), 2026-03-07T15:57:37.929722Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595920] => `select count(1) as count from sys_dict` []
+thread ThreadId(6), 2026-03-07T15:57:37.932848Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595920] <= len=1
+thread ThreadId(6), 2026-03-07T15:57:37.933329Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595921] => `select id ,name ,code ,state ,create_date from sys_dict order by create_date desc limit 3,3 ` []
+thread ThreadId(14), 2026-03-07T15:57:37.934920Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595921] <= len=3
+thread ThreadId(14), 2026-03-07T15:57:37.935423Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"12","name":"zhangsan12","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"14","name":"zhangsan14","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":14,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(14), 2026-03-07T15:57:37.936025Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 26.4306ms
+thread ThreadId(14), 2026-03-07T15:57:37.936296Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "378"}
+thread ThreadId(14), 2026-03-07T15:57:37.937137Z DEBUG hyper::proto::h1::io: flushed 487 bytes
+thread ThreadId(6), 2026-03-07T15:58:33.800240Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(6), 2026-03-07T15:58:33.800735Z DEBUG hyper::proto::h1::conn: incoming body is content-length (53 bytes)
+thread ThreadId(6), 2026-03-07T15:58:33.801306Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T15:58:33.801732Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(6), 2026-03-07T15:58:33.802138Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "53", "reqable-id": "reqable-id-ab1a09dc-65c5-4061-bbdd-49f0bcf36e87", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(6), 2026-03-07T15:58:33.808469Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":2,"size":3,"code":"test_dict12","name":null}
+thread ThreadId(6), 2026-03-07T15:58:33.830343Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595923] => `select count(1) as count from sys_dict where code = ?` ["test_dict12"]
+thread ThreadId(6), 2026-03-07T15:58:33.834637Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595923] <= len=1
+thread ThreadId(6), 2026-03-07T15:58:33.835865Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595924] => `select id ,name ,code ,state ,create_date from sys_dict where code = ? order by create_date desc limit 3,3 ` ["test_dict12"]
+thread ThreadId(14), 2026-03-07T15:58:33.839864Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595924] <= len=0
+thread ThreadId(14), 2026-03-07T15:58:33.840637Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[],"total":3,"page_no":2,"page_size":3,"do_count":true}
+thread ThreadId(14), 2026-03-07T15:58:33.842206Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 40.255ms
+thread ThreadId(14), 2026-03-07T15:58:33.842646Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "66"}
+thread ThreadId(14), 2026-03-07T15:58:33.845020Z DEBUG hyper::proto::h1::io: flushed 174 bytes
+thread ThreadId(6), 2026-03-07T15:59:20.366664Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(6), 2026-03-07T15:59:20.366967Z DEBUG hyper::proto::h1::conn: incoming body is content-length (53 bytes)
+thread ThreadId(6), 2026-03-07T15:59:20.367415Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(6), 2026-03-07T15:59:20.367696Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "53", "reqable-id": "reqable-id-2a880530-87a5-49a4-9c2b-73531b360f30", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(6), 2026-03-07T15:59:20.372605Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(6), 2026-03-07T15:59:20.375177Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":1,"size":3,"code":"test_dict12","name":null}
+thread ThreadId(14), 2026-03-07T15:59:20.393485Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595926] => `select count(1) as count from sys_dict where code = ?` ["test_dict12"]
+thread ThreadId(14), 2026-03-07T15:59:20.396710Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595926] <= len=1
+thread ThreadId(14), 2026-03-07T15:59:20.397577Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595927] => `select id ,name ,code ,state ,create_date from sys_dict where code = ? order by create_date desc limit 0,3 ` ["test_dict12"]
+thread ThreadId(6), 2026-03-07T15:59:20.401562Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436076842521595927] <= len=3
+thread ThreadId(6), 2026-03-07T15:59:20.402107Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict12","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"6","name":"zhangsan6","code":"test_dict12","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"7","name":"zhangsan7","code":"test_dict12","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":3,"page_no":1,"page_size":3,"do_count":true}
+thread ThreadId(6), 2026-03-07T15:59:20.402965Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 35.389ms
+thread ThreadId(6), 2026-03-07T15:59:20.403500Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "376"}
+thread ThreadId(6), 2026-03-07T15:59:20.404334Z DEBUG hyper::proto::h1::io: flushed 485 bytes
+thread ThreadId(14), 2026-03-07T16:04:45.513724Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(1), 2026-03-07T16:16:41.474522Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(17), 2026-03-07T16:17:05.335031Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(17), 2026-03-07T16:17:05.335143Z DEBUG hyper::proto::h1::conn: incoming body is content-length (53 bytes)
+thread ThreadId(17), 2026-03-07T16:17:05.335277Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(17), 2026-03-07T16:17:05.335381Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(17), 2026-03-07T16:17:05.335462Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "53", "reqable-id": "reqable-id-9ee770d1-0044-4141-ba90-42ef503de0e6", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer c2ed2133-6084-4c10-af75-6edf9b5fa114"}
+thread ThreadId(2), 2026-03-07T16:17:05.336916Z DEBUG main::routes: Request body for /sys-dict/select-page (JSON): {"page":1,"size":3,"code":"test_dict12","name":null}
+thread ThreadId(2), 2026-03-07T16:17:05.342688Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436082406634950657] => `select count(1) as count from sys_dict where code = ?` ["test_dict12"]
+thread ThreadId(2), 2026-03-07T16:17:05.343430Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436082406634950657] <= len=1
+thread ThreadId(2), 2026-03-07T16:17:05.343666Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436082406634950658] => `select id ,name ,code ,state ,create_date from sys_dict where code = ? order by create_date desc limit 0,3 ` ["test_dict12"]
+thread ThreadId(2), 2026-03-07T16:17:05.344311Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7436082406634950658] <= len=3
+thread ThreadId(2), 2026-03-07T16:17:05.344481Z DEBUG main::routes: Response body for /sys-dict/select-page (JSON): {"records":[{"id":"10","name":"zhangsan10","code":"test_dict12","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"6","name":"zhangsan6","code":"test_dict12","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"7","name":"zhangsan7","code":"test_dict12","state":1,"create_date":"2026-03-07T14:00:00+08:00"}],"total":3,"page_no":1,"page_size":3,"do_count":true}
+thread ThreadId(2), 2026-03-07T16:17:05.344688Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 9.2866ms
+thread ThreadId(2), 2026-03-07T16:17:05.344766Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "376"}
+thread ThreadId(2), 2026-03-07T16:17:05.344937Z DEBUG hyper::proto::h1::io: flushed 485 bytes
