@@ -1,4 +1,4 @@
-use axum::{response::Html, Json, extract::Extension};
+use axum::{Json, extract::Extension};
 use serde::Deserialize;
 use redis::AsyncCommands;
 use uuid::Uuid;
@@ -15,7 +15,7 @@ pub struct LoginRequest {
 pub async fn login_handler(
     Json(payload): Json<LoginRequest>,
     Extension(redis_client): Extension<redis::Client>,
-) -> Html<String> {
+) -> (axum::http::StatusCode, Json<serde_json::Value>) {
     // Load configuration
     let config = Config::from_file();
 
@@ -31,8 +31,20 @@ pub async fn login_handler(
 
         let _: () = conn.set_ex(&key, &payload.username, expiration).await.unwrap();
 
-        Html(format!("Logged in with session ID: {}", session_id))
+        (
+            axum::http::StatusCode::OK,
+            Json(serde_json::json!({
+                "status": "success",
+                "session_id": session_id
+            }))
+        )
     } else {
-        Html("Invalid username or password".to_string())
+        (
+            axum::http::StatusCode::UNAUTHORIZED,
+            Json(serde_json::json!({
+                "status": "error",
+                "message": "Invalid username or password"
+            }))
+        )
     }
 }

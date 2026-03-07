@@ -2267,3 +2267,4 @@ thread ThreadId(2), 2026-03-07T07:47:42.392694Z  INFO main::handlers::login_hand
 thread ThreadId(16), 2026-03-07T07:47:42.394690Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 3.3803ms
 thread ThreadId(16), 2026-03-07T07:47:42.394878Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "63"}
 thread ThreadId(16), 2026-03-07T07:47:42.395198Z DEBUG hyper::proto::h1::io: flushed 179 bytes
+thread ThreadId(1), 2026-03-07T07:53:09.023381Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
