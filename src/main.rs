@@ -73,6 +73,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .merge(routes::setup_routes())
         .layer(
             ServiceBuilder::new()
+                .layer(axum::middleware::from_fn(middleware::request_logging::log_request))
                 .layer(Extension(redis_client))
                 .layer(Extension(rb))
         );

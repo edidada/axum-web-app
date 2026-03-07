@@ -1948,3 +1948,45 @@ thread ThreadId(2), 2026-03-07T07:00:37.627377Z DEBUG hyper::proto::h1::conn: in
 thread ThreadId(2), 2026-03-07T07:00:37.627511Z DEBUG hyper::proto::h1::conn: incoming body completed
 thread ThreadId(2), 2026-03-07T07:00:37.627673Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9002)
 thread ThreadId(3), 2026-03-07T07:00:37.627958Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(2), 2026-03-07T07:06:26.132996Z DEBUG hyper::client::connect::http: connecting to 127.0.0.1:9002
+thread ThreadId(2), 2026-03-07T07:06:26.133708Z DEBUG hyper::client::connect::http: connected to 127.0.0.1:9002
+thread ThreadId(2), 2026-03-07T07:06:26.134334Z DEBUG hyper::proto::h1::io: flushed 152 bytes
+thread ThreadId(3), 2026-03-07T07:06:26.134434Z DEBUG hyper::proto::h1::io: parsed 4 headers
+thread ThreadId(3), 2026-03-07T07:06:26.134544Z DEBUG hyper::proto::h1::conn: incoming body is content-length (41 bytes)
+thread ThreadId(3), 2026-03-07T07:06:26.134727Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T07:06:26.135036Z DEBUG hyper::proto::h1::io: flushed 155 bytes
+thread ThreadId(2), 2026-03-07T07:06:26.135093Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(2), 2026-03-07T07:06:26.135191Z DEBUG hyper::proto::h1::conn: incoming body is content-length (39 bytes)
+thread ThreadId(2), 2026-03-07T07:06:26.135345Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-07T07:06:26.135745Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9002)
+thread ThreadId(2), 2026-03-07T07:06:26.136072Z DEBUG hyper::client::pool: reuse idle connection for ("http", 127.0.0.1:9002)
+thread ThreadId(2), 2026-03-07T07:06:26.136293Z DEBUG hyper::proto::h1::io: flushed 100 bytes
+thread ThreadId(3), 2026-03-07T07:06:26.136366Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(3), 2026-03-07T07:06:26.136440Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(3), 2026-03-07T07:06:26.136716Z DEBUG hyper::proto::h1::io: flushed 310 bytes
+thread ThreadId(2), 2026-03-07T07:06:26.136761Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(2), 2026-03-07T07:06:26.136847Z DEBUG hyper::proto::h1::conn: incoming body is content-length (201 bytes)
+thread ThreadId(2), 2026-03-07T07:06:26.136968Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-07T07:06:26.137134Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9002)
+thread ThreadId(3), 2026-03-07T07:06:26.137423Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(2), 2026-03-07T07:07:18.948791Z DEBUG hyper::client::connect::http: connecting to 127.0.0.1:9002
+thread ThreadId(2), 2026-03-07T07:07:18.949758Z DEBUG hyper::client::connect::http: connected to 127.0.0.1:9002
+thread ThreadId(2), 2026-03-07T07:07:18.950442Z DEBUG hyper::proto::h1::io: flushed 152 bytes
+thread ThreadId(3), 2026-03-07T07:07:18.950509Z DEBUG hyper::proto::h1::io: parsed 4 headers
+thread ThreadId(3), 2026-03-07T07:07:18.950582Z DEBUG hyper::proto::h1::conn: incoming body is content-length (41 bytes)
+thread ThreadId(3), 2026-03-07T07:07:18.950772Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T07:07:18.951046Z DEBUG hyper::proto::h1::io: flushed 155 bytes
+thread ThreadId(2), 2026-03-07T07:07:18.951142Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(2), 2026-03-07T07:07:18.951231Z DEBUG hyper::proto::h1::conn: incoming body is content-length (39 bytes)
+thread ThreadId(2), 2026-03-07T07:07:18.951326Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-07T07:07:18.951506Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9002)
+thread ThreadId(2), 2026-03-07T07:07:18.952027Z DEBUG hyper::client::pool: reuse idle connection for ("http", 127.0.0.1:9002)
+thread ThreadId(2), 2026-03-07T07:07:18.952437Z DEBUG hyper::proto::h1::io: flushed 100 bytes
+thread ThreadId(3), 2026-03-07T07:07:18.952620Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(3), 2026-03-07T07:07:18.952711Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(3), 2026-03-07T07:07:18.952963Z DEBUG hyper::proto::h1::io: flushed 310 bytes
+thread ThreadId(2), 2026-03-07T07:07:18.953047Z DEBUG hyper::proto::h1::io: parsed 3 headers
+thread ThreadId(2), 2026-03-07T07:07:18.953112Z DEBUG hyper::proto::h1::conn: incoming body is content-length (201 bytes)
+thread ThreadId(2), 2026-03-07T07:07:18.953255Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-07T07:07:18.953538Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9002)
+thread ThreadId(3), 2026-03-07T07:07:18.953834Z DEBUG hyper::proto::h1::conn: read eof
