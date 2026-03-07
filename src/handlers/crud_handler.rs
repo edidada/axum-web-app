@@ -60,8 +60,6 @@ pub async fn sys_dict_select_page(
     let dto = DictPageDTO {
         code: payload.code,
         name: payload.name,
-        limit: limit,
-        offset: offset,
     };
     let result = SysDict::select_page(rb, &page_request, &dto).await;
     match result {

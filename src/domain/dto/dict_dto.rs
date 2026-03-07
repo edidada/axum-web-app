@@ -4,6 +4,6 @@ use serde::{Deserialize, Serialize};
 pub struct DictPageDTO {
     pub code: Option<String>,
     pub name: Option<String>,
-    pub limit: u64,
-    pub offset: u64,
+    // pub limit: u64,
+    // pub offset: u64,
 }
