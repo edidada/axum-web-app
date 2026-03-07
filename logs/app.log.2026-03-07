@@ -792,3 +792,132 @@ thread ThreadId(6), 2026-03-07T06:08:28.100673Z TRACE hyper::proto::h1::conn: St
 thread ThreadId(6), 2026-03-07T06:08:28.100851Z TRACE hyper::proto::h1::conn: flushed({role=server}): State { reading: Closed, writing: Closed, keep_alive: Disabled }
 thread ThreadId(6), 2026-03-07T06:08:28.101020Z TRACE hyper::proto::h1::conn: shut down IO complete
 thread ThreadId(6), 2026-03-07T06:08:28.101193Z TRACE hyper::proto::h1::conn: Conn::read_head
+2026-03-07 14:11:48  INFO main::tests: === 创建表 ===
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259009] => `
+        CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            number TEXT,
+            status INTEGER,
+            user_id TEXT,
+            address_book_id TEXT,
+            order_time TEXT,
+            checkout_time TEXT,
+            pay_method INTEGER,
+            amount REAL,
+            remark TEXT,
+            phone TEXT,
+            address TEXT,
+            user_name TEXT,
+            consignee TEXT
+        )
+        ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259009] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453313] => `
+    CREATE TABLE IF NOT EXISTS sys_dict (
+        id TEXT PRIMARY KEY,
+        name TEXT,
+        code TEXT,
+        state INTEGER,
+        create_date TEXT
+    )
+    ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453313] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:11:48  INFO main::tests: === 表创建成功 ===
+2026-03-07 14:11:48  INFO main::tests: === 测试增加数据 ===
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259011] => `
+        CREATE TABLE IF NOT EXISTS order_detail (
+            id TEXT PRIMARY KEY,
+            order_id TEXT,
+            name TEXT,
+            image TEXT,
+            dish_id TEXT,
+            setmeal_id TEXT,
+            dish_flavor TEXT,
+            number INTEGER,
+            amount REAL
+        )
+        ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259011] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453315] => `insert into sys_dict (id, name, code, state, create_date ) VALUES (?, ?, ?, ?, ? )` ["2759288214817187665","测试字典6","test_dict6",0,"2026-03-07T14:11:48.3373955+08:00"]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259013] => `insert into orders (id, number, status, user_id, address_book_id, order_time, checkout_time, pay_method, amount, remark, phone, address, user_name, consignee ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )` ["24d6bb95-8aad-4cad-8ba2-cf74ee8a6c52","ORD-20240101-001",1,"user123","addr123","2026-03-07T14:11:48.3377483+08:00","2026-03-07T14:11:48.3377506+08:00",1,100.5,"测试订单","13800138000","北京市朝阳区","张三","李四"]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453315] <= rows_affected={"rows_affected": 1, "last_insert_id": 8}
+2026-03-07 14:11:48  INFO main::tests: 增加数据成功
+2026-03-07 14:11:48  INFO main::tests: === 测试查询数据 ===
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453317] => `select * from sys_dict ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453317] <= len=7
+2026-03-07 14:11:48  INFO main::tests: 查询到 7 条数据
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("13971402166223601940"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("18157145057910953316"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("14685051993391533777"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("14286270287534497876"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("17167282144442119220"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("16288630681015597367"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T14:08:27.3140762+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("2759288214817187665"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T14:11:48.3373955+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: === 测试使用 select_page API ===
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453319] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453319] <= len=7
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453320] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict order by create_date` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182189453320] <= len=7
+2026-03-07 14:11:48  INFO main::tests: 总记录数: 0
+2026-03-07 14:11:48  INFO main::tests: 当前页码: 1
+2026-03-07 14:11:48  INFO main::tests: 每页大小: 10
+2026-03-07 14:11:48  INFO main::tests: 查询到 7 条数据
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("13971402166223601940"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("18157145057910953316"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("14685051993391533777"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("14286270287534497876"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("17167282144442119220"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T14:08:27.3022077+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("16288630681015597367"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T14:08:27.3140762+08:00)) }
+2026-03-07 14:11:48  INFO main::tests: SysDict { id: Some("2759288214817187665"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T14:11:48.3373955+08:00)) }
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259009] => `
+        CREATE TABLE IF NOT EXISTS sys_dict (
+            id TEXT PRIMARY KEY,
+            name TEXT,
+            code TEXT,
+            state INTEGER,
+            create_date TEXT
+        )
+        ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259013] <= rows_affected={"rows_affected": 1, "last_insert_id": 7}
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259009] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259011] => `insert into sys_dict (id, name, code, state, create_date ) VALUES (?, ?, ?, ?, ? )` ["15136110118277110617","crud test","crud_code",1,"2026-03-07T14:11:48.3453587+08:00"]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259015] => `insert into order_detail (id, name, image, order_id, dish_id, dish_flavor, number, amount ) VALUES (?, ?, ?, ?, ?, ?, ?, ? )` ["55d965a5-40e1-430a-b9da-15bc87e8e0bd","宫保鸡丁","dish1.jpg","24d6bb95-8aad-4cad-8ba2-cf74ee8a6c52","dish123","中辣",2,38]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259011] <= rows_affected={"rows_affected": 1, "last_insert_id": 9}
+2026-03-07 14:11:48  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(9) }
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259013] => `select * from sys_dict ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259013] <= len=8
+2026-03-07 14:11:48  INFO main::tests: 查询到 8 条数据
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259015] => `update sys_dict set name=?, code=?, state=?, create_date=? ` ["updated crud test","crud_code",1,"2026-03-07T14:11:48.3453587+08:00"]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259015] <= rows_affected={"rows_affected": 8, "last_insert_id": 9}
+2026-03-07 14:11:48  INFO main::tests: 更新结果: ExecResult { rows_affected: 8, last_insert_id: U64(9) }
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259017] => `select * from sys_dict ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259017] <= len=8
+2026-03-07 14:11:48  INFO main::tests: 更新后查询到 8 条数据
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259019] => `delete from sys_dict where id = ?` [15136110118277110617]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259019] <= rows_affected={"rows_affected": 0, "last_insert_id": 0}
+2026-03-07 14:11:48  INFO main::tests: 删除结果: ExecResult { rows_affected: 0, last_insert_id: U64(0) }
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259021] => `select * from sys_dict ` []
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259021] <= len=8
+2026-03-07 14:11:48  INFO main::tests: 删除后查询到 8 条数据
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259015] <= rows_affected={"rows_affected": 1, "last_insert_id": 7}
+2026-03-07 14:11:48  INFO main::tests: === 测试 select_order_with_details API ===
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259017] => `select o.*, od.id as detail_id, od.name as detail_name, od.image as detail_image, od.dish_id, od.setmeal_id, od.dish_flavor, od.number as detail_number, od.amount as detail_amount
+from orders o
+left join order_detail od on o.id = od.order_id where o.id = ?` ["24d6bb95-8aad-4cad-8ba2-cf74ee8a6c52"]
+2026-03-07 14:11:48 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435930182185259017] <= len=1
+2026-03-07 14:11:48  INFO main::tests: 查询到 1 条关联数据
+2026-03-07 14:11:48  INFO main::tests: 订单信息: OrderWithDetail { id: Some("24d6bb95-8aad-4cad-8ba2-cf74ee8a6c52"), number: Some("ORD-20240101-001"), status: Some(1), user_id: Some("user123"), address_book_id: Some("addr123"), order_time: Some(DateTime(2026-03-07T14:11:48.3377483+08:00)), checkout_time: Some(DateTime(2026-03-07T14:11:48.3377506+08:00)), pay_method: Some(1), amount: Some(100.5), remark: Some("测试订单"), phone: Some("13800138000"), address: Some("北京市朝阳区"), user_name: Some("张三"), consignee: Some("李四"), detail_id: Some("55d965a5-40e1-430a-b9da-15bc87e8e0bd"), detail_name: Some("宫保鸡丁"), detail_image: Some("dish1.jpg"), dish_id: Some("dish123"), setmeal_id: None, dish_flavor: Some("中辣"), detail_number: Some(2), detail_amount: Some(38.0) }
