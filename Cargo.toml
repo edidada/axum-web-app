@@ -57,6 +57,7 @@ rbs = "4.5.0"
 rand = "0.8"
 simplelog = "0.12"
 log = "0.4"
+hyper = "0.14"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }

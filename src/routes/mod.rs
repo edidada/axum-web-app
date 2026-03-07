@@ -1,4 +1,4 @@
-use axum::{routing::get, routing::post, Extension, Router};
+use axum::{routing::get, routing::post, Extension, Router, Json};
 use rbatis::RBatis;
 use crate::handlers::get_handler::{get_handler, get_body_handler};
 use crate::handlers::post_handler::post_handler;
@@ -22,9 +22,13 @@ pub fn setup_routes() -> Router {
         .route("/sys-dict/insert", post(sys_dict_insert).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/update", post(sys_dict_update).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/delete", post(sys_dict_delete).layer(axum::middleware::from_fn(validate_session)))
-        .route("/api/sys-dict/list", get(|Extension(rb): Extension<&'static RBatis>| async move {
+        .route("/api/sys-dict/list", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<serde_json::Value>| async move {
             use crate::domain::table::sys_dict::SysDict;
             use axum::response::IntoResponse;
+
+            // 打印请求体到日志
+            tracing::debug!("Request body for /api/sys-dict/list: {:?}", payload);
+
             match SysDict::select_all(rb).await {
                 Ok(dicts) => axum::Json(dicts).into_response(),
                 Err(e) => {
