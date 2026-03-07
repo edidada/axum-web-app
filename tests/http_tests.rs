@@ -192,6 +192,33 @@ database = "ruiji"
                 use axum::http::Request;
                 use axum::Json;
 
+                // 请求日志中间件
+                async fn log_request<B>(req: Request<B>, next: axum::middleware::Next<B>) -> axum::response::Response
+                where
+                    B: Send,
+                {
+                    let start = std::time::Instant::now();
+                    let path = req.uri().path().to_string();
+                    let method = req.method().to_string();
+
+                    // 记录请求头
+                    tracing::debug!("Request: {} {}", method, path);
+                    tracing::debug!("Headers: {:?}", req.headers());
+
+                    // 处理请求
+                    let response = next.run(req).await;
+
+                    // 记录响应
+                    let status = response.status();
+                    let duration = start.elapsed();
+                    tracing::info!("Response: {} {} - {} in {:?}", method, path, status, duration);
+
+                    // 记录响应头
+                    tracing::debug!("Response Headers: {:?}", response.headers());
+
+                    response
+                }
+
                 let app = Router::new()
                     .route("/login", post(|_: Request<Body>| async { Html("Logged in with session ID: test-session") }))
                     .route("/get", get(|_: Request<Body>| async { Html("Hello, World!") }))
@@ -207,6 +234,7 @@ database = "ruiji"
                     }))
                     .layer(
                         ServiceBuilder::new()
+                            .layer(axum::middleware::from_fn(log_request))
                             .layer(Extension(redis_client))
                     );
 

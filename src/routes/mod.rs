@@ -10,17 +10,6 @@ use crate::middleware::session_validation::validate_session;
 
 pub fn setup_routes() -> Router {
     Router::new()
-        .route("/api/sys-dict/list", get(|Extension(rb): Extension<&'static RBatis>| async move {
-            use crate::domain::table::sys_dict::SysDict;
-            use axum::response::IntoResponse;
-            match SysDict::select_all(rb).await {
-                Ok(dicts) => axum::Json(dicts).into_response(),
-                Err(e) => {
-                    tracing::error!("Failed to get sys_dict list: {:?}", e);
-                    axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()
-                }
-            }
-        }).layer(axum::middleware::from_fn(validate_session)))
         .route("/login", post(login_handler))
         .route("/logout", post(logout_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/get", get(get_handler).layer(axum::middleware::from_fn(validate_session)))
@@ -33,6 +22,17 @@ pub fn setup_routes() -> Router {
         .route("/sys-dict/insert", post(sys_dict_insert).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/update", post(sys_dict_update).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/delete", post(sys_dict_delete).layer(axum::middleware::from_fn(validate_session)))
+        .route("/api/sys-dict/list", get(|Extension(rb): Extension<&'static RBatis>| async move {
+            use crate::domain::table::sys_dict::SysDict;
+            use axum::response::IntoResponse;
+            match SysDict::select_all(rb).await {
+                Ok(dicts) => axum::Json(dicts).into_response(),
+                Err(e) => {
+                    tracing::error!("Failed to get sys_dict list: {:?}", e);
+                    axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()
+                }
+            }
+        }).layer(axum::middleware::from_fn(validate_session)))
         // AddressBook 相关路由
         .route("/address-book/select-page", post(address_book_select_page).layer(axum::middleware::from_fn(validate_session)))
         .route("/address-book/insert", post(address_book_insert).layer(axum::middleware::from_fn(validate_session)))
