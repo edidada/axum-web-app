@@ -34,6 +34,7 @@ pub async fn login_handler(
         (
             axum::http::StatusCode::OK,
             Json(serde_json::json!({
+                "code": 0,
                 "status": "success",
                 "session_id": session_id
             }))
@@ -42,6 +43,7 @@ pub async fn login_handler(
         (
             axum::http::StatusCode::UNAUTHORIZED,
             Json(serde_json::json!({
+                "code": 1,
                 "status": "error",
                 "message": "Invalid username or password"
             }))
