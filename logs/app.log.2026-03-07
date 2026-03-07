@@ -1,0 +1,20 @@
+2026-03-07 11:03:59  INFO main::tests: === 创建表 ===
+2026-03-07 11:03:59  INFO main::tests: 插入影响行数: ExecResult { rows_affected: 1, last_insert_id: U64(1) }
+2026-03-07 11:03:59  INFO main::tests: 查询到 1 条数据
+2026-03-07 11:03:59  INFO main::tests: 更新结果: ExecResult { rows_affected: 1, last_insert_id: U64(1) }
+2026-03-07 11:03:59  INFO main::tests: === 表创建成功 ===
+2026-03-07 11:03:59  INFO main::tests: === 测试增加数据 ===
+2026-03-07 11:03:59  INFO main::tests: 更新后查询到 1 条数据
+2026-03-07 11:03:59  INFO main::tests: 增加数据成功
+2026-03-07 11:03:59  INFO main::tests: === 测试查询数据 ===
+2026-03-07 11:03:59  INFO main::tests: 查询到 2 条数据
+2026-03-07 11:03:59  INFO main::tests: SysDict { id: Some("2704268548376123612"), name: Some("updated crud test"), code: Some("crud_code"), state: Some(1), create_date: Some(DateTime(2026-03-07T11:03:59.1086923+08:00)) }
+2026-03-07 11:03:59  INFO main::tests: SysDict { id: Some("13971402166223601940"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T11:03:59.1157282+08:00)) }
+2026-03-07 11:03:59  INFO main::tests: === 测试使用 select_page API ===
+2026-03-07 11:03:59  INFO main::tests: 删除结果: ExecResult { rows_affected: 1, last_insert_id: U64(0) }
+2026-03-07 11:03:59  INFO main::tests: 删除后查询到 1 条数据
+2026-03-07 11:03:59  INFO main::tests: 总记录数: 0
+2026-03-07 11:03:59  INFO main::tests: 当前页码: 1
+2026-03-07 11:03:59  INFO main::tests: 每页大小: 10
+2026-03-07 11:03:59  INFO main::tests: 查询到 1 条数据
+2026-03-07 11:03:59  INFO main::tests: SysDict { id: Some("13971402166223601940"), name: Some("测试字典6"), code: Some("test_dict6"), state: Some(0), create_date: Some(DateTime(2026-03-07T11:03:59.1157282+08:00)) }
