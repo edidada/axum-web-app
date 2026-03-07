@@ -1,4 +1,5 @@
-use axum::{routing::get, routing::post, Router};
+use axum::{routing::get, routing::post, Extension, Router};
+use rbatis::RBatis;
 use crate::handlers::get_handler::{get_handler, get_body_handler};
 use crate::handlers::post_handler::post_handler;
 use crate::handlers::login_handler::login_handler;
@@ -9,6 +10,17 @@ use crate::middleware::session_validation::validate_session;
 
 pub fn setup_routes() -> Router {
     Router::new()
+        .route("/api/sys-dict/list", get(|Extension(rb): Extension<&'static RBatis>| async move {
+            use crate::domain::table::sys_dict::SysDict;
+            use axum::response::IntoResponse;
+            match SysDict::select_all(rb).await {
+                Ok(dicts) => axum::Json(dicts).into_response(),
+                Err(e) => {
+                    tracing::error!("Failed to get sys_dict list: {:?}", e);
+                    axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()
+                }
+            }
+        }).layer(axum::middleware::from_fn(validate_session)))
         .route("/login", post(login_handler))
         .route("/logout", post(logout_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/get", get(get_handler).layer(axum::middleware::from_fn(validate_session)))
