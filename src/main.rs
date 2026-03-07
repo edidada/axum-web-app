@@ -168,10 +168,11 @@ mod tests {
     use rand::Rng;
     use rbs::value;
     use uuid::Uuid;
+    use tracing::dispatcher::get_default;
 
     #[tokio::test]
     async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
-
+        // 设置日志
         let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
         let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
 
@@ -182,15 +183,15 @@ mod tests {
             .with_writer(non_blocking);
 
         // 创建一个基于环境变量的过滤器层
-        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
+        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
 
         // 创建一个订阅器，将过滤器层和文件层组合起来
         let subscriber = Registry::default()
             .with(env_filter)
             .with(file_layer);
 
-        // 设置全局订阅器
-        tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
+        // 设置全局订阅器，忽略已存在的错误
+        let _ = tracing::subscriber::set_global_default(subscriber);
 
         // 初始化 RBatis
         let rb = RBatis::new();
@@ -269,6 +270,27 @@ mod tests {
 
     #[tokio::test]
     async fn test_sys_dict_crud() -> Result<(), Box<dyn std::error::Error>> {
+        // 设置日志
+        let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
+        let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
+
+        // 创建一个日志记录器层，将日志输出到文件
+        let file_layer = fmt::layer()
+            .with_ansi(false) // 禁用 ANSI 样式
+            .with_timer(super::LocalTimer {}) // 使用本地时间
+            .with_writer(non_blocking);
+
+        // 创建一个基于环境变量的过滤器层
+        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
+
+        // 创建一个订阅器，将过滤器层和文件层组合起来
+        let subscriber = Registry::default()
+            .with(env_filter)
+            .with(file_layer);
+
+        // 设置全局订阅器，忽略已存在的错误
+        let _ = tracing::subscriber::set_global_default(subscriber);
+
         // Initialize RBatis for test
         let rb = RBatis::new();
         rb.init(SqliteDriver {}, "sqlite://./test.db")?;
@@ -335,6 +357,27 @@ mod tests {
 
     #[tokio::test]
     async fn test_select_order_with_details() -> Result<(), Box<dyn std::error::Error>> {
+        // 设置日志
+        let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
+        let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
+
+        // 创建一个日志记录器层，将日志输出到文件
+        let file_layer = fmt::layer()
+            .with_ansi(false) // 禁用 ANSI 样式
+            .with_timer(super::LocalTimer {}) // 使用本地时间
+            .with_writer(non_blocking);
+
+        // 创建一个基于环境变量的过滤器层
+        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
+
+        // 创建一个订阅器，将过滤器层和文件层组合起来
+        let subscriber = Registry::default()
+            .with(env_filter)
+            .with(file_layer);
+
+        // 设置全局订阅器，忽略已存在的错误
+        let _ = tracing::subscriber::set_global_default(subscriber);
+
         // Initialize RBatis for test
         let rb = RBatis::new();
         rb.init(SqliteDriver {}, "sqlite://./test.db")?;
