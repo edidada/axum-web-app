@@ -19,6 +19,8 @@
     </where>
     <if test="do_count == false">
         order by create_date
+        limit #{dto.limit}
+        offset #{dto.offset}
     </if>
 </select>
     <insert id="insert">

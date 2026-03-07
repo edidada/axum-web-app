@@ -115,10 +115,10 @@ pub fn setup_routes() -> Router {
         .route("/api/sys-dict/list", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<serde_json::Value>| async move {
             use crate::domain::table::sys_dict::SysDict;
             use axum::response::IntoResponse;
-            
+
             // 打印请求体
             tracing::debug!("Request body for /api/sys-dict/list (JSON): {}", payload);
-            
+
             // 处理请求
             match SysDict::select_all(rb).await {
                 Ok(dicts) => {
