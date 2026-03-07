@@ -17,11 +17,6 @@
             and name = #{dto.name}
         </if>
     </where>
-    <if test="do_count == false">
-        order by create_date
-        limit #{dto.limit}
-        offset #{dto.offset}
-    </if>
 </select>
     <insert id="insert">
         insert into sys_dict (id, name, code, state, create_date) values (#{id}, #{name}, #{code}, #{state}, #{create_date})
