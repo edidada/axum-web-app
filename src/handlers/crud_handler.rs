@@ -2,6 +2,7 @@ use axum::{response::Json, extract::Extension, http::StatusCode};
 use rbatis::rbatis::RBatis;
 use rbatis::PageRequest;
 use rbs::{value};
+use serde::{Serialize, Deserialize};
 
 use crate::domain::table::sys_dict::SysDict;
 use crate::domain::table::address_book::AddressBook;
@@ -33,11 +34,23 @@ use rbatis::rbdc::db::ExecResult;
 fn generate_id() -> String {    let mut rng = rand::thread_rng();    let id: u64 = rng.gen();    id.to_string()}
 
 // SysDict 相关接口
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SysDictPageRequest {
+    pub page: u64,
+    pub size: u64,
+    pub code: Option<String>,
+    pub name: Option<String>,
+}
+
 pub async fn sys_dict_select_page(
-    Json(payload): Json<(PageRequest, DictPageDTO)>,
+    Json(payload): Json<SysDictPageRequest>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<SysDict>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.size);
+    let dto = DictPageDTO {
+        code: payload.code,
+        name: payload.name,
+    };
     let result = SysDict::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
