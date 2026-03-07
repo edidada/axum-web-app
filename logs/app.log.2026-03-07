@@ -3023,3 +3023,30 @@ thread ThreadId(16), 2026-03-07T09:27:47.789558Z DEBUG main::routes: Response bo
 thread ThreadId(16), 2026-03-07T09:27:47.790270Z  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 21.1205ms
 thread ThreadId(16), 2026-03-07T09:27:47.790459Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "412"}
 thread ThreadId(16), 2026-03-07T09:27:47.790959Z DEBUG hyper::proto::h1::io: flushed 521 bytes
+thread ThreadId(1), 2026-03-07T09:30:54.689216Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(17), 2026-03-07T09:31:08.124632Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(17), 2026-03-07T09:31:08.124917Z DEBUG hyper::proto::h1::conn: incoming body is content-length (81 bytes)
+thread ThreadId(17), 2026-03-07T09:31:08.125518Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(17), 2026-03-07T09:31:08.125973Z DEBUG main::middleware::request_logging: Request: POST /sys-dict/select-page
+thread ThreadId(17), 2026-03-07T09:31:08.126367Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "81", "reqable-id": "reqable-id-667f80e4-1813-463b-a868-619f7294f6dd", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=74b55ce9-c6e3-43b5-88aa-cbc7cf72a9a9", "authorization": "Bearer dc96ec75-d0fb-4b10-b4c0-ba9911f0b98e"}
+thread ThreadId(5), 2026-03-07T09:31:08.152246Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435980288750129153] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict` []
+thread ThreadId(5), 2026-03-07T09:31:08.153908Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435980288750129153] <= len=14
+thread ThreadId(5), 2026-03-07T09:31:08.154652Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435980288750129154] => `select
+id
+,name
+,code
+,state
+,create_date
+from
+sys_dict order by create_date` []
+thread ThreadId(16), 2026-03-07T09:31:08.156312Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435980288750129154] <= len=14
+thread ThreadId(16), 2026-03-07T09:31:08.157636Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 31.6997ms
+thread ThreadId(16), 2026-03-07T09:31:08.157885Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1506"}
+thread ThreadId(16), 2026-03-07T09:31:08.158440Z DEBUG hyper::proto::h1::io: flushed 1616 bytes

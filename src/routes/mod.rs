@@ -22,13 +22,34 @@ pub fn setup_routes() -> Router {
         .route("/sys-dict/insert", post(sys_dict_insert).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/update", post(sys_dict_update).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/delete", post(sys_dict_delete).layer(axum::middleware::from_fn(validate_session)))
-        .route("/api/sys-dict/list", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<serde_json::Value>| async move {
+        .route("/api/sys-dict/list", post(|Extension(rb): Extension<&'static RBatis>, req: axum::http::Request<axum::body::Body>| async move {
             use crate::domain::table::sys_dict::SysDict;
             use axum::response::IntoResponse;
+            use hyper::body::to_bytes;
             use serde_json;
             
-            // 打印请求体到日志
-            tracing::debug!("Request body for /api/sys-dict/list: {:?}", payload);
+            // 先提取 Content-Type
+            let content_type = req.headers().get(axum::http::header::CONTENT_TYPE)
+                .and_then(|h| h.to_str().ok())
+                .unwrap_or("")
+                .to_string();
+            
+            // 读取请求体
+            let body_bytes = to_bytes(req.into_body()).await.unwrap_or_default();
+            
+            // 根据 Content-Type 打印请求体
+            if content_type.contains("application/json") {
+                // 尝试解析为 JSON
+                if let Ok(json_value) = serde_json::from_slice::<serde_json::Value>(&body_bytes) {
+                    tracing::debug!("Request body for /api/sys-dict/list (JSON): {}", json_value);
+                } else {
+                    let body_str = String::from_utf8_lossy(&body_bytes);
+                    tracing::debug!("Request body for /api/sys-dict/list (String): {}", body_str);
+                }
+            } else {
+                let body_str = String::from_utf8_lossy(&body_bytes);
+                tracing::debug!("Request body for /api/sys-dict/list (String): {}", body_str);
+            }
             
             match SysDict::select_all(rb).await {
                 Ok(dicts) => {
