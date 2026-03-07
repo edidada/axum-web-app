@@ -25,12 +25,24 @@ pub fn setup_routes() -> Router {
         .route("/api/sys-dict/list", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<serde_json::Value>| async move {
             use crate::domain::table::sys_dict::SysDict;
             use axum::response::IntoResponse;
-
+            use serde_json;
+            
             // 打印请求体到日志
             tracing::debug!("Request body for /api/sys-dict/list: {:?}", payload);
-
+            
             match SysDict::select_all(rb).await {
-                Ok(dicts) => axum::Json(dicts).into_response(),
+                Ok(dicts) => {
+                    // 打印出参到日志
+                    match serde_json::to_string(&dicts) {
+                        Ok(json_str) => {
+                            tracing::debug!("Response body for /api/sys-dict/list (JSON): {}", json_str);
+                        },
+                        Err(e) => {
+                            tracing::error!("Failed to serialize response body: {:?}", e);
+                        }
+                    }
+                    axum::Json(dicts).into_response()
+                },
                 Err(e) => {
                     tracing::error!("Failed to get sys_dict list: {:?}", e);
                     axum::http::StatusCode::INTERNAL_SERVER_ERROR.into_response()

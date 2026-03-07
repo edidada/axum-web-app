@@ -3009,3 +3009,17 @@ thread ThreadId(2), 2026-03-07T09:23:39.394315Z DEBUG rbatis::plugin::intercept:
 thread ThreadId(2), 2026-03-07T09:23:39.395151Z  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 20.9103ms
 thread ThreadId(2), 2026-03-07T09:23:39.395433Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "412"}
 thread ThreadId(2), 2026-03-07T09:23:39.395897Z DEBUG hyper::proto::h1::io: flushed 521 bytes
+thread ThreadId(1), 2026-03-07T09:27:20.106120Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(1), 2026-03-07T09:27:42.581007Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(17), 2026-03-07T09:27:47.768028Z DEBUG hyper::proto::h1::io: parsed 10 headers
+thread ThreadId(17), 2026-03-07T09:27:47.768314Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(17), 2026-03-07T09:27:47.768744Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(17), 2026-03-07T09:27:47.769036Z DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+thread ThreadId(17), 2026-03-07T09:27:47.769299Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-a27962b6-9838-4bd6-bb87-4a102bb560ea", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "session=dc96ec75-d0fb-4b10-b4c0-ba9911f0b98e", "authorization": "Bearer dc96ec75-d0fb-4b10-b4c0-ba9911f0b98e"}
+thread ThreadId(2), 2026-03-07T09:27:47.772422Z DEBUG main::routes: Request body for /api/sys-dict/list: Object {"password": String("Pass123Qwe"), "username": String("edidada")}
+thread ThreadId(16), 2026-03-07T09:27:47.787649Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435979483007553537] => `select * from sys_dict ` []
+thread ThreadId(16), 2026-03-07T09:27:47.789033Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7435979483007553537] <= len=4
+thread ThreadId(16), 2026-03-07T09:27:47.789558Z DEBUG main::routes: Response body for /api/sys-dict/list (JSON): [{"id":"1","name":"zhangsan","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"2","name":"测试字典2","code":"test_dict2","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"3","name":"zhangsan3","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"},{"id":"4","name":"zhangsan4","code":"test_dict1","state":1,"create_date":"2026-03-07T14:00:00+08:00"}]
+thread ThreadId(16), 2026-03-07T09:27:47.790270Z  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 21.1205ms
+thread ThreadId(16), 2026-03-07T09:27:47.790459Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "412"}
+thread ThreadId(16), 2026-03-07T09:27:47.790959Z DEBUG hyper::proto::h1::io: flushed 521 bytes
