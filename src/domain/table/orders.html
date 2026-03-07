@@ -20,4 +20,17 @@
         order by order_time desc
     </if>
 </select>
+<select id="select_order_with_details">
+    select o.*, od.id as detail_id, od.name as detail_name, od.image as detail_image, od.dish_id, od.setmeal_id, od.dish_flavor, od.number as detail_number, od.amount as detail_amount
+    from orders o
+    left join order_detail od on o.id = od.order_id
+    <where>
+        <if test="order_id != null">
+            and o.id = #{order_id}
+        </if>
+        <if test="user_id != null">
+            and o.user_id = #{user_id}
+        </if>
+    </where>
+</select>
 </mapper>

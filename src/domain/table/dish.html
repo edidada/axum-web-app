@@ -9,13 +9,22 @@
         <if test="dto.category_id != null">
             and category_id = #{dto.category_id}
         </if>
-        <if test="dto.status != null">
-            and status = #{dto.status}
-        </if>
-        and is_deleted = 0
     </where>
     <if test="do_count == false">
         order by sort
     </if>
+</select>
+<select id="select_dish_with_flavors">
+    select d.*, df.id as flavor_id, df.name as flavor_name, df.value as flavor_value
+    from dish d
+    left join dish_flavor df on d.id = df.dish_id
+    <where>
+        <if test="dish_id != null">
+            and d.id = #{dish_id}
+        </if>
+        <if test="name != null">
+            and d.name = #{name}
+        </if>
+    </where>
 </select>
 </mapper>
