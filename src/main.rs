@@ -166,6 +166,7 @@ mod tests {
     use tracing_subscriber::{fmt, EnvFilter, Registry, layer::SubscriberExt};
     use tracing_appender::rolling::{RollingFileAppender, Rotation};
     use rand::Rng;
+    use rbs::value;
     use uuid::Uuid;
 
     #[tokio::test]
@@ -319,7 +320,10 @@ mod tests {
 
         // Delete
         // 使用 delete_by_map 方法删除数据
-        let delete_result = sys_dict::SysDict::delete_by_map(&rb, Value::Null).await?;
+        let delete_result = sys_dict::SysDict::delete_by_map(
+            &rb,
+            value!{ "id": random_id },  // 这里 "id" 是你的表主键字段名
+        ).await?;
         tracing::info!("删除结果: {:?}", delete_result);
 
         // Verify delete
