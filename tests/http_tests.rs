@@ -125,7 +125,12 @@ database = "ruiji"
                         .with_timer(LocalTimer {})
                         .event_format(ThreadIdFormatter);
 
+                    // 设置日志级别为 DEBUG，以便看到 HTTP 请求日志
+                    use tracing_subscriber::EnvFilter;
+                    let env_filter = EnvFilter::new("axum=debug,hyper=debug,tower=debug");
+
                     let subscriber = Registry::default()
+                        .with(env_filter)
                         .with(console_layer)
                         .with(file_layer);
 
