@@ -4,7 +4,7 @@ use rbatis::rbdc::DateTime;
 use rbatis::executor::Executor;
 use rbatis::{crud, html_sql};
 
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Hash, Eq, PartialEq)]
 pub struct SysDict {
     pub id: Option<String>,
     pub name: Option<String>,
@@ -17,5 +17,5 @@ crud!(SysDict {});
 
 #[html_sql("src/domain/table/sys_dict.html")]
 impl SysDict {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
+    pub async fn select_page(conn: &dyn rbatis::Executor, request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
 }

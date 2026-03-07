@@ -48,15 +48,6 @@ pub async fn sys_dict_select_page(
 ) -> Result<Json<rbatis::Page<SysDict>>, (StatusCode, String)> {
     let page_request = PageRequest::new(payload.page, payload.size);
 
-    // let mut limit :u64= 0;
-    // if payload.page == 0 {
-    //      limit :u64 = 0;
-    // } else {
-    //      limit : u64=  (payload.page - 1) * payload.size;
-    // };
-
-    let offset = if payload.page == 0 { 0 } else { payload.size };
-    let limit = if payload.page == 0 { 0 } else { (payload.page - 1) * payload.size };
     let dto = DictPageDTO {
         code: payload.code,
         name: payload.name,
