@@ -100,7 +100,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let count_sql = "SELECT COUNT(*) FROM sys_dict";
     
     let data = rb.query_decode::<Vec<SysDict>>(sql, vec![]).await?;
-    let count_result = rb.query_decode::<Vec<serde_json::Value>>(count_sql, vec![]).await?;
+    let _count_result = rb.query_decode::<Vec<serde_json::Value>>(count_sql, vec![]).await?;
     
     println!("查询到 {} 条数据", data.len());
     for item in data {

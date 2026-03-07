@@ -3,15 +3,13 @@ use std::thread;
 use tracing::{span, Level, info};
 use tracing_subscriber::{
     fmt::{
-        format::{Format, Writer},
+        format::Writer,
         FmtContext, FormatEvent, FormatFields, time::FormatTime,
     },
-    layer::Context,
     registry::LookupSpan,
     Layer,
 };
 use chrono::Local;
-use tracing_appender::non_blocking;
 
 // 自定义时间格式化结构体
 struct LocalTimer;

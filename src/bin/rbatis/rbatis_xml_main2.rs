@@ -7,7 +7,6 @@ use rbatis::rbdc::DateTime;
 use rbatis::{crud, html_sql};
 use simplelog::{CombinedLogger, Config, WriteLogger};
 use rand::Rng;
-use uuid::Uuid;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct SysDict {
