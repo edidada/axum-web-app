@@ -2108,3 +2108,162 @@ thread ThreadId(11), 2026-03-07T07:14:58.369815Z DEBUG hyper::proto::h1::conn: r
 thread ThreadId(6), 2026-03-07T07:14:58.369886Z DEBUG hyper::proto::h1::conn: incoming body completed
 thread ThreadId(6), 2026-03-07T07:14:58.370059Z DEBUG hyper::client::pool: pooling idle connection for ("http", 127.0.0.1:9002)
 thread ThreadId(11), 2026-03-07T07:14:58.370271Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(1), 2026-03-07T07:16:10.151127Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(3), 2026-03-07T07:31:30.804756Z DEBUG hyper::proto::h1::io: parsed 8 headers
+thread ThreadId(3), 2026-03-07T07:31:30.804922Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(3), 2026-03-07T07:31:30.805228Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(3), 2026-03-07T07:31:30.805390Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "0", "reqable-id": "reqable-id-550e1ed0-b94d-44e8-aebe-b466d158459a", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(3), 2026-03-07T07:31:30.806159Z  INFO main::middleware::request_logging: Response: POST /login - 415 Unsupported Media Type in 505.8µs
+thread ThreadId(3), 2026-03-07T07:31:30.806315Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "54"}
+thread ThreadId(3), 2026-03-07T07:31:30.806751Z DEBUG hyper::proto::h1::io: flushed 191 bytes
+thread ThreadId(3), 2026-03-07T07:32:02.129630Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(3), 2026-03-07T07:32:02.129904Z DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+thread ThreadId(3), 2026-03-07T07:32:02.130163Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T07:32:02.130369Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(3), 2026-03-07T07:32:02.130629Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "2", "reqable-id": "reqable-id-d02fd7a4-608e-4c4f-9f75-55e92c7768cd", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475", "content-type": "application/json"}
+thread ThreadId(3), 2026-03-07T07:32:02.131003Z  INFO main::middleware::request_logging: Response: POST /login - 422 Unprocessable Entity in 608.6µs
+thread ThreadId(3), 2026-03-07T07:32:02.131105Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "101"}
+thread ThreadId(3), 2026-03-07T07:32:02.131344Z DEBUG hyper::proto::h1::io: flushed 237 bytes
+thread ThreadId(16), 2026-03-07T07:32:20.302624Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(16), 2026-03-07T07:32:20.303094Z DEBUG hyper::proto::h1::conn: incoming body is content-length (16 bytes)
+thread ThreadId(16), 2026-03-07T07:32:20.303344Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(16), 2026-03-07T07:32:20.303589Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(16), 2026-03-07T07:32:20.303783Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "16", "reqable-id": "reqable-id-d2dbcc9e-34a3-4231-96c7-c4390b108e98", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(16), 2026-03-07T07:32:20.304095Z  INFO main::middleware::request_logging: Response: POST /login - 422 Unprocessable Entity in 512.7µs
+thread ThreadId(16), 2026-03-07T07:32:20.304256Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "102"}
+thread ThreadId(16), 2026-03-07T07:32:20.304531Z DEBUG hyper::proto::h1::io: flushed 238 bytes
+thread ThreadId(3), 2026-03-07T07:32:33.786598Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(3), 2026-03-07T07:32:33.786798Z DEBUG hyper::proto::h1::conn: incoming body is content-length (40 bytes)
+thread ThreadId(3), 2026-03-07T07:32:33.787052Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T07:32:33.787240Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(3), 2026-03-07T07:32:33.787405Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "40", "reqable-id": "reqable-id-90419023-24d5-44a6-926b-6f697bbc6075", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(3), 2026-03-07T07:32:33.788628Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 1.3606ms
+thread ThreadId(3), 2026-03-07T07:32:33.788771Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "28"}
+thread ThreadId(3), 2026-03-07T07:32:33.789028Z DEBUG hyper::proto::h1::io: flushed 144 bytes
+thread ThreadId(3), 2026-03-07T07:33:05.376196Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(3), 2026-03-07T07:33:05.376381Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(3), 2026-03-07T07:33:05.376594Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(3), 2026-03-07T07:33:05.376740Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(3), 2026-03-07T07:33:05.376894Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-6ce5ee08-83a6-4e82-af60-91c3080c7a01", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(3), 2026-03-07T07:33:05.378118Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 1.2872ms
+thread ThreadId(3), 2026-03-07T07:33:05.378313Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "28"}
+thread ThreadId(3), 2026-03-07T07:33:05.378579Z DEBUG hyper::proto::h1::io: flushed 144 bytes
+thread ThreadId(1), 2026-03-07T07:34:39.524270Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(17), 2026-03-07T07:34:43.522998Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(17), 2026-03-07T07:34:43.523119Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(17), 2026-03-07T07:34:43.523318Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(17), 2026-03-07T07:34:43.523474Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(17), 2026-03-07T07:34:43.523601Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-9217b217-6086-4716-91bb-b3937f52268c", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(17), 2026-03-07T07:34:43.524947Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 1.4008ms
+thread ThreadId(17), 2026-03-07T07:34:43.525090Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "28"}
+thread ThreadId(17), 2026-03-07T07:34:43.525387Z DEBUG hyper::proto::h1::io: flushed 144 bytes
+thread ThreadId(1), 2026-03-07T07:37:29.124989Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(17), 2026-03-07T07:37:33.698972Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(17), 2026-03-07T07:37:33.699152Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(17), 2026-03-07T07:37:33.699386Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(17), 2026-03-07T07:37:33.699626Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(17), 2026-03-07T07:37:33.699845Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-91ff5a9e-6e85-40ac-80a0-53dca46b2c2c", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(17), 2026-03-07T07:37:33.701482Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 1.8224ms
+thread ThreadId(17), 2026-03-07T07:37:33.701653Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "283"}
+thread ThreadId(17), 2026-03-07T07:37:33.702098Z DEBUG hyper::proto::h1::io: flushed 392 bytes
+thread ThreadId(1), 2026-03-07T07:40:15.292017Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(11), 2026-03-07T07:40:15.642674Z DEBUG hyper::proto::h1::io: parsed 8 headers
+thread ThreadId(11), 2026-03-07T07:40:15.642823Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(11), 2026-03-07T07:40:15.643023Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(11), 2026-03-07T07:40:15.643164Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(11), 2026-03-07T07:40:15.643265Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-276686d6-40b7-4b38-b4bb-1e4f53cc65fb", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json"}
+thread ThreadId(11), 2026-03-07T07:40:15.644253Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 1.0456ms
+thread ThreadId(11), 2026-03-07T07:40:15.644355Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "28"}
+thread ThreadId(11), 2026-03-07T07:40:15.644730Z DEBUG hyper::proto::h1::io: flushed 144 bytes
+thread ThreadId(1), 2026-03-07T07:40:33.813178Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(9), 2026-03-07T07:40:34.018302Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(9), 2026-03-07T07:40:34.018485Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(9), 2026-03-07T07:40:34.018756Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(9), 2026-03-07T07:40:34.019063Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(9), 2026-03-07T07:40:34.019193Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-a746cb46-1f89-4e50-9715-23ee4bb70dec", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(9), 2026-03-07T07:40:34.020679Z  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "user",
+    "password": "password"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "testdb"
+  }
+}
+thread ThreadId(9), 2026-03-07T07:40:34.020937Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 1.8932ms
+thread ThreadId(9), 2026-03-07T07:40:34.021101Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "28"}
+thread ThreadId(9), 2026-03-07T07:40:34.021458Z DEBUG hyper::proto::h1::io: flushed 144 bytes
+thread ThreadId(1), 2026-03-07T07:44:01.695358Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(12), 2026-03-07T07:44:05.914099Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(12), 2026-03-07T07:44:05.914365Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(12), 2026-03-07T07:44:05.914666Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(12), 2026-03-07T07:44:05.915005Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(12), 2026-03-07T07:44:05.915203Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-188890b3-20d7-4ccd-901a-ec0d9e8d2887", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(12), 2026-03-07T07:44:05.917386Z  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+thread ThreadId(2), 2026-03-07T07:47:42.390284Z DEBUG hyper::proto::h1::io: parsed 9 headers
+thread ThreadId(2), 2026-03-07T07:47:42.390435Z DEBUG hyper::proto::h1::conn: incoming body is content-length (55 bytes)
+thread ThreadId(2), 2026-03-07T07:47:42.390958Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-07T07:47:42.391266Z DEBUG main::middleware::request_logging: Request: POST /login
+thread ThreadId(2), 2026-03-07T07:47:42.391442Z DEBUG main::middleware::request_logging: Headers: {"host": "127.0.0.1:9001", "connection": "keep-alive", "content-length": "55", "reqable-id": "reqable-id-f33e22fd-86ca-4ea4-a056-6ec943bcf445", "user-agent": "Reqable/2.33.12", "accept": "*/*", "accept-encoding": "gzip, deflate, br", "content-type": "application/json", "cookie": "JSESSIONID=800cbc3f-7023-4f32-9a53-233a0b9c965b; SESSION=8c5b5fb6-8449-4210-808a-d5dde2b67475"}
+thread ThreadId(2), 2026-03-07T07:47:42.392694Z  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+thread ThreadId(16), 2026-03-07T07:47:42.394690Z  INFO main::middleware::request_logging: Response: POST /login - 200 OK in 3.3803ms
+thread ThreadId(16), 2026-03-07T07:47:42.394878Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "63"}
+thread ThreadId(16), 2026-03-07T07:47:42.395198Z DEBUG hyper::proto::h1::io: flushed 179 bytes

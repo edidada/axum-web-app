@@ -3,6 +3,8 @@ use serde::Deserialize;
 use redis::AsyncCommands;
 use uuid::Uuid;
 use crate::config::Config;
+use serde_json;
+use log;
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
@@ -16,6 +18,9 @@ pub async fn login_handler(
 ) -> Html<String> {
     // Load configuration
     let config = Config::from_file();
+
+    // Log the entire configuration
+    log::info!("Configuration: {}", serde_json::to_string_pretty(&config).unwrap());
 
     // Validate username and password
     if payload.username == config.auth.username && payload.password == config.auth.password {
