@@ -3532,6 +3532,7 @@ thread ThreadId(16), 2026-03-07T13:11:45.932411Z DEBUG main::routes: Response bo
 thread ThreadId(16), 2026-03-07T13:11:45.933009Z  INFO main::middleware::request_logging: Response: POST /sys-dict/select-page - 200 OK in 34.32ms
 thread ThreadId(16), 2026-03-07T13:11:45.933245Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "375"}
 thread ThreadId(16), 2026-03-07T13:11:45.933754Z DEBUG hyper::proto::h1::io: flushed 484 bytes
+thread ThreadId(1), 2026-03-07T16:41:04.658837Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
 thread ThreadId(2), 2026-03-07T13:16:55.197323Z DEBUG hyper::proto::h1::conn: read eof
 thread ThreadId(1), 2026-03-07T13:26:34.074756Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
 thread ThreadId(17), 2026-03-07T13:27:31.207939Z DEBUG hyper::proto::h1::io: parsed 10 headers
