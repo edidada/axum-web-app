@@ -12,8 +12,8 @@ use crate::domain::table::sys_dict::SysDict;
 
 pub fn setup_routes() -> Router {
     Router::new()
-        .route("/login", post(login_handler))
-        .route("/logout", post(logout_handler).layer(axum::middleware::from_fn(validate_session)))
+        .route("/api/login", post(login_handler))
+        .route("/api/logout", post(logout_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/get", get(get_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/post", post(post_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/getBody", post(get_body_handler).layer(axum::middleware::from_fn(validate_session)))
