@@ -180,3 +180,52 @@ thread ThreadId(7), 2026-03-18T16:16:46.574063Z DEBUG hyper::proto::h1::conn: re
 2026-03-19 00:24:10.932737 DEBUG hyper::proto::h1::io: parsed 13 headers
 2026-03-19 00:24:10.932800 DEBUG hyper::proto::h1::conn: incoming body is empty
 2026-03-19 00:24:10.933015 DEBUG hyper::proto::h1::io: flushed 275 bytes
+2026-03-19 00:25:58.258425 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 00:25:58.258511 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 00:25:58.269970 DEBUG hyper::proto::h1::io: flushed 275 bytes
+2026-03-19 00:27:37.245729  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+2026-03-19 00:27:52.774534 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 00:27:52.774697 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 00:27:52.775906 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-19 00:27:52.784116 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-19 00:27:52.784190 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-19 00:27:52.784362 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 00:27:52.784579 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-19 00:27:52.784750 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-19 00:27:52.786938  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+2026-03-19 00:27:52.796157  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 11.193869ms
+2026-03-19 00:27:52.796349 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=0a6b03ac-4419-4737-95c5-315e9de10d2a; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+2026-03-19 00:27:52.797178 DEBUG hyper::proto::h1::io: flushed 460 bytes
+2026-03-19 00:27:58.741562 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 00:27:58.742053 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 00:27:58.742613 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-19 00:27:58.748404 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-19 00:27:58.748600 DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+2026-03-19 00:27:58.749351 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 00:27:58.749505 DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+2026-03-19 00:27:58.749665 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "connection": "keep-alive", "content-length": "2", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=0a6b03ac-4419-4737-95c5-315e9de10d2a"}
+2026-03-19 00:27:58.751451  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 401 Unauthorized in 1.925752ms
+2026-03-19 00:27:58.751669 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "15"}
+2026-03-19 00:27:58.752060 DEBUG hyper::proto::h1::io: flushed 323 bytes

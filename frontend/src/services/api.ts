@@ -50,27 +50,42 @@ class ApiService {
   }
 
   async login(username: string, password: string): Promise<LoginResponse> {
-    const response = await fetch(`${API_BASE_URL}/api/login`, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify({ username, password }),
-      credentials: 'include',
-    });
+    console.log('API login called with:', { username, password });
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({ username, password }),
+        credentials: 'include',
+      });
 
-    const data = await response.json();
-    
-    // 处理后端返回的响应格式
-    const result: LoginResponse = {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '登录成功' : '登录失败'),
-      session_id: data.session_id,
-    };
-    
-    if (result.success && result.session_id) {
-      this.setSessionId(result.session_id);
+      console.log('API login response status:', response.status);
+      console.log('API login response headers:', response.headers);
+
+      const data = await response.json();
+      console.log('API login response data:', data);
+      
+      // 处理后端返回的响应格式
+      const result: LoginResponse = {
+        success: data.code === 0 || data.status === 'success',
+        message: data.message || (data.status === 'success' ? '登录成功' : '登录失败'),
+        session_id: data.session_id,
+      };
+      
+      console.log('API login result:', result);
+      
+      if (result.success && result.session_id) {
+        this.setSessionId(result.session_id);
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('API login error:', error);
+      return {
+        success: false,
+        message: '登录请求失败: ' + (error as Error).message,
+      };
     }
-    
-    return result;
   }
 
   async logout(): Promise<ApiResponse<any>> {

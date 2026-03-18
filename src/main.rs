@@ -71,10 +71,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let rb = get_rbatis();
 
     // 创建 CORS 中间件
+    // 注意：当使用 credentials: 'include' 时，allow_origin 不能是 Any，必须指定具体的源
+    // 同时，allow_headers 也不能是 Any，必须指定具体的头部
     let cors = CorsLayer::new()
-        .allow_origin(Any)
-        .allow_methods(Any)
-        .allow_headers(Any);
+        .allow_origin("http://localhost:5173".parse::<axum::http::HeaderValue>().unwrap())
+        .allow_methods([axum::http::Method::GET, axum::http::Method::POST, axum::http::Method::PUT, axum::http::Method::DELETE, axum::http::Method::OPTIONS])
+        .allow_headers([axum::http::header::CONTENT_TYPE, axum::http::header::AUTHORIZATION])
+        .allow_credentials(true);
 
     let app = Router::new()
         .merge(routes::setup_routes())
