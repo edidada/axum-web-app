@@ -125,7 +125,7 @@ const formData = ref<any>({});
 const editingId = ref<string | null>(null);
 
 const menuItems = [
-  { id: 'dict', label: '字典管理', action: 'getSysDictList', type: 'api/sys-dict' },
+  { id: 'dict', label: '字典管理', action: 'getSysDictList', type: 'sys-dict' },
   { id: 'address', label: '地址簿', action: 'getAddressBookPage', type: 'address-book' },
   { id: 'category', label: '分类管理', action: 'getCategoryPage', type: 'category' },
   { id: 'dish', label: '菜品管理', action: 'getDishPage', type: 'dish' },
