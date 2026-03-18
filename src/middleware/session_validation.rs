@@ -1,7 +1,7 @@
 use axum::{
     async_trait,
     extract::{FromRequest, RequestParts},
-    http::{Request, StatusCode},
+    http::{Request, StatusCode, header::COOKIE},
     response::IntoResponse,
     middleware::Next,
 };
@@ -9,6 +9,38 @@ use redis::{AsyncCommands, Client};
 use crate::config::Config;
 
 pub struct ValidSession(pub String);
+
+/// 从请求中提取 session_id
+/// 优先从 Authorization 头部获取 Bearer token，如果没有则从 Cookie 中获取
+fn extract_session_id<B>(req: &RequestParts<B>) -> Option<String> {
+    // 首先尝试从 Authorization 头部获取 Bearer token
+    let auth_session = req
+        .headers()
+        .get("Authorization")
+        .and_then(|header| header.to_str().ok())
+        .and_then(|auth| auth.strip_prefix("Bearer "))
+        .map(|s| s.to_string());
+
+    if auth_session.is_some() {
+        return auth_session;
+    }
+
+    // 如果没有 Authorization 头部，则从 Cookie 中获取
+    req
+        .headers()
+        .get(COOKIE)
+        .and_then(|header| header.to_str().ok())
+        .and_then(|cookie| {
+            cookie.split(';').find_map(|c| {
+                let c = c.trim();
+                if c.starts_with("session=") {
+                    c.strip_prefix("session=").map(|s| s.to_string())
+                } else {
+                    None
+                }
+            })
+        })
+}
 
 #[async_trait]
 impl<B> FromRequest<B> for ValidSession
@@ -21,12 +53,9 @@ where
         let redis_client = req.extensions().get::<Client>().cloned().ok_or((StatusCode::INTERNAL_SERVER_ERROR, "Redis client missing"))?;
         let config = Config::from_file();
 
-        let session_id = req
-            .headers()
-            .get("Authorization")
-            .and_then(|header| header.to_str().ok())
-            .and_then(|auth| auth.strip_prefix("Bearer "))
-            .ok_or((StatusCode::UNAUTHORIZED, "Missing or invalid Authorization header"))?;
+        // 从 Authorization 头部或 Cookie 中获取 session_id
+        let session_id = extract_session_id(req)
+            .ok_or((StatusCode::UNAUTHORIZED, "Missing or invalid session"))?;
 
         let mut conn = redis_client.get_async_connection().await.map_err(|_| {
             (StatusCode::INTERNAL_SERVER_ERROR, "Failed to connect to Redis")
@@ -51,13 +80,29 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
     let redis_client = req.extensions().get::<Client>().cloned().unwrap();
     let config = Config::from_file();
 
-    // Extract session_id before borrowing req mutably
+    // 从 Authorization 头部或 Cookie 中获取 session_id
     let session_id = req
         .headers()
         .get("Authorization")
         .and_then(|header| header.to_str().ok())
         .and_then(|auth| auth.strip_prefix("Bearer "))
-        .map(|s| s.to_string());
+        .map(|s| s.to_string())
+        .or_else(|| {
+            req
+                .headers()
+                .get(COOKIE)
+                .and_then(|header| header.to_str().ok())
+                .and_then(|cookie| {
+                    cookie.split(';').find_map(|c| {
+                        let c = c.trim();
+                        if c.starts_with("session=") {
+                            c.strip_prefix("session=").map(|s| s.to_string())
+                        } else {
+                            None
+                        }
+                    })
+                })
+        });
 
     if let Some(session_id) = session_id {
         let mut conn = redis_client.get_async_connection().await.unwrap();
