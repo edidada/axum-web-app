@@ -42,3 +42,12 @@ thread ThreadId(2), 2026-03-18T15:16:10.294369Z  INFO main::middleware::request_
 thread ThreadId(2), 2026-03-18T15:16:10.295675Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "68"}
 thread ThreadId(2), 2026-03-18T15:16:10.295947Z DEBUG hyper::proto::h1::io: flushed 307 bytes
 thread ThreadId(2), 2026-03-18T15:16:46.623941Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(2), 2026-03-18T16:05:36.569930Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:05:36.571056Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:05:36.572437Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(7), 2026-03-18T16:07:40.053009Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(7), 2026-03-18T16:07:40.057259Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(7), 2026-03-18T16:07:40.070666Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(7), 2026-03-18T16:10:39.377164Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(7), 2026-03-18T16:10:39.377267Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(7), 2026-03-18T16:10:39.380967Z DEBUG hyper::proto::h1::io: flushed 275 bytes
