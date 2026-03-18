@@ -9,6 +9,7 @@ use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
+use tower_http::cors::{Any, CorsLayer};
 use tracing_appender::non_blocking::{WorkerGuard};
 use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
@@ -69,10 +70,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
     // 获取 RBatis 实例
     let rb = get_rbatis();
 
+    // 创建 CORS 中间件
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(Any)
+        .allow_headers(Any);
+
     let app = Router::new()
         .merge(routes::setup_routes())
         .layer(
             ServiceBuilder::new()
+                .layer(cors)
                 .layer(axum::middleware::from_fn(middleware::request_logging::log_request))
                 .layer(Extension(redis_client))
                 .layer(Extension(rb))

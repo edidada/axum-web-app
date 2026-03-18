@@ -1,0 +1,44 @@
+thread ThreadId(1), 2026-03-18T15:00:19.389305Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(9), 2026-03-18T15:09:24.631509Z DEBUG hyper::proto::h1::io: parsed 12 headers
+thread ThreadId(9), 2026-03-18T15:09:24.631597Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(9), 2026-03-18T15:09:24.631961Z DEBUG main::middleware::request_logging: Request: OPTIONS /api/login
+thread ThreadId(9), 2026-03-18T15:09:24.632044Z DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "connection": "keep-alive", "accept": "*/*", "access-control-request-method": "POST", "access-control-request-headers": "content-type", "origin": "null", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", "sec-fetch-mode": "cors", "sec-fetch-site": "cross-site", "sec-fetch-dest": "empty", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+thread ThreadId(9), 2026-03-18T15:09:24.632272Z  INFO main::middleware::request_logging: Response: OPTIONS /api/login - 405 Method Not Allowed in 332.855µs
+thread ThreadId(9), 2026-03-18T15:09:24.632320Z DEBUG main::middleware::request_logging: Response Headers: {"content-length": "0"}
+thread ThreadId(9), 2026-03-18T15:09:24.632525Z DEBUG hyper::proto::h1::io: flushed 91 bytes
+thread ThreadId(1), 2026-03-18T15:15:22.330382Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+thread ThreadId(6), 2026-03-18T15:16:10.274647Z DEBUG hyper::proto::h1::io: parsed 12 headers
+thread ThreadId(6), 2026-03-18T15:16:10.274777Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(6), 2026-03-18T15:16:10.275453Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T15:16:10.289247Z DEBUG hyper::proto::h1::io: parsed 15 headers
+thread ThreadId(2), 2026-03-18T15:16:10.289331Z DEBUG hyper::proto::h1::conn: incoming body is content-length (35 bytes)
+thread ThreadId(2), 2026-03-18T15:16:10.289542Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-18T15:16:10.289790Z DEBUG main::middleware::request_logging: Request: POST /api/login
+thread ThreadId(2), 2026-03-18T15:16:10.290008Z DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "connection": "keep-alive", "content-length": "35", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "null", "sec-fetch-site": "cross-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+thread ThreadId(2), 2026-03-18T15:16:10.294003Z  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+thread ThreadId(2), 2026-03-18T15:16:10.294369Z  INFO main::middleware::request_logging: Response: POST /api/login - 401 Unauthorized in 4.640936ms
+thread ThreadId(2), 2026-03-18T15:16:10.295675Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "68"}
+thread ThreadId(2), 2026-03-18T15:16:10.295947Z DEBUG hyper::proto::h1::io: flushed 307 bytes
+thread ThreadId(2), 2026-03-18T15:16:46.623941Z DEBUG hyper::proto::h1::conn: read eof
