@@ -135,12 +135,11 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '获取成功' : '获取失败'),
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
       total: data.total,
-      records: data.records,
+      records: data.records || [],
     };
   }
 
@@ -154,12 +153,11 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '获取成功' : '获取失败'),
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
       total: data.total,
-      records: data.records,
+      records: data.records || [],
     };
   }
 
@@ -173,12 +171,11 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '获取成功' : '获取失败'),
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
       total: data.total,
-      records: data.records,
+      records: data.records || [],
     };
   }
 }

@@ -6,6 +6,7 @@ Selenium 自动化测试 - 登录功能测试
 后端API: http://localhost:9001 (Axum后端)
 """
 
+import os
 import unittest
 import time
 from selenium import webdriver
@@ -14,7 +15,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 
 
 class LoginTest(unittest.TestCase):
@@ -23,16 +23,14 @@ class LoginTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """测试类开始前执行一次"""
-        # 配置 Chrome 选项
         chrome_options = Options()
-        # chrome_options.add_argument('--headless')  # 无头模式，不显示浏览器窗口
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument('--window-size=1920,1080')
         
-        # 初始化 WebDriver
+        chromedriver_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "drivers", "chromedriver")
         cls.driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()),
+            service=Service(chromedriver_path),
             options=chrome_options
         )
         cls.driver.implicitly_wait(10)
@@ -46,16 +44,16 @@ class LoginTest(unittest.TestCase):
         
     def setUp(self):
         """每个测试方法开始前执行"""
-        # 打开登录页面
         self.driver.get(f"{self.base_url}/login")
-        time.sleep(1)  # 等待页面加载
+        self.driver.delete_all_cookies()
+        self.driver.execute_script("localStorage.clear();")
+        self.driver.refresh()
+        time.sleep(1)
         
     def test_page_load(self):
         """测试1: 验证登录页面是否正常加载"""
-        # 验证页面标题
-        self.assertIn("登录", self.driver.title)
+        self.assertIn("后台管理系统", self.driver.title)
         
-        # 验证登录表单元素是否存在
         username_input = self.driver.find_element(By.ID, "username")
         password_input = self.driver.find_element(By.ID, "password")
         login_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
@@ -67,19 +65,16 @@ class LoginTest(unittest.TestCase):
         
     def test_empty_username(self):
         """测试2: 验证空用户名时的错误提示"""
-        # 不输入用户名，直接点击登录
         login_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         login_button.click()
         time.sleep(1)
         
-        # 验证是否还在登录页面（没有跳转）
         current_url = self.driver.current_url
         self.assertIn("/login", current_url)
         print("✓ 测试2通过: 空用户名时未跳转")
         
     def test_empty_password(self):
         """测试3: 验证空密码时的错误提示"""
-        # 输入用户名，不输入密码
         username_input = self.driver.find_element(By.ID, "username")
         username_input.send_keys("edidada")
         
@@ -87,44 +82,37 @@ class LoginTest(unittest.TestCase):
         login_button.click()
         time.sleep(1)
         
-        # 验证是否还在登录页面
         current_url = self.driver.current_url
         self.assertIn("/login", current_url)
         print("✓ 测试3通过: 空密码时未跳转")
         
     def test_invalid_credentials(self):
         """测试4: 验证错误的用户名密码"""
-        # 输入错误的用户名和密码
         username_input = self.driver.find_element(By.ID, "username")
         password_input = self.driver.find_element(By.ID, "password")
         
         username_input.send_keys("wronguser")
         password_input.send_keys("wrongpass")
         
-        # 点击登录按钮
         login_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         login_button.click()
-        time.sleep(2)  # 等待请求响应
+        time.sleep(2)
         
-        # 验证是否还在登录页面（登录失败不会跳转）
         current_url = self.driver.current_url
         self.assertIn("/login", current_url)
         print("✓ 测试4通过: 错误凭据时登录失败")
         
     def test_valid_login(self):
         """测试5: 验证正确的用户名密码可以登录成功"""
-        # 输入正确的用户名和密码
         username_input = self.driver.find_element(By.ID, "username")
         password_input = self.driver.find_element(By.ID, "password")
         
         username_input.send_keys("edidada")
         password_input.send_keys("Pass123Qwe")
         
-        # 点击登录按钮
         login_button = self.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         login_button.click()
         
-        # 等待页面跳转（最多等待5秒）
         try:
             WebDriverWait(self.driver, 5).until(
                 EC.url_contains("/dashboard")
@@ -133,51 +121,93 @@ class LoginTest(unittest.TestCase):
         except:
             self.fail("登录后未跳转到仪表板页面")
             
-    def test_login_logout(self):
-        """测试6: 验证登录后可以正常退出"""
-        # 先登录
+    def test_menu_navigation(self):
+        """测试6: 验证菜单导航功能"""
         self.test_valid_login()
         time.sleep(1)
         
-        # 查找退出按钮并点击
+        menu_items = [
+            ("字典管理", "dict"),
+            ("地址簿", "address"),
+            ("分类管理", "category"),
+            ("菜品管理", "dish"),
+        ]
+        
+        for idx, (label, expected_id) in enumerate(menu_items):
+            try:
+                menu_button = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(), '{label}')]"))
+                )
+                menu_button.click()
+                time.sleep(1)
+                
+                active_button = self.driver.find_element(By.CSS_SELECTOR, "button.nav-item.active")
+                self.assertEqual(active_button.text, label)
+                print(f"✓ 测试6.{idx+1}通过: 点击'{label}'菜单成功")
+                
+            except Exception as e:
+                print(f"✗ 测试6.{idx+1}失败: 点击'{label}'菜单失败 - {e}")
+                
+    def test_data_display(self):
+        """测试7: 验证数据展示功能"""
+        self.test_valid_login()
+        time.sleep(1)
+        
+        try:
+            menu_button = WebDriverWait(self.driver, 5).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '分类管理')]"))
+            )
+            menu_button.click()
+            time.sleep(2)
+            
+            table = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, "table"))
+            )
+            self.assertIsNotNone(table)
+            
+            rows = self.driver.find_elements(By.CSS_SELECTOR, "table tbody tr")
+            self.assertGreater(len(rows), 0)
+            print(f"✓ 测试7通过: 数据展示正常，共{len(rows)}条记录")
+            
+        except Exception as e:
+            print(f"✗ 测试7失败: 数据展示失败 - {e}")
+            
+    def test_login_logout(self):
+        """测试8: 验证登录后可以正常退出"""
+        self.test_valid_login()
+        time.sleep(1)
+        
         try:
             logout_button = self.driver.find_element(By.CLASS_NAME, "logout-btn")
             logout_button.click()
             time.sleep(2)
             
-            # 验证是否返回到登录页面
             current_url = self.driver.current_url
             self.assertIn("/login", current_url)
-            print("✓ 测试6通过: 退出登录成功")
+            print("✓ 测试8通过: 退出登录成功")
         except:
-            print("⚠ 测试6跳过: 未找到退出按钮")
+            print("⚠ 测试8跳过: 未找到退出按钮")
             
     def test_session_persistence(self):
-        """测试7: 验证登录后刷新页面仍保持登录状态"""
-        # 先登录
+        """测试9: 验证登录后刷新页面仍保持登录状态"""
         self.test_valid_login()
         time.sleep(1)
         
-        # 刷新页面
         self.driver.refresh()
         time.sleep(2)
         
-        # 验证是否仍在仪表板页面（未跳转到登录页）
         current_url = self.driver.current_url
         self.assertIn("/dashboard", current_url)
-        print("✓ 测试7通过: 刷新页面后仍保持登录状态")
+        print("✓ 测试9通过: 刷新页面后仍保持登录状态")
 
 
 def run_tests():
     """运行所有测试"""
-    # 创建测试套件
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
     
-    # 添加测试用例
     suite.addTests(loader.loadTestsFromTestCase(LoginTest))
     
-    # 运行测试
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
     

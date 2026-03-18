@@ -221,12 +221,20 @@ pub async fn category_delete(
 pub async fn dish_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
-) -> Result<Json<rbatis::Page<Dish>>, (StatusCode, String)> {
+) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
     let page_request = PageRequest::new(payload.page, payload.pageSize);
     let dto = DishPageDTO::default();
     let result: std::result::Result<rbatis::Page<Dish>, rbatis::Error> = Dish::select_page(rb, &page_request, &dto).await;
     match result {
-        Ok(page) => Ok(Json(page)),
+        Ok(page) => {
+            let response = serde_json::json!({
+                "records": page.records,
+                "total": page.total,
+                "page_no": page.page_no,
+                "page_size": page.page_size,
+            });
+            Ok(Json(response))
+        },
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
     }
 }
