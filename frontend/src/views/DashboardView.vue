@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/auth';
 import { apiService } from '../services/api';
@@ -139,9 +139,15 @@ function formatValue(value: any): string {
   return String(value);
 }
 
+watch(activeTab, () => {
+  fetchData();
+});
+
 onMounted(() => {
   if (!authStore.isAuthenticated) {
     router.push('/login');
+  } else {
+    fetchData();
   }
 });
 </script>

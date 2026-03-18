@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct OrderDetailPageDTO {
     pub order_id: Option<String>,
     pub dish_id: Option<String>,

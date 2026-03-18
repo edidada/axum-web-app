@@ -1,4 +1,11 @@
 # Axum Web Application
+
+frontend是web ui代码仓库
+spider是selenium自动化测试文件夹
+自动测试web，selenium工具，新建单独文件夹，测试登录功能
+pg database用系统安装好的，只保留新建表的sql，处理数据的sql
+文件放在db文件夹
+
 cargo build --release
 
 在Rust中，有几种通过命令行工具“一键”移除未使用导入（unused import）警告的方法。
