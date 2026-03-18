@@ -45,9 +45,7 @@ class ApiService {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
-    if (this.sessionId) {
-      headers['Cookie'] = `session_id=${this.sessionId}`;
-    }
+    // 移除手动设置的 Cookie 头，让浏览器自动处理
     return headers;
   }
 

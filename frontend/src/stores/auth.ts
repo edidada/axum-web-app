@@ -11,16 +11,20 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(user: string, password: string) {
     try {
+      console.log('Auth store login called with:', { user, password });
       const response = await apiService.login(user, password);
+      console.log('Auth store login response:', response);
       if (response.success && response.session_id) {
         isLoggedIn.value = true;
         username.value = user;
         sessionId.value = response.session_id;
+        console.log('Auth store login success:', { sessionId: response.session_id });
         return { success: true, message: response.message };
       }
+      console.log('Auth store login failed:', response.message);
       return { success: false, message: response.message || '登录失败' };
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Auth store login error:', error);
       return { success: false, message: '登录请求失败' };
     }
   }

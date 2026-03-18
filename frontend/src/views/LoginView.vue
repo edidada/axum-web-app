@@ -57,7 +57,9 @@ async function handleLogin() {
   errorMessage.value = '';
 
   try {
+    console.log('Login attempt with:', { username: username.value, password: password.value });
     const result = await authStore.login(username.value, password.value);
+    console.log('Login result:', result);
     if (result.success) {
       router.push('/dashboard');
     } else {

@@ -51,3 +51,132 @@ thread ThreadId(7), 2026-03-18T16:07:40.070666Z DEBUG hyper::proto::h1::io: flus
 thread ThreadId(7), 2026-03-18T16:10:39.377164Z DEBUG hyper::proto::h1::io: parsed 13 headers
 thread ThreadId(7), 2026-03-18T16:10:39.377267Z DEBUG hyper::proto::h1::conn: incoming body is empty
 thread ThreadId(7), 2026-03-18T16:10:39.380967Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(7), 2026-03-18T16:12:44.168125Z DEBUG hyper::proto::h1::io: parsed 5 headers
+thread ThreadId(7), 2026-03-18T16:12:44.168205Z DEBUG hyper::proto::h1::conn: incoming body is content-length (49 bytes)
+thread ThreadId(7), 2026-03-18T16:12:44.168346Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(7), 2026-03-18T16:12:44.169233Z DEBUG main::middleware::request_logging: Request: POST /api/login
+thread ThreadId(7), 2026-03-18T16:12:44.169433Z DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "user-agent": "curl/8.7.1", "accept": "*/*", "content-type": "application/json", "content-length": "49"}
+thread ThreadId(7), 2026-03-18T16:12:44.175214Z  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+thread ThreadId(2), 2026-03-18T16:12:44.185350Z  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 16.860862ms
+thread ThreadId(2), 2026-03-18T16:12:44.185435Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=2bbf7409-f1f7-4e83-b098-42c262ab5b9f; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+thread ThreadId(2), 2026-03-18T16:12:44.185582Z DEBUG hyper::proto::h1::io: flushed 400 bytes
+thread ThreadId(2), 2026-03-18T16:12:44.186083Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(2), 2026-03-18T16:14:51.929737Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:14:51.929871Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:14:51.930433Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T16:14:53.189326Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:14:53.189390Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:14:53.194842Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T16:14:53.708040Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:14:53.708129Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:14:53.708547Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T16:14:53.870883Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:14:53.871002Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:14:53.871606Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T16:14:54.022220Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:14:54.022300Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:14:54.023257Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T16:14:59.246861Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(2), 2026-03-18T16:14:59.247189Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(2), 2026-03-18T16:14:59.300871Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(2), 2026-03-18T16:16:29.696522Z DEBUG hyper::proto::h1::io: parsed 6 headers
+thread ThreadId(2), 2026-03-18T16:16:29.696605Z DEBUG hyper::proto::h1::conn: incoming body is content-length (49 bytes)
+thread ThreadId(2), 2026-03-18T16:16:29.696751Z DEBUG hyper::proto::h1::conn: incoming body completed
+thread ThreadId(2), 2026-03-18T16:16:29.697182Z DEBUG main::middleware::request_logging: Request: POST /api/login
+thread ThreadId(2), 2026-03-18T16:16:29.697295Z DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "user-agent": "curl/8.7.1", "accept": "*/*", "content-type": "application/json", "origin": "http://localhost:5173", "content-length": "49"}
+thread ThreadId(2), 2026-03-18T16:16:29.700242Z  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+thread ThreadId(7), 2026-03-18T16:16:29.703678Z  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 6.768425ms
+thread ThreadId(7), 2026-03-18T16:16:29.703867Z DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=2c69bf87-bced-4d45-8945-588c4f935d78; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+thread ThreadId(7), 2026-03-18T16:16:29.704067Z DEBUG hyper::proto::h1::io: flushed 400 bytes
+thread ThreadId(7), 2026-03-18T16:16:29.707397Z DEBUG hyper::proto::h1::conn: read eof
+thread ThreadId(7), 2026-03-18T16:16:33.049641Z DEBUG hyper::proto::h1::io: parsed 13 headers
+thread ThreadId(7), 2026-03-18T16:16:33.049719Z DEBUG hyper::proto::h1::conn: incoming body is empty
+thread ThreadId(7), 2026-03-18T16:16:33.050046Z DEBUG hyper::proto::h1::io: flushed 275 bytes
+thread ThreadId(7), 2026-03-18T16:16:46.574063Z DEBUG hyper::proto::h1::conn: read eof
+2026-03-19 00:21:18.648593  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+2026-03-19 00:21:36.948935  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+2026-03-19 00:21:45.912292 DEBUG hyper::proto::h1::io: parsed 6 headers
+2026-03-19 00:21:45.912654 DEBUG hyper::proto::h1::conn: incoming body is content-length (49 bytes)
+2026-03-19 00:21:45.913138 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 00:21:45.913449 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-19 00:21:45.913699 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "user-agent": "curl/8.7.1", "accept": "*/*", "content-type": "application/json", "origin": "http://localhost:5173", "content-length": "49"}
+2026-03-19 00:21:45.918315  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "5Edidada",
+    "database": "ruiji"
+  }
+}
+2026-03-19 00:21:45.921017  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 7.264664ms
+2026-03-19 00:21:45.921187 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=711de8f9-f224-4cb7-8eac-8032b6cac9e4; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+2026-03-19 00:21:45.921542 DEBUG hyper::proto::h1::io: flushed 400 bytes
+2026-03-19 00:21:45.922081 DEBUG hyper::proto::h1::conn: read eof
+2026-03-19 00:24:04.756395 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 00:24:04.756603 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 00:24:04.756993 DEBUG hyper::proto::h1::io: flushed 275 bytes
+2026-03-19 00:24:05.836843 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 00:24:05.836951 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 00:24:05.837426 DEBUG hyper::proto::h1::io: flushed 275 bytes
+2026-03-19 00:24:10.932737 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 00:24:10.932800 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 00:24:10.933015 DEBUG hyper::proto::h1::io: flushed 275 bytes

@@ -113,14 +113,12 @@ fn set_format_log() -> WorkerGuard {
     // 创建一个日志记录器层，将日志输出到文件
     let file_layer = fmt::layer()
         .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
-        .event_format(ThreadIdFormatter)
         .with_ansi(false) // 禁用 ANSI 样式
         .with_writer(non_blocking);
 
     // 创建一个格式化层，将日志输出到控制台
     let console_layer = fmt::layer()
-        .with_timer(LocalTimer {}) // 传递 LocalTimer 实例
-        .event_format(ThreadIdFormatter);
+        .with_timer(LocalTimer {}); // 传递 LocalTimer 实例
 
     // 创建一个订阅者，将文件层和控制台层添加到订阅者中
     let subscriber = Registry::default()
@@ -134,35 +132,11 @@ fn set_format_log() -> WorkerGuard {
     guard
 }
 
-// 自定义日志格式化结构体
-struct ThreadIdFormatter;
-
-impl<S, N> FormatEvent<S, N> for ThreadIdFormatter
-where
-    S: tracing::Subscriber + for<'lookup> LookupSpan<'lookup>,
-    N: for<'writer> FormatFields<'writer> + 'static,
-{
-    fn format_event(
-        &self,
-        ctx: &FmtContext<'_, S, N>,
-        mut writer: Writer<'_>,
-        event: &tracing::Event<'_>,
-    ) -> std::fmt::Result {
-        // 获取当前线程 ID
-        let thread_id = thread::current().id();
-        // 写入线程 ID 信息
-        write!(writer, "thread {:?}, ", thread_id)?;
-
-        // 调用默认的格式化方法处理事件
-        <Format as FormatEvent<S, N>>::format_event(&Format::default(), ctx, writer, event)
-    }
-}
-
 struct LocalTimer;
 
 impl FormatTime for LocalTimer {
     fn format_time(&self, w: &mut Writer<'_>) -> std::fmt::Result {
-        write!(w, "{}", Local::now().format("%Y-%m-%d %H:%M:%S"))
+        write!(w, "{}", Local::now().format("%Y-%m-%d %H:%M:%S%.6f"))
     }
 }
 
