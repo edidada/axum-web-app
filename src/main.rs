@@ -15,7 +15,7 @@ use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
-use rbdc_mysql::driver::MysqlDriver;
+use rbdc_pg::driver::PgDriver;
 
 mod handlers;
 mod routes;
@@ -31,14 +31,15 @@ async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let config = Config::from_file();
     let rb = RBatis::new();
     // rbatis 默认已经启用了 SQL 日志，日志级别为 Debug
-    let mysql_url = format!("mysql://{}:{}@{}:{}/{}", 
+    // PostgreSQL 连接字符串格式: postgres://username:password@host:port/database
+    let pg_url = format!("postgres://{}:{}@{}:{}/{}",
         config.mysql.username,
         config.mysql.password,
         config.mysql.host,
         config.mysql.port,
         config.mysql.database
     );
-    rb.init(MysqlDriver {}, &mysql_url)?;
+    rb.init(PgDriver {}, &pg_url)?;
     unsafe {
         RB = Some(rb);
     }

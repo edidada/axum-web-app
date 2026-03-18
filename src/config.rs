@@ -49,9 +49,9 @@ impl Config {
         settings.set("redis.expiration", 3600).unwrap();
         settings.set("redis.key_prefix", "session:").unwrap();
         settings.set("mysql.host", "127.0.0.1").unwrap();
-        settings.set("mysql.port", 3306).unwrap();
-        settings.set("mysql.username", "root").unwrap();
-        settings.set("mysql.password", "5Edidada").unwrap();
+        settings.set("mysql.port", 5432).unwrap();  // PostgreSQL 默认端口
+        settings.set("mysql.username", "ibqo").unwrap();  // PostgreSQL 用户名
+        settings.set("mysql.password", "").unwrap();  // PostgreSQL 无密码
         settings.set("mysql.database", "ruiji").unwrap();
         
         // 尝试加载配置文件，如果不存在则使用默认值
