@@ -65,7 +65,7 @@ class LoginTest(unittest.TestCase):
             
             # 生成视频文件名
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            cls.video_file = os.path.join(videos_dir, f"test_login_{timestamp}.mp4")
+            cls.video_file = os.path.join(videos_dir, "test_login_%s.mp4" % timestamp)
             
             # 使用ffmpeg录制屏幕
             platform = sys.platform
@@ -300,6 +300,72 @@ class LoginTest(unittest.TestCase):
         current_url = self.driver.current_url
         self.assertIn("/dashboard", current_url)
         print("✓ 测试9通过: 刷新页面后仍保持登录状态")
+        
+    def test_health_check(self):
+        """测试10: 验证健康检查接口"""
+        import requests
+        try:
+            response = requests.get(f"{self.api_url}/health")
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data["status"], "healthy")
+            self.assertIn("version", data)
+            print("✓ 测试10通过: 健康检查接口正常")
+        except Exception as e:
+            print(f"✗ 测试10失败: 健康检查接口测试失败 - {e}")
+            
+    def test_report_apis(self):
+        """测试11: 验证报表接口"""
+        import requests
+        self.test_valid_login()
+        time.sleep(1)
+        
+        try:
+            # 获取会话cookie
+            cookies = self.driver.get_cookies()
+            cookie_dict = {cookie['name']: cookie['value'] for cookie in cookies}
+            
+            # 测试订单详情报表
+            response = requests.get(f"{self.api_url}/report/order-details", cookies=cookie_dict)
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data.get("code"), 200)
+            self.assertIsInstance(data.get("data"), list)
+            print("✓ 测试11.1通过: 订单详情报表接口正常")
+            
+            # 测试套餐菜品报表
+            response = requests.get(f"{self.api_url}/report/setmeal-dishes", cookies=cookie_dict)
+            self.assertEqual(response.status_code, 200)
+            data = response.json()
+            self.assertEqual(data.get("code"), 200)
+            self.assertIsInstance(data.get("data"), list)
+            print("✓ 测试11.2通过: 套餐菜品报表接口正常")
+            
+        except Exception as e:
+            print(f"✗ 测试11失败: 报表接口测试失败 - {e}")
+            
+    def test_report_page(self):
+        """测试12: 验证报表页面"""
+        self.test_valid_login()
+        time.sleep(1)
+        
+        try:
+            # 点击报表菜单
+            report_button = WebDriverWait(self.driver, 5).until(
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '报表管理')]"))
+            )
+            report_button.click()
+            time.sleep(2)
+            
+            # 验证报表页面加载
+            page_title = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located((By.TAG_NAME, "h2"))
+            )
+            self.assertIn("报表", page_title.text)
+            print("✓ 测试12通过: 报表页面加载正常")
+            
+        except Exception as e:
+            print(f"✗ 测试12失败: 报表页面测试失败 - {e}")
 
 
 def run_tests():
