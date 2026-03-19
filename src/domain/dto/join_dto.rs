@@ -11,7 +11,7 @@ pub struct OrderWithDetailDTO {
     pub order_time: Option<String>,
     pub pay_method: Option<i32>,
     pub pay_status: Option<i32>,
-    pub order_amount: Option<f64>,
+    pub order_amount: Option<String>,
     pub order_remark: Option<String>,
     pub consignee: Option<String>,
     pub phone: Option<String>,
@@ -24,7 +24,7 @@ pub struct OrderWithDetailDTO {
     pub dish_image: Option<String>,
     pub dish_flavor: Option<String>,
     pub number: Option<i32>,
-    pub amount: Option<f64>,
+    pub amount: Option<String>,
 }
 
 // 套餐 JOIN 菜品查询
@@ -33,7 +33,7 @@ pub struct SetmealWithDishDTO {
     // 套餐信息
     pub setmeal_id: Option<String>,
     pub setmeal_name: Option<String>,
-    pub setmeal_price: Option<f64>,
+    pub setmeal_price: Option<String>,
     pub setmeal_status: Option<i32>,
     pub setmeal_code: Option<String>,
     pub setmeal_description: Option<String>,
@@ -47,7 +47,7 @@ pub struct SetmealWithDishDTO {
     // 菜品信息
     pub dish_id: Option<String>,
     pub dish_name: Option<String>,
-    pub dish_price: Option<f64>,
+    pub dish_price: Option<String>,
 }
 
 // 购物车 JOIN 商品信息查询
@@ -58,13 +58,13 @@ pub struct ShoppingCartWithItemDTO {
     pub user_id: Option<String>,
     pub dish_flavor: Option<String>,
     pub number: Option<i32>,
-    pub cart_amount: Option<f64>,
+    pub cart_amount: Option<String>,
     pub create_time: Option<String>,
     // 商品信息（可能是菜品或套餐）
     pub item_id: Option<String>,
     pub item_name: Option<String>,
     pub item_image: Option<String>,
-    pub item_price: Option<f64>,
+    pub item_price: Option<String>,
     pub item_type: Option<String>, // "dish" 或 "setmeal"
 }
 
@@ -74,7 +74,7 @@ pub struct DishFullInfoDTO {
     // 菜品信息
     pub dish_id: Option<String>,
     pub dish_name: Option<String>,
-    pub dish_price: Option<f64>,
+    pub dish_price: Option<String>,
     pub dish_code: Option<String>,
     pub dish_image: Option<String>,
     pub dish_description: Option<String>,
@@ -117,5 +117,5 @@ pub struct UserWithOrderStatsDTO {
     pub sex: Option<i32>,
     // 订单统计
     pub order_count: Option<i64>,
-    pub total_amount: Option<f64>,
+    pub total_amount: Option<String>,
 }

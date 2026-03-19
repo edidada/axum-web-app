@@ -14,7 +14,7 @@ pub struct Orders {
     pub order_time: Option<DateTime>,
     pub checkout_time: Option<DateTime>,
     pub pay_method: Option<i32>,
-    pub amount: Option<f64>,
+    pub amount: Option<String>,
     pub remark: Option<String>,
     pub phone: Option<String>,
     pub address: Option<String>,
@@ -32,7 +32,7 @@ pub struct OrderWithDetail {
     pub order_time: Option<DateTime>,
     pub checkout_time: Option<DateTime>,
     pub pay_method: Option<i32>,
-    pub amount: Option<f64>,
+    pub amount: Option<String>,
     pub remark: Option<String>,
     pub phone: Option<String>,
     pub address: Option<String>,
@@ -45,7 +45,7 @@ pub struct OrderWithDetail {
     pub setmeal_id: Option<String>,
     pub dish_flavor: Option<String>,
     pub detail_number: Option<i32>,
-    pub detail_amount: Option<f64>,
+    pub detail_amount: Option<String>,
 }
 
 crud!(Orders {});

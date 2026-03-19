@@ -9,7 +9,7 @@ pub struct SetmealDish {
     pub setmeal_id: Option<String>,
     pub dish_id: Option<String>,
     pub name: Option<String>,
-    pub price: Option<f64>,
+    pub price: Option<String>,
     pub copies: Option<i32>,
     pub sort: Option<i32>,
     pub create_time: Option<DateTime>,

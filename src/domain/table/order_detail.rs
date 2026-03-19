@@ -12,7 +12,7 @@ pub struct OrderDetail {
     pub setmeal_id: Option<String>,
     pub dish_flavor: Option<String>,
     pub number: Option<i32>,
-    pub amount: Option<f64>,
+    pub amount: Option<String>,
 }
 
 crud!(OrderDetail {});
