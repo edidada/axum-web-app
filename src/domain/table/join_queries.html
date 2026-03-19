@@ -158,7 +158,7 @@
         u.sex,
         count(o.id) as order_count,
         coalesce(sum(o.amount), 0) as total_amount
-    from user u
+    from "user" u
     left join orders o on u.id = o.user_id
     <where>
         <if test="user_id != null">
@@ -192,7 +192,7 @@
         ab.label,
         ab.is_default
     from address_book ab
-    left join user u on ab.user_id = u.id
+    left join "user" u on ab.user_id = u.id
     <where>
         ab.is_deleted = 0
         <if test="user_id != null">

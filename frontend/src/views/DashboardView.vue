@@ -333,6 +333,97 @@ const headerLabels = computed(() => {
       amount: '金额',
       create_time: '创建时间',
     },
+    join_order_details: {
+      order_id: '订单ID',
+      order_number: '订单号',
+      order_status: '订单状态',
+      user_id: '用户ID',
+      order_time: '下单时间',
+      pay_method: '支付方式',
+      pay_status: '支付状态',
+      order_amount: '订单金额',
+      order_remark: '订单备注',
+      consignee: '收货人',
+      phone: '电话',
+      address: '地址',
+      detail_id: '详情ID',
+      dish_id: '菜品ID',
+      setmeal_id: '套餐ID',
+      dish_name: '菜品名称',
+      dish_image: '菜品图片',
+      dish_flavor: '口味',
+      number: '数量',
+      amount: '金额',
+    },
+    join_setmeal_dishes: {
+      setmeal_id: '套餐ID',
+      setmeal_name: '套餐名称',
+      setmeal_price: '套餐价格',
+      setmeal_status: '套餐状态',
+      setmeal_code: '套餐编码',
+      setmeal_description: '套餐描述',
+      setmeal_image: '套餐图片',
+      category_id: '分类ID',
+      category_name: '分类名称',
+      sd_id: '关联ID',
+      copies: '份数',
+      dish_id: '菜品ID',
+      dish_name: '菜品名称',
+      dish_price: '菜品价格',
+    },
+    join_shopping_cart: {
+      cart_id: '购物车ID',
+      user_id: '用户ID',
+      dish_flavor: '口味',
+      number: '数量',
+      cart_amount: '购物车金额',
+      create_time: '创建时间',
+      item_id: '商品ID',
+      item_name: '商品名称',
+      item_image: '商品图片',
+      item_price: '商品价格',
+      item_type: '商品类型',
+    },
+    join_dish_full: {
+      dish_id: '菜品ID',
+      dish_name: '菜品名称',
+      dish_price: '菜品价格',
+      dish_code: '菜品编码',
+      dish_image: '菜品图片',
+      dish_description: '菜品描述',
+      dish_status: '菜品状态',
+      dish_sort: '菜品排序',
+      category_id: '分类ID',
+      category_name: '分类名称',
+      flavors: '口味',
+    },
+    join_user_stats: {
+      user_id: '用户ID',
+      openid: '微信OpenID',
+      user_name: '用户姓名',
+      phone: '电话',
+      sex: '性别',
+      order_count: '订单数量',
+      total_amount: '订单总额',
+    },
+    join_address_user: {
+      id: '地址ID',
+      user_id: '用户ID',
+      user_name: '用户姓名',
+      user_phone: '用户电话',
+      consignee: '收货人',
+      sex: '性别',
+      phone: '收货人电话',
+      province_code: '省份编码',
+      province_name: '省份名称',
+      city_code: '城市编码',
+      city_name: '城市名称',
+      district_code: '区县编码',
+      district_name: '区县名称',
+      detail: '详细地址',
+      label: '标签',
+      is_default: '默认地址',
+    },
   };
   return labelMap[activeTab.value] || {};
 });
@@ -579,13 +670,23 @@ async function handleSubmit() {
   isSubmitting.value = true;
   try {
     const type = currentMenuItem.value.type;
+    
+    const submitData = { ...formData.value };
+    
+    if (submitData.amount !== undefined && submitData.amount !== null && submitData.amount !== '') {
+      submitData.amount = String(submitData.amount);
+    }
+    if (submitData.price !== undefined && submitData.price !== null && submitData.price !== '') {
+      submitData.price = String(submitData.price);
+    }
+    
     let response;
     
     if (isEdit.value && editingId.value) {
-      formData.value.id = editingId.value;
-      response = await apiService.updateRecord(type, formData.value);
+      submitData.id = editingId.value;
+      response = await apiService.updateRecord(type, submitData);
     } else {
-      response = await apiService.createRecord(type, formData.value);
+      response = await apiService.createRecord(type, submitData);
     }
 
     if (response.success) {

@@ -14,12 +14,15 @@ pub struct Orders {
     pub order_time: Option<DateTime>,
     pub checkout_time: Option<DateTime>,
     pub pay_method: Option<i32>,
+    pub pay_status: Option<i32>,
     pub amount: Option<String>,
     pub remark: Option<String>,
     pub phone: Option<String>,
     pub address: Option<String>,
     pub user_name: Option<String>,
     pub consignee: Option<String>,
+    pub create_time: Option<DateTime>,
+    pub update_time: Option<DateTime>,
 }
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
