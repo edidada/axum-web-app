@@ -321,7 +321,7 @@ class ApiService {
 
   // JOIN 查询方法
   async getOrderWithDetails(): Promise<PaginatedResponse<any>> {
-    const response = await fetch(`${API_BASE_URL}/join/order-with-details`, {
+    const response = await fetch(`${API_BASE_URL}/report/order-details`, {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
@@ -337,7 +337,7 @@ class ApiService {
   }
 
   async getSetmealWithDishes(): Promise<PaginatedResponse<any>> {
-    const response = await fetch(`${API_BASE_URL}/join/setmeal-with-dishes`, {
+    const response = await fetch(`${API_BASE_URL}/report/setmeal-dishes`, {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
@@ -353,7 +353,7 @@ class ApiService {
   }
 
   async getShoppingCartWithItems(): Promise<PaginatedResponse<any>> {
-    const response = await fetch(`${API_BASE_URL}/join/shopping-cart-with-items`, {
+    const response = await fetch(`${API_BASE_URL}/report/shopping-cart`, {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
@@ -369,7 +369,7 @@ class ApiService {
   }
 
   async getDishFullInfo(): Promise<PaginatedResponse<any>> {
-    const response = await fetch(`${API_BASE_URL}/join/dish-full-info`, {
+    const response = await fetch(`${API_BASE_URL}/report/dish-full-info`, {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
@@ -385,7 +385,7 @@ class ApiService {
   }
 
   async getUserWithOrderStats(): Promise<PaginatedResponse<any>> {
-    const response = await fetch(`${API_BASE_URL}/join/user-with-order-stats`, {
+    const response = await fetch(`${API_BASE_URL}/report/user-order-stats`, {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
@@ -401,7 +401,7 @@ class ApiService {
   }
 
   async getAddressBookWithUser(): Promise<PaginatedResponse<any>> {
-    const response = await fetch(`${API_BASE_URL}/join/address-book-with-user`, {
+    const response = await fetch(`${API_BASE_URL}/report/address-book`, {
       method: 'GET',
       headers: this.getHeaders(),
       credentials: 'include',
