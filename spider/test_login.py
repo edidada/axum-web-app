@@ -28,7 +28,7 @@ class LoginTest(unittest.TestCase):
         chrome_options.add_argument('--disable-dev-shm-usage')
         chrome_options.add_argument('--window-size=1920,1080')
         
-        chromedriver_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "drivers", "chromedriver")
+        chromedriver_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "drivers", "chromedriver.exe")
         cls.driver = webdriver.Chrome(
             service=Service(chromedriver_path),
             options=chrome_options
