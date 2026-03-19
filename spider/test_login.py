@@ -67,13 +67,19 @@ class LoginTest(unittest.TestCase):
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             cls.video_file = os.path.join(videos_dir, "test_login_%s.mp4" % timestamp)
             
+            # 使用指定的ffmpeg路径
+            ffmpeg_path = '/Users/ibqo/development/ffmpeg/ffmpeg'
+            if not os.path.exists(ffmpeg_path):
+                # 如果指定路径不存在，尝试使用系统PATH中的ffmpeg
+                ffmpeg_path = 'ffmpeg'
+            
             # 使用ffmpeg录制屏幕
             platform = sys.platform
             
             if platform == 'darwin':  # macOS
                 input_source = '1'  # 主显示器
                 ffmpeg_cmd = [
-                    'ffmpeg',
+                    ffmpeg_path,
                     '-f', 'avfoundation',
                     '-i', input_source,
                     '-r', '30',
@@ -86,7 +92,7 @@ class LoginTest(unittest.TestCase):
             elif platform.startswith('linux'):  # Linux
                 input_source = ':0.0'
                 ffmpeg_cmd = [
-                    'ffmpeg',
+                    ffmpeg_path,
                     '-f', 'x11grab',
                     '-i', input_source,
                     '-r', '30',
@@ -99,7 +105,7 @@ class LoginTest(unittest.TestCase):
             else:  # Windows
                 input_source = 'desktop'
                 ffmpeg_cmd = [
-                    'ffmpeg',
+                    ffmpeg_path,
                     '-f', 'gdigrab',
                     '-i', input_source,
                     '-r', '30',
