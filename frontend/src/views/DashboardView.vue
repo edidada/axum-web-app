@@ -11,14 +11,19 @@
     </header>
 
     <nav class="nav-menu">
-      <button
-        v-for="item in menuItems"
-        :key="item.id"
-        :class="['nav-item', { active: activeTab === item.id }]"
-        @click="activeTab = item.id"
-      >
-        {{ item.label }}
-      </button>
+      <div v-for="group in menuGroups" :key="group.name" class="menu-group">
+        <div class="menu-group-title">{{ group.name }}</div>
+        <div class="menu-group-items">
+          <button
+            v-for="item in group.items"
+            :key="item.id"
+            :class="['nav-item', { active: activeTab === item.id }]"
+            @click="activeTab = item.id"
+          >
+            {{ item.label }}
+          </button>
+        </div>
+      </div>
     </nav>
 
     <main class="content">
@@ -125,26 +130,41 @@ const formData = ref<any>({});
 const editingId = ref<string | null>(null);
 
 const menuItems = [
-  { id: 'dict', label: '字典管理', action: 'getSysDictList', type: 'sys-dict' },
-  { id: 'address', label: '地址簿', action: 'getAddressBookPage', type: 'address-book' },
-  { id: 'category', label: '分类管理', action: 'getCategoryPage', type: 'category' },
-  { id: 'dish', label: '菜品管理', action: 'getDishPage', type: 'dish' },
-  { id: 'dish_flavor', label: '菜品口味', action: 'getDishFlavorPage', type: 'dish-flavor' },
-  { id: 'employee', label: '员工管理', action: 'getEmployeePage', type: 'employee' },
-  { id: 'user', label: '用户管理', action: 'getUserPage', type: 'user' },
-  { id: 'setmeal', label: '套餐管理', action: 'getSetmealPage', type: 'setmeal' },
-  { id: 'setmeal_dish', label: '套餐菜品', action: 'getSetmealDishPage', type: 'setmeal-dish' },
-  { id: 'orders', label: '订单管理', action: 'getOrdersPage', type: 'orders' },
-  { id: 'order_detail', label: '订单详情', action: 'getOrderDetailPage', type: 'order-detail' },
-  { id: 'shopping_cart', label: '购物车', action: 'getShoppingCartPage', type: 'shopping-cart' },
-  // JOIN 查询菜单
-  { id: 'join_order_details', label: '【JOIN】订单详情', action: 'getOrderWithDetails', type: 'join', isJoin: true },
-  { id: 'join_setmeal_dishes', label: '【JOIN】套餐菜品', action: 'getSetmealWithDishes', type: 'join', isJoin: true },
-  { id: 'join_shopping_cart', label: '【JOIN】购物车商品', action: 'getShoppingCartWithItems', type: 'join', isJoin: true },
-  { id: 'join_dish_full', label: '【JOIN】菜品完整信息', action: 'getDishFullInfo', type: 'join', isJoin: true },
-  { id: 'join_user_stats', label: '【JOIN】用户订单统计', action: 'getUserWithOrderStats', type: 'join', isJoin: true },
-  { id: 'join_address_user', label: '【JOIN】地址簿用户', action: 'getAddressBookWithUser', type: 'join', isJoin: true },
+  { id: 'dict', label: '字典管理', action: 'getSysDictList', type: 'sys-dict', group: '基础管理' },
+  { id: 'address', label: '地址簿', action: 'getAddressBookPage', type: 'address-book', group: '基础管理' },
+  { id: 'category', label: '分类管理', action: 'getCategoryPage', type: 'category', group: '基础管理' },
+  { id: 'dish', label: '菜品管理', action: 'getDishPage', type: 'dish', group: '基础管理' },
+  { id: 'dish_flavor', label: '菜品口味', action: 'getDishFlavorPage', type: 'dish-flavor', group: '基础管理' },
+  { id: 'employee', label: '员工管理', action: 'getEmployeePage', type: 'employee', group: '基础管理' },
+  { id: 'user', label: '用户管理', action: 'getUserPage', type: 'user', group: '基础管理' },
+  { id: 'setmeal', label: '套餐管理', action: 'getSetmealPage', type: 'setmeal', group: '基础管理' },
+  { id: 'setmeal_dish', label: '套餐菜品', action: 'getSetmealDishPage', type: 'setmeal-dish', group: '基础管理' },
+  { id: 'orders', label: '订单管理', action: 'getOrdersPage', type: 'orders', group: '业务管理' },
+  { id: 'order_detail', label: '订单详情', action: 'getOrderDetailPage', type: 'order-detail', group: '业务管理' },
+  { id: 'shopping_cart', label: '购物车', action: 'getShoppingCartPage', type: 'shopping-cart', group: '业务管理' },
+  // 报表查询菜单
+  { id: 'join_order_details', label: '订单详情报表', action: 'getOrderWithDetails', type: 'join', isJoin: true, group: '报表查询' },
+  { id: 'join_setmeal_dishes', label: '套餐菜品报表', action: 'getSetmealWithDishes', type: 'join', isJoin: true, group: '报表查询' },
+  { id: 'join_shopping_cart', label: '购物车报表', action: 'getShoppingCartWithItems', type: 'join', isJoin: true, group: '报表查询' },
+  { id: 'join_dish_full', label: '菜品信息报表', action: 'getDishFullInfo', type: 'join', isJoin: true, group: '报表查询' },
+  { id: 'join_user_stats', label: '用户统计报表', action: 'getUserWithOrderStats', type: 'join', isJoin: true, group: '报表查询' },
+  { id: 'join_address_user', label: '地址用户报表', action: 'getAddressBookWithUser', type: 'join', isJoin: true, group: '报表查询' },
 ];
+
+const menuGroups = computed(() => {
+  const groups: Record<string, any[]> = {};
+  menuItems.forEach(item => {
+    const group = item.group || '其他';
+    if (!groups[group]) {
+      groups[group] = [];
+    }
+    groups[group].push(item);
+  });
+  return Object.keys(groups).map(name => ({
+    name,
+    items: groups[name]
+  }));
+});
 
 const currentMenuItem = computed(() => {
   return menuItems.find(item => item.id === activeTab.value) || menuItems[0];
@@ -667,16 +687,37 @@ onMounted(() => {
 
 .nav-menu {
   background: white;
-  padding: 1rem 2rem;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
+  flex-wrap: wrap;
   gap: 1rem;
-  border-bottom: 1px solid #e0e0e0;
+}
+
+.menu-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.menu-group-title {
+  font-size: 0.85rem;
+  color: #888;
+  font-weight: 600;
+  padding: 0.25rem 0.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.menu-group-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .nav-item {
   padding: 0.5rem 1rem;
-  background: none;
   border: none;
+  background: #f8f9fa;
   border-radius: 4px;
   cursor: pointer;
   color: #555;

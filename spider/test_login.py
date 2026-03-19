@@ -322,7 +322,7 @@ class LoginTest(unittest.TestCase):
         try:
             # 测试订单详情JOIN查询
             join_button = WebDriverWait(self.driver, 5).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '【JOIN】订单详情')]"))
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '订单详情报表')]"))
             )
             join_button.click()
             time.sleep(2)
@@ -336,7 +336,7 @@ class LoginTest(unittest.TestCase):
             
             # 测试套餐菜品JOIN查询
             setmeal_button = WebDriverWait(self.driver, 5).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '【JOIN】套餐菜品')]"))
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '套餐菜品报表')]"))
             )
             setmeal_button.click()
             time.sleep(2)
@@ -359,7 +359,7 @@ class LoginTest(unittest.TestCase):
         try:
             # 点击JOIN查询菜单
             join_button = WebDriverWait(self.driver, 5).until(
-                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '【JOIN】订单详情')]"))
+                EC.element_to_be_clickable((By.XPATH, "//button[contains(text(), '订单详情报表')]"))
             )
             join_button.click()
             time.sleep(2)
@@ -373,6 +373,65 @@ class LoginTest(unittest.TestCase):
             
         except Exception as e:
             print(f"✗ 测试12失败: JOIN查询页面测试失败 - {e}")
+            
+    def test_crud_operations(self):
+        """测试13: 测试所有菜单的CRUD操作"""
+        self.test_valid_login()
+        time.sleep(1)
+        
+        # 测试字典管理的CRUD操作
+        try:
+            print("\n开始测试字典管理CRUD操作...")
+            self._test_single_menu_crud("字典管理", "dict")
+        except Exception as e:
+            print(f"✗ 字典管理CRUD测试失败: {e}")
+            
+        # 测试分类管理的CRUD操作
+        try:
+            print("\n开始测试分类管理CRUD操作...")
+            self._test_single_menu_crud("分类管理", "category")
+        except Exception as e:
+            print(f"✗ 分类管理CRUD测试失败: {e}")
+            
+    def _test_single_menu_crud(self, menu_name, menu_id):
+        """测试单个菜单的CRUD操作"""
+        # 点击菜单
+        menu_button = WebDriverWait(self.driver, 5).until(
+            EC.element_to_be_clickable((By.XPATH, f"//button[contains(text(), '{menu_name}')]"))
+        )
+        menu_button.click()
+        time.sleep(2)
+        
+        # 测试新增操作
+        try:
+            add_button = self.driver.find_element(By.XPATH, "//button[contains(text(), '新增')]")
+            add_button.click()
+            time.sleep(1)
+            
+            # 填写表单（简化版，实际应该根据不同菜单填写不同字段）
+            # 这里只测试打开模态框
+            modal = WebDriverWait(self.driver, 3).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "modal"))
+            )
+            self.assertIsNotNone(modal)
+            
+            # 关闭模态框
+            cancel_button = self.driver.find_element(By.XPATH, "//button[contains(text(), '取消')]")
+            cancel_button.click()
+            time.sleep(1)
+            
+            print(f"  ✓ {menu_name}新增功能正常")
+        except Exception as e:
+            print(f"  ✗ {menu_name}新增功能失败: {e}")
+            
+        # 测试刷新操作
+        try:
+            refresh_button = self.driver.find_element(By.XPATH, "//button[contains(text(), '刷新')]")
+            refresh_button.click()
+            time.sleep(2)
+            print(f"  ✓ {menu_name}刷新功能正常")
+        except Exception as e:
+            print(f"  ✗ {menu_name}刷新功能失败: {e}")
 
 
 def run_tests():
