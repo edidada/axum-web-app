@@ -34,18 +34,10 @@ async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let config = Config::from_file();
     let rb = RBatis::new();
     
-    // 根据配置选择数据库驱动
-    let db_url = config.get_database_url();
-    
-    if config.is_postgresql() {
-        // PostgreSQL 连接
-        tracing::info!("Initializing PostgreSQL connection to {}", config.database.host);
-        rb.init(PgDriver {}, &db_url)?;
-    } else {
-        // MySQL 连接 (默认)
-        tracing::info!("Initializing MySQL connection to {}", config.database.host);
-        rb.init(MysqlDriver {}, &db_url)?;
-    }
+    // 直接使用 PostgreSQL 配置
+    let db_url = "postgres://ibqo:@127.0.0.1:5432/axum_db";
+    tracing::info!("Initializing PostgreSQL connection to 127.0.0.1:5432");
+    rb.init(PgDriver {}, db_url)?;
     
     unsafe {
         RB = Some(rb);

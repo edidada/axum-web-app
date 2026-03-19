@@ -4,11 +4,15 @@
 Selenium 自动化测试 - 登录功能测试
 测试目标: http://localhost:5173 (Vue前端)
 后端API: http://localhost:9001 (Axum后端)
+支持视频录制功能
 """
 
 import os
+import sys
 import unittest
 import time
+import subprocess
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -23,6 +27,9 @@ class LoginTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """测试类开始前执行一次"""
+        cls.video_process = None
+        cls.video_file = None
+        
         chrome_options = Options()
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
@@ -37,10 +44,104 @@ class LoginTest(unittest.TestCase):
         cls.base_url = "http://localhost:5173"
         cls.api_url = "http://localhost:9001"
         
+        # 启动视频录制
+        cls.start_recording()
+        
     @classmethod
     def tearDownClass(cls):
         """测试类结束后执行一次"""
+        # 停止视频录制
+        cls.stop_recording()
         cls.driver.quit()
+        
+    @classmethod
+    def start_recording(cls):
+        """开始录制视频"""
+        try:
+            # 创建videos目录
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            videos_dir = os.path.join(script_dir, "videos")
+            os.makedirs(videos_dir, exist_ok=True)
+            
+            # 生成视频文件名
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            cls.video_file = os.path.join(videos_dir, f"test_login_{timestamp}.mp4")
+            
+            # 使用ffmpeg录制屏幕
+            platform = sys.platform
+            
+            if platform == 'darwin':  # macOS
+                input_source = '1'  # 主显示器
+                ffmpeg_cmd = [
+                    'ffmpeg',
+                    '-f', 'avfoundation',
+                    '-i', input_source,
+                    '-r', '30',
+                    '-c:v', 'libx264',
+                    '-preset', 'ultrafast',
+                    '-crf', '23',
+                    '-pix_fmt', 'yuv420p',
+                    cls.video_file
+                ]
+            elif platform.startswith('linux'):  # Linux
+                input_source = ':0.0'
+                ffmpeg_cmd = [
+                    'ffmpeg',
+                    '-f', 'x11grab',
+                    '-i', input_source,
+                    '-r', '30',
+                    '-c:v', 'libx264',
+                    '-preset', 'ultrafast',
+                    '-crf', '23',
+                    '-pix_fmt', 'yuv420p',
+                    cls.video_file
+                ]
+            else:  # Windows
+                input_source = 'desktop'
+                ffmpeg_cmd = [
+                    'ffmpeg',
+                    '-f', 'gdigrab',
+                    '-i', input_source,
+                    '-r', '30',
+                    '-c:v', 'libx264',
+                    '-preset', 'ultrafast',
+                    '-crf', '23',
+                    '-pix_fmt', 'yuv420p',
+                    cls.video_file
+                ]
+            
+            # 启动ffmpeg进程
+            cls.video_process = subprocess.Popen(
+                ffmpeg_cmd,
+                stdin=subprocess.PIPE,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
+            
+            print(f"📹 开始录制视频: {cls.video_file}")
+            time.sleep(1)  # 等待ffmpeg启动
+            
+        except FileNotFoundError:
+            print("⚠️  未找到ffmpeg，跳过视频录制")
+            print("   可以通过以下命令安装ffmpeg:")
+            print("   macOS: brew install ffmpeg")
+            print("   Linux: sudo apt-get install ffmpeg")
+            print("   Windows: 从 https://ffmpeg.org/download.html 下载")
+        except Exception as e:
+            print(f"⚠️  视频录制启动失败: {e}")
+    
+    @classmethod
+    def stop_recording(cls):
+        """停止录制视频"""
+        if cls.video_process and cls.video_process.poll() is None:
+            try:
+                # 发送q命令停止ffmpeg
+                cls.video_process.stdin.write(b'q')
+                cls.video_process.stdin.close()
+                cls.video_process.wait(timeout=5)
+                print(f"📹 视频已保存: {cls.video_file}")
+            except Exception as e:
+                print(f"⚠️  停止录制时出错: {e}")
         
     def setUp(self):
         """每个测试方法开始前执行"""

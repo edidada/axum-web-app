@@ -9,6 +9,9 @@ pub struct SysDict {
     pub id: Option<String>,
     pub name: Option<String>,
     pub code: Option<String>,
+    pub value: Option<String>,
+    pub sort: Option<i32>,
+    pub remark: Option<String>,
     pub state: Option<i32>,
     pub create_date: Option<DateTime>,
 }

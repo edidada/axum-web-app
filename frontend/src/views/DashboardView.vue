@@ -171,6 +171,9 @@ const headerLabels = computed(() => {
       user_id: '用户ID',
       create_time: '创建时间',
       update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
+      is_deleted: '删除标记',
     },
     category: {
       name: '分类名称',
@@ -179,6 +182,8 @@ const headerLabels = computed(() => {
       category_type: '分类类型',
       create_time: '创建时间',
       update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
     },
     dish: {
       name: '菜品名称',
@@ -191,6 +196,9 @@ const headerLabels = computed(() => {
       sort: '排序',
       create_time: '创建时间',
       update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
+      is_deleted: '删除标记',
     },
   };
   return labelMap[activeTab.value] || {};
