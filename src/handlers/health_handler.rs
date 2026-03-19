@@ -26,7 +26,8 @@ pub fn init_start_time() {
 
 /// 健康检查接口 - 基础健康状态
 pub async fn health_check() -> Json<HealthResponse> {
-    let start_time = START_TIME.get().unwrap_or(&SystemTime::now());
+    let current_time = SystemTime::now();
+    let start_time = START_TIME.get().unwrap_or(&current_time);
     let uptime = SystemTime::now()
         .duration_since(*start_time)
         .unwrap_or_default()
@@ -49,7 +50,8 @@ pub async fn health_check() -> Json<HealthResponse> {
 
 /// 详细健康检查接口 - 包含系统信息
 pub async fn health_check_detailed() -> Json<serde_json::Value> {
-    let start_time = START_TIME.get().unwrap_or(&SystemTime::now());
+    let current_time = SystemTime::now();
+    let start_time = START_TIME.get().unwrap_or(&current_time);
     let uptime = SystemTime::now()
         .duration_since(*start_time)
         .unwrap_or_default()
