@@ -44,7 +44,7 @@
             <thead>
               <tr>
                 <th>序号</th>
-                <th v-for="header in displayHeaders" :key="header">{{ header }}</th>
+                <th v-for="header in displayHeaders" :key="header">{{ headerLabels[header] || header }}</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -142,6 +142,58 @@ const tableHeaders = computed(() => {
 
 const displayHeaders = computed(() => {
   return tableHeaders.value.filter(h => h !== 'id');
+});
+
+const headerLabels = computed(() => {
+  const labelMap: Record<string, Record<string, string>> = {
+    dict: {
+      code: '编码',
+      name: '名称',
+      value: '值',
+      sort: '排序',
+      remark: '备注',
+      state: '状态',
+      create_date: '创建时间',
+    },
+    address: {
+      consignee: '收货人',
+      sex: '性别',
+      phone: '电话',
+      province_code: '省份编码',
+      province_name: '省份名称',
+      city_code: '城市编码',
+      city_name: '城市名称',
+      district_code: '区县编码',
+      district_name: '区县名称',
+      detail: '详细地址',
+      label: '标签',
+      is_default: '默认地址',
+      user_id: '用户ID',
+      create_time: '创建时间',
+      update_time: '更新时间',
+    },
+    category: {
+      name: '分类名称',
+      sort: '排序',
+      type: '类型',
+      category_type: '分类类型',
+      create_time: '创建时间',
+      update_time: '更新时间',
+    },
+    dish: {
+      name: '菜品名称',
+      category_id: '分类ID',
+      price: '价格',
+      code: '编码',
+      image: '图片',
+      description: '描述',
+      status: '状态',
+      sort: '排序',
+      create_time: '创建时间',
+      update_time: '更新时间',
+    },
+  };
+  return labelMap[activeTab.value] || {};
 });
 
 const editableFields = computed(() => {
