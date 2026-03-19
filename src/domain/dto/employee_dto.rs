@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct EmployeePageDTO {
     pub name: Option<String>,
     pub username: Option<String>,

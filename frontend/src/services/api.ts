@@ -45,7 +45,6 @@ class ApiService {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
-    // 移除手动设置的 Cookie 头，让浏览器自动处理
     return headers;
   }
 
@@ -65,7 +64,6 @@ class ApiService {
       const data = await response.json();
       console.log('API login response data:', data);
       
-      // 处理后端返回的响应格式
       const result: LoginResponse = {
         success: data.code === 0 || data.status === 'success',
         message: data.message || (data.status === 'success' ? '登录成功' : '登录失败'),
@@ -97,7 +95,6 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     const result: ApiResponse<any> = {
       success: data.code === 0 || data.status === 'success',
       message: data.message || (data.status === 'success' ? '退出成功' : '退出失败'),
@@ -117,7 +114,6 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
       success: Array.isArray(data),
       message: Array.isArray(data) ? '获取成功' : '获取失败',
@@ -135,12 +131,11 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '获取成功' : '获取失败'),
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
       total: data.total,
-      records: data.records,
+      records: data.records || [],
     };
   }
 
@@ -154,12 +149,11 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '获取成功' : '获取失败'),
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
       total: data.total,
-      records: data.records,
+      records: data.records || [],
     };
   }
 
@@ -173,12 +167,65 @@ class ApiService {
 
     const data = await response.json();
     
-    // 处理后端返回的响应格式
     return {
-      success: data.code === 0 || data.status === 'success',
-      message: data.message || (data.status === 'success' ? '获取成功' : '获取失败'),
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
       total: data.total,
-      records: data.records,
+      records: data.records || [],
+    };
+  }
+
+  async createRecord(type: string, data: any): Promise<ApiResponse<any>> {
+    const url = `${API_BASE_URL}/${type}/insert`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+    
+    return {
+      success: response.ok,
+      message: response.ok ? '新增成功' : '新增失败',
+      data: result,
+    };
+  }
+
+  async updateRecord(type: string, data: any): Promise<ApiResponse<any>> {
+    const url = `${API_BASE_URL}/${type}/update`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+    
+    return {
+      success: response.ok,
+      message: response.ok ? '更新成功' : '更新失败',
+      data: result,
+    };
+  }
+
+  async deleteRecord(type: string, id: string): Promise<ApiResponse<any>> {
+    const url = `${API_BASE_URL}/${type}/delete`;
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(id),
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+    
+    return {
+      success: response.ok,
+      message: response.ok ? '删除成功' : '删除失败',
+      data: result,
     };
   }
 }

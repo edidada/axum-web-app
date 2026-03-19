@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct AddressBookPageDTO {
     pub user_id: Option<String>,
     pub consignee: Option<String>,

@@ -1,0 +1,55 @@
+2026-03-19 01:23:46.882106  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+2026-03-19 01:24:01.801416 DEBUG hyper::proto::h1::io: parsed 5 headers
+2026-03-19 01:24:01.801515 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-19 01:24:01.801738 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 01:24:01.801938 DEBUG main::middleware::request_logging: Request: POST /dish/select-page
+2026-03-19 01:24:01.802031 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "user-agent": "curl/8.7.1", "accept": "*/*", "content-type": "application/json", "content-length": "24"}
+2026-03-19 01:24:01.803058  INFO main::middleware::request_logging: Response: POST /dish/select-page - 401 Unauthorized in 1.108988ms
+2026-03-19 01:24:01.803147 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "15"}
+2026-03-19 01:24:01.803476 DEBUG hyper::proto::h1::io: flushed 323 bytes
+2026-03-19 01:24:01.806617 DEBUG hyper::proto::h1::conn: read eof
+2026-03-19 01:24:08.586002 DEBUG hyper::proto::h1::io: parsed 5 headers
+2026-03-19 01:24:08.586072 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-19 01:24:08.586198 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 01:24:08.586310 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-19 01:24:08.586370 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "user-agent": "curl/8.7.1", "accept": "*/*", "content-type": "application/json", "content-length": "46"}
+2026-03-19 01:24:08.587264  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9001,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 5432,
+    "username": "ibqo",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-19 01:24:08.588624  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 2.169067ms
+2026-03-19 01:24:08.588827 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=bff80a1b-5a67-46c6-a005-185b371b790e; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+2026-03-19 01:24:08.589023 DEBUG hyper::proto::h1::io: flushed 460 bytes
+2026-03-19 01:24:08.590134 DEBUG hyper::proto::h1::conn: read eof
+2026-03-19 01:24:08.606736 DEBUG hyper::proto::h1::io: parsed 6 headers
+2026-03-19 01:24:08.606792 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-19 01:24:08.606889 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 01:24:08.606983 DEBUG main::middleware::request_logging: Request: POST /dish/select-page
+2026-03-19 01:24:08.607070 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "user-agent": "curl/8.7.1", "accept": "*/*", "cookie": "session=bff80a1b-5a67-46c6-a005-185b371b790e", "content-type": "application/json", "content-length": "24"}
+2026-03-19 01:24:08.614198 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7440085556865929217] => `select count(1) as count from dish` []
+2026-03-19 01:24:08.616259 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7440085556865929217] <= len=1
+2026-03-19 01:24:08.616524 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7440085556865929218] => `select * from dish order by sort limit 10 offset 0` []
+2026-03-19 01:24:08.619691 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7440085556865929218] <= len=5
+2026-03-19 01:24:08.620164  INFO main::middleware::request_logging: Response: POST /dish/select-page - 500 Internal Server Error in 13.132074ms
+2026-03-19 01:24:08.620278 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "64"}
+2026-03-19 01:24:08.620497 DEBUG hyper::proto::h1::io: flushed 381 bytes
+2026-03-19 01:24:08.621948 DEBUG hyper::proto::h1::conn: read eof

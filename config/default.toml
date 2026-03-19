@@ -1,17 +1,40 @@
 [auth]
 username = "edidada"
 password = "Pass123Qwe"
+
 [webapp]
 port = 9002
 redisurl = "redis://127.0.0.1/"
+
 [redis]
 ip = "127.0.0.1"
 port = 6379
 expiration = 3600  # Expiration time in seconds
 key_prefix = "session:"
+
+# 兼容旧配置 (保留)
 [mysql]
 host = "127.0.0.1"
 port = 3306
 username = "root"
 password = "5Edidada"
 database = "ruiji"
+
+# 新的数据库配置 (推荐)
+# 支持的数据库类型: mysql, postgresql, postgres, pg
+[database]
+db_type = "mysql"  # 可选: mysql, postgresql, postgres, pg
+host = "127.0.0.1"
+port = 3306
+username = "root"
+password = "5Edidada"
+database = "ruiji"
+
+# PostgreSQL 配置示例:
+# [database]
+# db_type = "postgresql"
+# host = "127.0.0.1"
+# port = 5432
+# username = "postgres"
+# password = "your_password"
+# database = "ruiji"

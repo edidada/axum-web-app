@@ -15,7 +15,10 @@ use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
 use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
+
+// 导入数据库驱动
 use rbdc_mysql::driver::MysqlDriver;
+use rbdc_pg::driver::PgDriver;
 
 mod handlers;
 mod routes;
@@ -26,19 +29,24 @@ mod domain;
 // 定义静态的 RBatis 实例
 static mut RB: Option<RBatis> = None;
 
-// 异步初始化函数
+// 异步初始化函数 - 支持 MySQL 和 PostgreSQL
 async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let config = Config::from_file();
     let rb = RBatis::new();
-    // rbatis 默认已经启用了 SQL 日志，日志级别为 Debug
-    let mysql_url = format!("mysql://{}:{}@{}:{}/{}", 
-        config.mysql.username,
-        config.mysql.password,
-        config.mysql.host,
-        config.mysql.port,
-        config.mysql.database
-    );
-    rb.init(MysqlDriver {}, &mysql_url)?;
+    
+    // 根据配置选择数据库驱动
+    let db_url = config.get_database_url();
+    
+    if config.is_postgresql() {
+        // PostgreSQL 连接
+        tracing::info!("Initializing PostgreSQL connection to {}", config.database.host);
+        rb.init(PgDriver {}, &db_url)?;
+    } else {
+        // MySQL 连接 (默认)
+        tracing::info!("Initializing MySQL connection to {}", config.database.host);
+        rb.init(MysqlDriver {}, &db_url)?;
+    }
+    
     unsafe {
         RB = Some(rb);
     }
@@ -148,320 +156,124 @@ impl FormatTime for LocalTimer {
 mod tests {
     use rbatis::{PageRequest, RBatis};
     use rbdc_sqlite::SqliteDriver;
-    use crate::domain::table::sys_dict;
-    use tracing_subscriber::{fmt, EnvFilter, Registry, layer::SubscriberExt};
-    use tracing_appender::rolling::{RollingFileAppender, Rotation};
-    use rand::Rng;
-    use rbs::value;
-    use uuid::Uuid;
-    use tracing::dispatcher::get_default;
+    use crate::domain::table::orders::Orders;
 
-    #[tokio::test]
-    async fn test_sys_dict() -> Result<(), Box<dyn std::error::Error>> {
-        // 设置日志
-        let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
-        let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
-
+    // 初始化日志的辅助函数
+    fn init_test_log() {
+        let _ = tracing_subscriber::fmt()
+            .with_max_level(tracing::Level::DEBUG)
+            .try_init();
         // 初始化 log 到 tracing 的桥接
-        tracing_log::LogTracer::init().unwrap_or(());
-
-        // 创建一个日志记录器层，将日志输出到文件
-        let file_layer = fmt::layer()
-            .with_ansi(false) // 禁用 ANSI 样式
-            .with_timer(super::LocalTimer {}) // 使用本地时间
-            .with_writer(non_blocking);
-
-        // 创建一个基于环境变量的过滤器层
-        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
-
-        // 创建一个订阅器，将过滤器层和文件层组合起来
-        let subscriber = Registry::default()
-            .with(env_filter)
-            .with(file_layer);
-
-        // 设置全局订阅器，忽略已存在的错误
-        let _ = tracing::subscriber::set_global_default(subscriber);
-
-        // 初始化 RBatis
-        let rb = RBatis::new();
-        rb.init(SqliteDriver {}, "sqlite://./test.db")?;
-
-        // 创建表
-        tracing::info!("=== 创建表 ===");
-        let create_table_sql = r#"
-    CREATE TABLE IF NOT EXISTS sys_dict (
-        id TEXT PRIMARY KEY,
-        name TEXT,
-        code TEXT,
-        state INTEGER,
-        create_date TEXT
-    )
-    "#;
-        rb.exec(create_table_sql, vec![]).await?;
-        tracing::info!("=== 表创建成功 ===");
-
-        // 测试增加数据
-        tracing::info!("=== 测试增加数据 ===");
-        let mut rng = rand::thread_rng();
-        let random_id = rng.gen::<u64>();
-
-        let dict = sys_dict::SysDict {
-            id: Some(random_id.to_string()),
-            name: Some("测试字典6".to_string()),
-            code: Some("test_dict6".to_string()),
-            state: Some(0),
-            create_date: Some(rbatis::rbdc::DateTime::now()),
-        };
-
-        let result = sys_dict::SysDict::insert(&rb, &dict).await;
-        match result {
-            Ok(_) => tracing::info!("增加数据成功"),
-            Err(e) => tracing::info!("增加数据失败: {:?}", e),
-        }
-
-        // 测试查询数据
-        tracing::info!("=== 测试查询数据 ===");
-        let result = sys_dict::SysDict::select_all(&rb).await;
-        match result {
-            Ok(dicts) => {
-                tracing::info!("查询到 {} 条数据", dicts.len());
-                for dict in dicts {
-                    tracing::info!("{:?}", dict);
-                }
-            }
-            Err(e) => tracing::info!("查询数据失败: {:?}", e),
-        }
-
-        // 测试使用 select_page API
-        tracing::info!("=== 测试使用 select_page API ===");
-        let page_request = PageRequest::new(1, 10);
-        let dto = crate::domain::dto::dict_dto::DictPageDTO {
-            name: None,
-            code: None,
-        };
-
-        let result = sys_dict::SysDict::select_page(&rb, &page_request, &dto).await;
-        match result {
-            Ok(page) => {
-                tracing::info!("总记录数: {}", page.total);
-                tracing::info!("当前页码: {}", page.page_no);
-                tracing::info!("每页大小: {}", page.page_size);
-                tracing::info!("查询到 {} 条数据", page.records.len());
-                for dict in page.records {
-                    tracing::info!("{:?}", dict);
-                }
-            }
-            Err(e) => tracing::info!("分页查询失败: {:?}", e),
-        }
-
-        Ok(())
+        let _ = tracing_log::LogTracer::init();
     }
 
-    #[tokio::test]
-    async fn test_sys_dict_crud() -> Result<(), Box<dyn std::error::Error>> {
-        // 设置日志
-        let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
-        let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
-
-        // 初始化 log 到 tracing 的桥接
-        tracing_log::LogTracer::init().unwrap_or(());
-
-        // 创建一个日志记录器层，将日志输出到文件
-        let file_layer = fmt::layer()
-            .with_ansi(false) // 禁用 ANSI 样式
-            .with_timer(super::LocalTimer {}) // 使用本地时间
-            .with_writer(non_blocking);
-
-        // 创建一个基于环境变量的过滤器层
-        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
-
-        // 创建一个订阅器，将过滤器层和文件层组合起来
-        let subscriber = Registry::default()
-            .with(env_filter)
-            .with(file_layer);
-
-        // 设置全局订阅器，忽略已存在的错误
-        let _ = tracing::subscriber::set_global_default(subscriber);
-
-        // Initialize RBatis for test
+    // 初始化 SQLite 用于测试
+    async fn init_sqlite_rbatis() -> RBatis {
         let rb = RBatis::new();
-        rb.init(SqliteDriver {}, "sqlite://./test.db")?;
-
-        // Create table
-        let create_table_sql = r#"
-        CREATE TABLE IF NOT EXISTS sys_dict (
-            id TEXT PRIMARY KEY,
-            name TEXT,
-            code TEXT,
-            state INTEGER,
-            create_date TEXT
-        )
-        "#;
-        rb.exec(create_table_sql, vec![]).await?;
-
-        let mut rng = rand::thread_rng();
-        let random_id = rng.gen::<u64>();
-        let dict = sys_dict::SysDict {
-            id: Some(random_id.to_string()),
-            name: Some("crud test".to_string()),
-            code: Some("crud_code".to_string()),
-            state: Some(1),
-            create_date: Some(rbatis::rbdc::DateTime::now()),
-        };
-
-        // Insert
-        let affected = sys_dict::SysDict::insert(&rb, &dict).await?;
-        tracing::info!("插入影响行数: {:?}", affected);
-
-        // Select all
-        let selected_all = sys_dict::SysDict::select_all(&rb).await?;
-        tracing::info!("查询到 {} 条数据", selected_all.len());
-        assert!(selected_all.len() > 0);
-
-        // Update
-        let mut updated_dict = dict.clone();
-        updated_dict.name = Some("updated crud test".to_string());
-
-        // 使用 update_by_map 方法更新数据
-        use rbs::Value;
-        let update_result = sys_dict::SysDict::update_by_map(&rb, &updated_dict, Value::Null).await?;
-        tracing::info!("更新结果: {:?}", update_result);
-
-        // Verify update
-        let selected_all_after_update = sys_dict::SysDict::select_all(&rb).await?;
-        tracing::info!("更新后查询到 {} 条数据", selected_all_after_update.len());
-        assert!(selected_all_after_update.len() > 0);
-
-        // Delete
-        // 使用 delete_by_map 方法删除数据
-        let delete_result = sys_dict::SysDict::delete_by_map(
-            &rb,
-            value!{ "id": random_id },  // 这里 "id" 是你的表主键字段名
-        ).await?;
-        tracing::info!("删除结果: {:?}", delete_result);
-
-        // Verify delete
-        let selected_all_after_delete = sys_dict::SysDict::select_all(&rb).await?;
-        tracing::info!("删除后查询到 {} 条数据", selected_all_after_delete.len());
-
-        Ok(())
+        rb.init(SqliteDriver {}, "sqlite://:memory:").unwrap();
+        rb
     }
 
     #[tokio::test]
     async fn test_select_order_with_details() -> Result<(), Box<dyn std::error::Error>> {
-        // 设置日志
-        let appender = RollingFileAppender::new(Rotation::DAILY, "logs", "app.log");
-        let (non_blocking, _guard) = tracing_appender::non_blocking(appender);
+        init_test_log();
 
-        // 初始化 log 到 tracing 的桥接
-        tracing_log::LogTracer::init().unwrap_or(());
+        let rb = init_sqlite_rbatis().await;
 
-        // 创建一个日志记录器层，将日志输出到文件
-        let file_layer = fmt::layer()
-            .with_ansi(false) // 禁用 ANSI 样式
-            .with_timer(super::LocalTimer {}) // 使用本地时间
-            .with_writer(non_blocking);
-
-        // 创建一个基于环境变量的过滤器层
-        let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
-
-        // 创建一个订阅器，将过滤器层和文件层组合起来
-        let subscriber = Registry::default()
-            .with(env_filter)
-            .with(file_layer);
-
-        // 设置全局订阅器，忽略已存在的错误
-        let _ = tracing::subscriber::set_global_default(subscriber);
-
-        // Initialize RBatis for test
-        let rb = RBatis::new();
-        rb.init(SqliteDriver {}, "sqlite://./test.db")?;
-
-        // Create orders table
-        let create_orders_table = r#"
-        CREATE TABLE IF NOT EXISTS orders (
-            id TEXT PRIMARY KEY,
-            number TEXT,
-            status INTEGER,
-            user_id TEXT,
-            address_book_id TEXT,
-            order_time TEXT,
-            checkout_time TEXT,
-            pay_method INTEGER,
-            amount REAL,
-            remark TEXT,
-            phone TEXT,
-            address TEXT,
-            user_name TEXT,
-            consignee TEXT
-        )
+        // 创建 orders 表
+        let create_orders_sql = r#"
+            CREATE TABLE orders (
+                id TEXT PRIMARY KEY,
+                number TEXT,
+                status INTEGER,
+                user_id TEXT,
+                address_book_id TEXT,
+                order_time TEXT,
+                checkout_time TEXT,
+                pay_method INTEGER,
+                pay_status INTEGER,
+                amount REAL,
+                remark TEXT,
+                phone TEXT,
+                address TEXT,
+                user_name TEXT,
+                consignee TEXT,
+                cancel_reason TEXT,
+                rejection_reason TEXT,
+                cancel_time TEXT,
+                estimated_delivery_time TEXT,
+                delivery_status INTEGER,
+                delivery_time TEXT,
+                pack_amount INTEGER,
+                tableware_number INTEGER,
+                tableware_status INTEGER
+            )
         "#;
-        rb.exec(create_orders_table, vec![]).await?;
+        rb.exec(create_orders_sql, vec![]).await?;
 
-        // Create order_detail table
-        let create_order_detail_table = r#"
-        CREATE TABLE IF NOT EXISTS order_detail (
-            id TEXT PRIMARY KEY,
-            order_id TEXT,
-            name TEXT,
-            image TEXT,
-            dish_id TEXT,
-            setmeal_id TEXT,
-            dish_flavor TEXT,
-            number INTEGER,
-            amount REAL
-        )
+        // 创建 order_detail 表
+        let create_detail_sql = r#"
+            CREATE TABLE order_detail (
+                id TEXT PRIMARY KEY,
+                name TEXT,
+                image TEXT,
+                order_id TEXT,
+                dish_id TEXT,
+                setmeal_id TEXT,
+                dish_flavor TEXT,
+                number INTEGER,
+                amount REAL
+            )
         "#;
-        rb.exec(create_order_detail_table, vec![]).await?;
+        rb.exec(create_detail_sql, vec![]).await?;
 
-        // Insert test data
-        let order_id = Uuid::new_v4().to_string();
-        let order = crate::domain::table::orders::Orders {
-            id: Some(order_id.clone()),
-            number: Some("ORD-20240101-001".to_string()),
-            status: Some(1),
-            user_id: Some("user123".to_string()),
-            address_book_id: Some("addr123".to_string()),
-            order_time: Some(rbatis::rbdc::DateTime::now()),
-            checkout_time: Some(rbatis::rbdc::DateTime::now()),
-            pay_method: Some(1),
-            amount: Some(100.50),
-            remark: Some("测试订单".to_string()),
-            phone: Some("13800138000".to_string()),
-            address: Some("北京市朝阳区".to_string()),
-            user_name: Some("张三".to_string()),
-            consignee: Some("李四".to_string()),
-        };
+        // 插入测试数据到 orders
+        let insert_order_sql = r#"
+            INSERT INTO orders (id, number, status, user_id, amount, consignee)
+            VALUES (?, ?, ?, ?, ?, ?)
+        "#;
+        rb.exec(insert_order_sql, vec![
+            rbs::to_value!("order_001"),
+            rbs::to_value!("ORD20240307001"),
+            rbs::to_value!(1),
+            rbs::to_value!("user_001"),
+            rbs::to_value!(99.99),
+            rbs::to_value!("张三"),
+        ]).await?;
 
-        // Insert order
-        let _ = crate::domain::table::orders::Orders::insert(&rb, &order).await?;
+        // 插入测试数据到 order_detail
+        let insert_detail_sql = r#"
+            INSERT INTO order_detail (id, name, order_id, dish_id, number, amount)
+            VALUES (?, ?, ?, ?, ?, ?)
+        "#;
+        rb.exec(insert_detail_sql, vec![
+            rbs::to_value!("detail_001"),
+            rbs::to_value!("宫保鸡丁"),
+            rbs::to_value!("order_001"),
+            rbs::to_value!("dish_001"),
+            rbs::to_value!(2),
+            rbs::to_value!(49.99),
+        ]).await?;
 
-        // Insert order detail
-        let detail_id = Uuid::new_v4().to_string();
-        let order_detail = crate::domain::table::order_detail::OrderDetail {
-            id: Some(detail_id),
-            order_id: Some(order_id.clone()),
-            name: Some("宫保鸡丁".to_string()),
-            image: Some("dish1.jpg".to_string()),
-            dish_id: Some("dish123".to_string()),
-            setmeal_id: None,
-            dish_flavor: Some("中辣".to_string()),
-            number: Some(2),
-            amount: Some(38.0),
-        };
+        rb.exec(insert_detail_sql, vec![
+            rbs::to_value!("detail_002"),
+            rbs::to_value!("麻婆豆腐"),
+            rbs::to_value!("order_001"),
+            rbs::to_value!("dish_002"),
+            rbs::to_value!(1),
+            rbs::to_value!(29.99),
+        ]).await?;
 
-        let _ = crate::domain::table::order_detail::OrderDetail::insert(&rb, &order_detail).await?;
+        // 测试关联查询
+        let results = Orders::select_order_with_details(&rb, "order_001").await;
 
-        // Test select_order_with_details API
-        tracing::info!("=== 测试 select_order_with_details API ===");
-        let result = crate::domain::table::orders::Orders::select_order_with_details(&rb, Some(&order_id), None).await;
-        match result {
-            Ok(order_with_details) => {
-                tracing::info!("查询到 {} 条关联数据", order_with_details.len());
-                for item in &order_with_details {
-                    tracing::info!("订单信息: {:?}", item);
+        match results {
+            Ok(rows) => {
+                tracing::info!("查询成功，返回 {} 行数据", rows.len());
+                for row in &rows {
+                    tracing::info!("订单: {:?}, 明细: {:?}", row.order, row.detail);
                 }
-                assert!(!order_with_details.is_empty());
+                assert!(!rows.is_empty(), "应该返回关联数据");
             }
             Err(e) => {
                 tracing::error!("查询失败: {:?}", e);

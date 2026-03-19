@@ -33,6 +33,13 @@ use rbatis::rbdc::db::ExecResult;
 
 fn generate_id() -> String {    let mut rng = rand::thread_rng();    let id: u64 = rng.gen();    id.to_string()}
 
+// 通用分页请求结构体
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct PageQuery {
+    pub page: u64,
+    pub pageSize: u64,
+}
+
 // SysDict 相关接口
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SysDictPageRequest {
@@ -102,10 +109,11 @@ pub async fn sys_dict_delete(
 
 // AddressBook 相关接口
 pub async fn address_book_select_page(
-    Json(payload): Json<(PageRequest, AddressBookPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<AddressBook>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = AddressBookPageDTO::default();
     let result: std::result::Result<rbatis::Page<AddressBook>, rbatis::Error> = AddressBook::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -156,10 +164,11 @@ pub async fn address_book_delete(
 
 // Category 相关接口
 pub async fn category_select_page(
-    Json(payload): Json<(PageRequest, CategoryPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Category>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = CategoryPageDTO::default();
     let result: std::result::Result<rbatis::Page<Category>, rbatis::Error> = Category::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -210,13 +219,22 @@ pub async fn category_delete(
 
 // Dish 相关接口
 pub async fn dish_select_page(
-    Json(payload): Json<(PageRequest, DishPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
-) -> Result<Json<rbatis::Page<Dish>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = DishPageDTO::default();
     let result: std::result::Result<rbatis::Page<Dish>, rbatis::Error> = Dish::select_page(rb, &page_request, &dto).await;
     match result {
-        Ok(page) => Ok(Json(page)),
+        Ok(page) => {
+            let response = serde_json::json!({
+                "records": page.records,
+                "total": page.total,
+                "page_no": page.page_no,
+                "page_size": page.page_size,
+            });
+            Ok(Json(response))
+        },
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, format!("{:?}", e))),
     }
 }
@@ -264,10 +282,11 @@ pub async fn dish_delete(
 
 // DishFlavor 相关接口
 pub async fn dish_flavor_select_page(
-    Json(payload): Json<(PageRequest, DishFlavorPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<DishFlavor>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = DishFlavorPageDTO::default();
     let result: std::result::Result<rbatis::Page<DishFlavor>, rbatis::Error> = DishFlavor::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -318,10 +337,11 @@ pub async fn dish_flavor_delete(
 
 // Employee 相关接口
 pub async fn employee_select_page(
-    Json(payload): Json<(PageRequest, EmployeePageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Employee>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = EmployeePageDTO::default();
     let result: std::result::Result<rbatis::Page<Employee>, rbatis::Error> = Employee::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -372,10 +392,11 @@ pub async fn employee_delete(
 
 // OrderDetail 相关接口
 pub async fn order_detail_select_page(
-    Json(payload): Json<(PageRequest, OrderDetailPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<OrderDetail>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = OrderDetailPageDTO::default();
     let result: std::result::Result<rbatis::Page<OrderDetail>, rbatis::Error> = OrderDetail::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -426,10 +447,11 @@ pub async fn order_detail_delete(
 
 // Orders 相关接口
 pub async fn orders_select_page(
-    Json(payload): Json<(PageRequest, OrdersPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Orders>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = OrdersPageDTO::default();
     let result: std::result::Result<rbatis::Page<Orders>, rbatis::Error> = Orders::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -480,10 +502,11 @@ pub async fn orders_delete(
 
 // Setmeal 相关接口
 pub async fn setmeal_select_page(
-    Json(payload): Json<(PageRequest, SetmealPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Setmeal>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = SetmealPageDTO::default();
     let result: std::result::Result<rbatis::Page<Setmeal>, rbatis::Error> = Setmeal::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -534,10 +557,11 @@ pub async fn setmeal_delete(
 
 // SetmealDish 相关接口
 pub async fn setmeal_dish_select_page(
-    Json(payload): Json<(PageRequest, SetmealDishPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<SetmealDish>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = SetmealDishPageDTO::default();
     let result: std::result::Result<rbatis::Page<SetmealDish>, rbatis::Error> = SetmealDish::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -588,10 +612,11 @@ pub async fn setmeal_dish_delete(
 
 // ShoppingCart 相关接口
 pub async fn shopping_cart_select_page(
-    Json(payload): Json<(PageRequest, ShoppingCartPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<ShoppingCart>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = ShoppingCartPageDTO::default();
     let result: std::result::Result<rbatis::Page<ShoppingCart>, rbatis::Error> = ShoppingCart::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),
@@ -643,10 +668,11 @@ pub async fn shopping_cart_delete(
 
 // User 相关接口
 pub async fn user_select_page(
-    Json(payload): Json<(PageRequest, UserPageDTO)>,
+    Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<User>>, (StatusCode, String)> {
-    let (page_request, dto) = payload;
+    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let dto = UserPageDTO::default();
     let result: std::result::Result<rbatis::Page<User>, rbatis::Error> = User::select_page(rb, &page_request, &dto).await;
     match result {
         Ok(page) => Ok(Json(page)),

@@ -1,4 +1,4 @@
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize, Default)]
 pub struct DishFlavorPageDTO {
     pub dish_id: Option<String>,
     pub name: Option<String>,

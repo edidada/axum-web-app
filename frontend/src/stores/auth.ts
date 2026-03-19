@@ -3,9 +3,9 @@ import { defineStore } from 'pinia';
 import { apiService } from '../services/api';
 
 export const useAuthStore = defineStore('auth', () => {
-  const isLoggedIn = ref(false);
-  const username = ref('');
-  const sessionId = ref('');
+  const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
+  const username = ref(localStorage.getItem('username') || '');
+  const sessionId = ref(localStorage.getItem('sessionId') || '');
 
   const isAuthenticated = computed(() => isLoggedIn.value && !!sessionId.value);
 
@@ -18,6 +18,9 @@ export const useAuthStore = defineStore('auth', () => {
         isLoggedIn.value = true;
         username.value = user;
         sessionId.value = response.session_id;
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('username', user);
+        localStorage.setItem('sessionId', response.session_id);
         console.log('Auth store login success:', { sessionId: response.session_id });
         return { success: true, message: response.message };
       }
@@ -38,6 +41,9 @@ export const useAuthStore = defineStore('auth', () => {
       isLoggedIn.value = false;
       username.value = '';
       sessionId.value = '';
+      localStorage.removeItem('isLoggedIn');
+      localStorage.removeItem('username');
+      localStorage.removeItem('sessionId');
     }
   }
 
