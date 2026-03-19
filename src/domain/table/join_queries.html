@@ -1,0 +1,208 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
+<mapper>
+
+<!-- 订单详情 JOIN 查询 - 查询订单及其详情 -->
+<select id="select_order_with_details">
+    select 
+        o.id as order_id,
+        o.number as order_number,
+        o.status as order_status,
+        o.user_id,
+        o.order_time::text as order_time,
+        o.pay_method,
+        o.pay_status,
+        o.amount as order_amount,
+        o.remark as order_remark,
+        o.consignee,
+        o.phone,
+        o.address,
+        od.id as detail_id,
+        od.dish_id,
+        od.setmeal_id,
+        od.name as dish_name,
+        od.image as dish_image,
+        od.dish_flavor,
+        od.number,
+        od.amount
+    from orders o
+    left join order_detail od on o.id = od.order_id
+    <where>
+        <if test="order_id != null">
+            and o.id = #{order_id}
+        </if>
+        <if test="user_id != null">
+            and o.user_id = #{user_id}
+        </if>
+        <if test="status != null">
+            and o.status = #{status}
+        </if>
+    </where>
+    order by o.order_time desc
+</select>
+
+<!-- 套餐 JOIN 菜品查询 - 查询套餐及其包含的菜品 -->
+<select id="select_setmeal_with_dishes">
+    select 
+        s.id as setmeal_id,
+        s.name as setmeal_name,
+        s.price as setmeal_price,
+        s.status as setmeal_status,
+        s.code as setmeal_code,
+        s.description as setmeal_description,
+        s.image as setmeal_image,
+        c.id as category_id,
+        c.name as category_name,
+        sd.id as sd_id,
+        sd.copies,
+        d.id as dish_id,
+        d.name as dish_name,
+        d.price as dish_price
+    from setmeal s
+    left join category c on s.category_id = c.id
+    left join setmeal_dish sd on s.id = sd.setmeal_id
+    left join dish d on sd.dish_id = d.id
+    <where>
+        <if test="setmeal_id != null">
+            and s.id = #{setmeal_id}
+        </if>
+        <if test="category_id != null">
+            and s.category_id = #{category_id}
+        </if>
+        <if test="status != null">
+            and s.status = #{status}
+        </if>
+    </where>
+    order by s.create_time desc
+</select>
+
+<!-- 购物车 JOIN 商品信息查询 -->
+<select id="select_shopping_cart_with_items">
+    select 
+        sc.id as cart_id,
+        sc.user_id,
+        sc.dish_flavor,
+        sc.number,
+        sc.amount as cart_amount,
+        sc.create_time::text as create_time,
+        case 
+            when sc.dish_id is not null then sc.dish_id
+            else sc.setmeal_id
+        end as item_id,
+        case 
+            when sc.dish_id is not null then d.name
+            else s.name
+        end as item_name,
+        case 
+            when sc.dish_id is not null then d.image
+            else s.image
+        end as item_image,
+        case 
+            when sc.dish_id is not null then d.price
+            else s.price
+        end as item_price,
+        case 
+            when sc.dish_id is not null then 'dish'
+            else 'setmeal'
+        end as item_type
+    from shopping_cart sc
+    left join dish d on sc.dish_id = d.id
+    left join setmeal s on sc.setmeal_id = s.id
+    <where>
+        <if test="user_id != null">
+            and sc.user_id = #{user_id}
+        </if>
+    </where>
+    order by sc.create_time desc
+</select>
+
+<!-- 菜品 JOIN 分类和口味查询 -->
+<select id="select_dish_full_info">
+    select 
+        d.id as dish_id,
+        d.name as dish_name,
+        d.price as dish_price,
+        d.code as dish_code,
+        d.image as dish_image,
+        d.description as dish_description,
+        d.status as dish_status,
+        d.sort as dish_sort,
+        c.id as category_id,
+        c.name as category_name,
+        string_agg(df.name || ':' || df.value, ', ') as flavors
+    from dish d
+    left join category c on d.category_id = c.id
+    left join dish_flavor df on d.id = df.dish_id and df.is_deleted = 0
+    <where>
+        d.is_deleted = 0
+        <if test="dish_id != null">
+            and d.id = #{dish_id}
+        </if>
+        <if test="category_id != null">
+            and d.category_id = #{category_id}
+        </if>
+        <if test="status != null">
+            and d.status = #{status}
+        </if>
+    </where>
+    group by d.id, c.id, c.name
+    order by d.sort
+</select>
+
+<!-- 用户 JOIN 订单统计查询 -->
+<select id="select_user_with_order_stats">
+    select 
+        u.id as user_id,
+        u.openid,
+        u.name as user_name,
+        u.phone,
+        u.sex,
+        count(o.id) as order_count,
+        coalesce(sum(o.amount), 0) as total_amount
+    from user u
+    left join orders o on u.id = o.user_id
+    <where>
+        <if test="user_id != null">
+            and u.id = #{user_id}
+        </if>
+        <if test="phone != null">
+            and u.phone = #{phone}
+        </if>
+    </where>
+    group by u.id
+    order by order_count desc
+</select>
+
+<!-- 地址簿 JOIN 用户信息查询 -->
+<select id="select_address_book_with_user">
+    select 
+        ab.id,
+        ab.user_id,
+        u.name as user_name,
+        u.phone as user_phone,
+        ab.consignee,
+        ab.sex,
+        ab.phone,
+        ab.province_code,
+        ab.province_name,
+        ab.city_code,
+        ab.city_name,
+        ab.district_code,
+        ab.district_name,
+        ab.detail,
+        ab.label,
+        ab.is_default
+    from address_book ab
+    left join user u on ab.user_id = u.id
+    <where>
+        ab.is_deleted = 0
+        <if test="user_id != null">
+            and ab.user_id = #{user_id}
+        </if>
+        <if test="is_default != null">
+            and ab.is_default = #{is_default}
+        </if>
+    </where>
+    order by ab.is_default desc, ab.create_time desc
+</select>
+
+</mapper>

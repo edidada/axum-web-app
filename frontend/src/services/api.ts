@@ -175,6 +175,247 @@ class ApiService {
     };
   }
 
+  async getDishFlavorPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/dish-flavor/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getEmployeePage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/employee/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getUserPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/user/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getSetmealPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/setmeal/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getSetmealDishPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/setmeal-dish/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getOrdersPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/orders/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getOrderDetailPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/order-detail/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  async getShoppingCartPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/shopping-cart/select-page`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({ page, pageSize }),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: Array.isArray(data.records),
+      message: Array.isArray(data.records) ? '获取成功' : '获取失败',
+      total: data.total,
+      records: data.records || [],
+    };
+  }
+
+  // JOIN 查询方法
+  async getOrderWithDetails(): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/join/order-with-details`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: data.code === 200,
+      message: data.message || '获取成功',
+      records: data.data || [],
+    };
+  }
+
+  async getSetmealWithDishes(): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/join/setmeal-with-dishes`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: data.code === 200,
+      message: data.message || '获取成功',
+      records: data.data || [],
+    };
+  }
+
+  async getShoppingCartWithItems(): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/join/shopping-cart-with-items`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: data.code === 200,
+      message: data.message || '获取成功',
+      records: data.data || [],
+    };
+  }
+
+  async getDishFullInfo(): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/join/dish-full-info`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: data.code === 200,
+      message: data.message || '获取成功',
+      records: data.data || [],
+    };
+  }
+
+  async getUserWithOrderStats(): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/join/user-with-order-stats`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: data.code === 200,
+      message: data.message || '获取成功',
+      records: data.data || [],
+    };
+  }
+
+  async getAddressBookWithUser(): Promise<PaginatedResponse<any>> {
+    const response = await fetch(`${API_BASE_URL}/join/address-book-with-user`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+
+    const data = await response.json();
+    
+    return {
+      success: data.code === 200,
+      message: data.message || '获取成功',
+      records: data.data || [],
+    };
+  }
+
   async createRecord(type: string, data: any): Promise<ApiResponse<any>> {
     const url = `${API_BASE_URL}/${type}/insert`;
     const response = await fetch(url, {

@@ -11,3 +11,4 @@ pub mod setmeal_dish;
 pub mod shopping_cart;
 pub mod user;
 pub mod paginate;
+pub mod join_query;

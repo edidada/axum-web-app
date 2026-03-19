@@ -1633,3 +1633,16 @@
 2026-03-19 21:59:16.409499  INFO main::middleware::request_logging: Response: POST /dish/select-page - 200 OK in 14.070714ms
 2026-03-19 21:59:16.409563 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1313"}
 2026-03-19 21:59:16.409698 DEBUG hyper::proto::h1::io: flushed 1604 bytes
+2026-03-19 22:01:32.126521 DEBUG hyper::proto::h1::conn: read eof
+2026-03-19 22:01:32.127120 DEBUG hyper::proto::h1::conn: read eof
+2026-03-19 22:55:22.571637 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-19 22:55:22.572426 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-19 22:55:22.573424 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-19 22:55:22.581053 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-19 22:55:22.581103 DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+2026-03-19 22:55:22.581245 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-19 22:55:22.582027 DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+2026-03-19 22:55:22.582232 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9001", "connection": "keep-alive", "content-length": "2", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36", "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"Google Chrome\";v=\"145\", \"Chromium\";v=\"145\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-19 22:55:22.594892  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 401 Unauthorized in 12.818906ms
+2026-03-19 22:55:22.595020 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "15"}
+2026-03-19 22:55:22.595304 DEBUG hyper::proto::h1::io: flushed 323 bytes

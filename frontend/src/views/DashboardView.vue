@@ -129,6 +129,21 @@ const menuItems = [
   { id: 'address', label: '地址簿', action: 'getAddressBookPage', type: 'address-book' },
   { id: 'category', label: '分类管理', action: 'getCategoryPage', type: 'category' },
   { id: 'dish', label: '菜品管理', action: 'getDishPage', type: 'dish' },
+  { id: 'dish_flavor', label: '菜品口味', action: 'getDishFlavorPage', type: 'dish-flavor' },
+  { id: 'employee', label: '员工管理', action: 'getEmployeePage', type: 'employee' },
+  { id: 'user', label: '用户管理', action: 'getUserPage', type: 'user' },
+  { id: 'setmeal', label: '套餐管理', action: 'getSetmealPage', type: 'setmeal' },
+  { id: 'setmeal_dish', label: '套餐菜品', action: 'getSetmealDishPage', type: 'setmeal-dish' },
+  { id: 'orders', label: '订单管理', action: 'getOrdersPage', type: 'orders' },
+  { id: 'order_detail', label: '订单详情', action: 'getOrderDetailPage', type: 'order-detail' },
+  { id: 'shopping_cart', label: '购物车', action: 'getShoppingCartPage', type: 'shopping-cart' },
+  // JOIN 查询菜单
+  { id: 'join_order_details', label: '【JOIN】订单详情', action: 'getOrderWithDetails', type: 'join', isJoin: true },
+  { id: 'join_setmeal_dishes', label: '【JOIN】套餐菜品', action: 'getSetmealWithDishes', type: 'join', isJoin: true },
+  { id: 'join_shopping_cart', label: '【JOIN】购物车商品', action: 'getShoppingCartWithItems', type: 'join', isJoin: true },
+  { id: 'join_dish_full', label: '【JOIN】菜品完整信息', action: 'getDishFullInfo', type: 'join', isJoin: true },
+  { id: 'join_user_stats', label: '【JOIN】用户订单统计', action: 'getUserWithOrderStats', type: 'join', isJoin: true },
+  { id: 'join_address_user', label: '【JOIN】地址簿用户', action: 'getAddressBookWithUser', type: 'join', isJoin: true },
 ];
 
 const currentMenuItem = computed(() => {
@@ -200,6 +215,104 @@ const headerLabels = computed(() => {
       update_user: '更新用户',
       is_deleted: '删除标记',
     },
+    dish_flavor: {
+      dish_id: '菜品ID',
+      name: '口味名称',
+      value: '口味值',
+      create_time: '创建时间',
+      update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
+      is_deleted: '删除标记',
+    },
+    employee: {
+      name: '姓名',
+      username: '用户名',
+      password: '密码',
+      phone: '电话',
+      sex: '性别',
+      id_number: '身份证号',
+      status: '状态',
+      create_time: '创建时间',
+      update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
+    },
+    user: {
+      openid: '微信OpenID',
+      name: '姓名',
+      phone: '电话',
+      sex: '性别',
+      id_number: '身份证号',
+      avatar: '头像',
+      create_time: '创建时间',
+      update_time: '更新时间',
+    },
+    setmeal: {
+      category_id: '分类ID',
+      name: '套餐名称',
+      price: '价格',
+      status: '状态',
+      code: '编码',
+      description: '描述',
+      image: '图片',
+      create_time: '创建时间',
+      update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
+      is_deleted: '删除标记',
+    },
+    setmeal_dish: {
+      setmeal_id: '套餐ID',
+      dish_id: '菜品ID',
+      name: '菜品名称',
+      price: '价格',
+      copies: '份数',
+      create_time: '创建时间',
+      update_time: '更新时间',
+      create_user: '创建用户',
+      update_user: '更新用户',
+    },
+    orders: {
+      number: '订单号',
+      status: '订单状态',
+      user_id: '用户ID',
+      address_book_id: '地址簿ID',
+      order_time: '下单时间',
+      checkout_time: '结账时间',
+      pay_method: '支付方式',
+      pay_status: '支付状态',
+      amount: '金额',
+      remark: '备注',
+      phone: '电话',
+      address: '地址',
+      user_name: '用户名',
+      consignee: '收货人',
+      create_time: '创建时间',
+      update_time: '更新时间',
+    },
+    order_detail: {
+      name: '商品名称',
+      image: '商品图片',
+      order_id: '订单ID',
+      dish_id: '菜品ID',
+      setmeal_id: '套餐ID',
+      dish_flavor: '口味',
+      number: '数量',
+      amount: '金额',
+      create_time: '创建时间',
+    },
+    shopping_cart: {
+      name: '商品名称',
+      image: '商品图片',
+      user_id: '用户ID',
+      dish_id: '菜品ID',
+      setmeal_id: '套餐ID',
+      dish_flavor: '口味',
+      number: '数量',
+      amount: '金额',
+      create_time: '创建时间',
+    },
   };
   return labelMap[activeTab.value] || {};
 });
@@ -241,6 +354,85 @@ const editableFields = computed(() => {
       { key: 'status', label: '状态', type: 'number' },
       { key: 'sort', label: '排序', type: 'number' },
     ],
+    dish_flavor: [
+      { key: 'dish_id', label: '菜品ID' },
+      { key: 'name', label: '口味名称' },
+      { key: 'value', label: '口味值' },
+    ],
+    employee: [
+      { key: 'name', label: '姓名' },
+      { key: 'username', label: '用户名' },
+      { key: 'password', label: '密码', type: 'password' },
+      { key: 'phone', label: '电话' },
+      { key: 'sex', label: '性别', type: 'number' },
+      { key: 'id_number', label: '身份证号' },
+      { key: 'status', label: '状态', type: 'number' },
+    ],
+    user: [
+      { key: 'openid', label: '微信OpenID' },
+      { key: 'name', label: '姓名' },
+      { key: 'phone', label: '电话' },
+      { key: 'sex', label: '性别', type: 'number' },
+      { key: 'id_number', label: '身份证号' },
+      { key: 'avatar', label: '头像' },
+    ],
+    setmeal: [
+      { key: 'category_id', label: '分类ID' },
+      { key: 'name', label: '套餐名称' },
+      { key: 'price', label: '价格', type: 'number' },
+      { key: 'status', label: '状态', type: 'number' },
+      { key: 'code', label: '编码' },
+      { key: 'description', label: '描述', type: 'textarea' },
+      { key: 'image', label: '图片' },
+    ],
+    setmeal_dish: [
+      { key: 'setmeal_id', label: '套餐ID' },
+      { key: 'dish_id', label: '菜品ID' },
+      { key: 'name', label: '菜品名称' },
+      { key: 'price', label: '价格', type: 'number' },
+      { key: 'copies', label: '份数', type: 'number' },
+    ],
+    orders: [
+      { key: 'number', label: '订单号' },
+      { key: 'status', label: '订单状态', type: 'number' },
+      { key: 'user_id', label: '用户ID' },
+      { key: 'address_book_id', label: '地址簿ID' },
+      { key: 'pay_method', label: '支付方式', type: 'number' },
+      { key: 'pay_status', label: '支付状态', type: 'number' },
+      { key: 'amount', label: '金额', type: 'number' },
+      { key: 'remark', label: '备注', type: 'textarea' },
+      { key: 'phone', label: '电话' },
+      { key: 'address', label: '地址', type: 'textarea' },
+      { key: 'user_name', label: '用户名' },
+      { key: 'consignee', label: '收货人' },
+    ],
+    order_detail: [
+      { key: 'name', label: '商品名称' },
+      { key: 'image', label: '商品图片' },
+      { key: 'order_id', label: '订单ID' },
+      { key: 'dish_id', label: '菜品ID' },
+      { key: 'setmeal_id', label: '套餐ID' },
+      { key: 'dish_flavor', label: '口味' },
+      { key: 'number', label: '数量', type: 'number' },
+      { key: 'amount', label: '金额', type: 'number' },
+    ],
+    shopping_cart: [
+      { key: 'name', label: '商品名称' },
+      { key: 'image', label: '商品图片' },
+      { key: 'user_id', label: '用户ID' },
+      { key: 'dish_id', label: '菜品ID' },
+      { key: 'setmeal_id', label: '套餐ID' },
+      { key: 'dish_flavor', label: '口味' },
+      { key: 'number', label: '数量', type: 'number' },
+      { key: 'amount', label: '金额', type: 'number' },
+    ],
+    // JOIN 查询字段配置
+    join_order_details: [],
+    join_setmeal_dishes: [],
+    join_shopping_cart: [],
+    join_dish_full: [],
+    join_user_stats: [],
+    join_address_user: [],
   };
   return fieldConfigs[activeTab.value] || [];
 });
@@ -271,6 +463,49 @@ async function fetchData() {
         break;
       case 'getDishPage':
         response = await apiService.getDishPage();
+        break;
+      case 'getDishFlavorPage':
+        response = await apiService.getDishFlavorPage();
+        break;
+      case 'getEmployeePage':
+        response = await apiService.getEmployeePage();
+        break;
+      case 'getUserPage':
+        response = await apiService.getUserPage();
+        break;
+      case 'getSetmealPage':
+        response = await apiService.getSetmealPage();
+        break;
+      case 'getSetmealDishPage':
+        response = await apiService.getSetmealDishPage();
+        break;
+      case 'getOrdersPage':
+        response = await apiService.getOrdersPage();
+        break;
+      case 'getOrderDetailPage':
+        response = await apiService.getOrderDetailPage();
+        break;
+      case 'getShoppingCartPage':
+        response = await apiService.getShoppingCartPage();
+        break;
+      // JOIN 查询
+      case 'getOrderWithDetails':
+        response = await apiService.getOrderWithDetails();
+        break;
+      case 'getSetmealWithDishes':
+        response = await apiService.getSetmealWithDishes();
+        break;
+      case 'getShoppingCartWithItems':
+        response = await apiService.getShoppingCartWithItems();
+        break;
+      case 'getDishFullInfo':
+        response = await apiService.getDishFullInfo();
+        break;
+      case 'getUserWithOrderStats':
+        response = await apiService.getUserWithOrderStats();
+        break;
+      case 'getAddressBookWithUser':
+        response = await apiService.getAddressBookWithUser();
         break;
       default:
         throw new Error('Unknown action');

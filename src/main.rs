@@ -4,20 +4,18 @@ use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
 use tracing_subscriber::{fmt, Registry, EnvFilter};
-use tracing_subscriber::fmt::format::{Format, Writer};
+use tracing_subscriber::fmt::format::Writer;
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use tracing_appender::non_blocking::{WorkerGuard};
-use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
-use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
+use crate::handlers::health_handler::init_start_time;
 
 // 导入数据库驱动
-use rbdc_mysql::driver::MysqlDriver;
 use rbdc_pg::driver::PgDriver;
 
 mod handlers;
@@ -54,6 +52,9 @@ fn get_rbatis() -> &'static RBatis {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    // 初始化启动时间（用于健康检查）
+    init_start_time();
+    
     // 初始化 RBatis
     init_rbatis().await?;
 
