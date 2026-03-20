@@ -68,6 +68,9 @@ pub struct ShoppingCartWithItemDTO {
     pub item_type: Option<String>, // "dish" 或 "setmeal"
 }
 
+// 购物车 JOIN 商品信息查询（别名）
+pub type CartWithItemDTO = ShoppingCartWithItemDTO;
+
 // 菜品 JOIN 分类和口味查询
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct DishFullInfoDTO {
@@ -118,4 +121,27 @@ pub struct UserWithOrderStatsDTO {
     // 订单统计
     pub order_count: Option<i64>,
     pub total_amount: Option<String>,
+}
+
+// 地址簿 JOIN 用户信息查询
+#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
+pub struct AddressBookWithUserDTO {
+    // 地址簿信息
+    pub address_id: Option<String>,
+    pub user_id: Option<String>,
+    pub consignee: Option<String>,
+    pub sex: Option<i32>,
+    pub phone: Option<String>,
+    pub province_code: Option<String>,
+    pub province_name: Option<String>,
+    pub city_code: Option<String>,
+    pub city_name: Option<String>,
+    pub district_code: Option<String>,
+    pub district_name: Option<String>,
+    pub detail: Option<String>,
+    pub label: Option<String>,
+    pub is_default: Option<i32>,
+    // 用户信息
+    pub user_name: Option<String>,
+    pub user_phone: Option<String>,
 }

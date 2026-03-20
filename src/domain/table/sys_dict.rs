@@ -1,7 +1,6 @@
 use crate::domain::dto::dict_dto::DictPageDTO;
 
 use rbatis::rbdc::DateTime;
-use rbatis::executor::Executor;
 use rbatis::{crud, html_sql};
 use serde::ser::Serializer;
 
@@ -37,7 +36,7 @@ pub struct SysDict {
 
 crud!(SysDict {});
 
-#[html_sql("src/domain/table/sys_dict.html")]
+#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/sys_dict.html")]
 impl SysDict {
     pub async fn select_page(conn: &dyn rbatis::Executor, request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
 }

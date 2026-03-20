@@ -6,8 +6,8 @@
         <if test="dto.category_type != null">
             and type = #{dto.category_type}
         </if>
-        <if test="dto.name != null">
-            and name = #{dto.name}
+        <if test="dto.name != null && dto.name != ''">
+            and name like '%' || #{dto.name} || '%'
         </if>
     </where>
     <if test="do_count == false">

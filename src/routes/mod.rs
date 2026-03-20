@@ -121,19 +121,32 @@ pub fn setup_routes() -> Router {
         }).layer(axum::middleware::from_fn(validate_session)))
         .route("/api/sys-dict/list", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<serde_json::Value>| async move {
             use crate::domain::table::sys_dict::SysDict;
+            use crate::domain::dto::dict_dto::DictPageDTO;
+            use rbatis::PageRequest;
             use axum::response::IntoResponse;
 
             // 打印请求体
             tracing::debug!("Request body for /api/sys-dict/list (JSON): {}", payload);
 
-            // 处理请求
-            match SysDict::select_all(rb).await {
-                Ok(dicts) => {
+            // 解析查询参数
+            let code = payload.get("code").and_then(|v| v.as_str()).map(|s| s.to_string());
+            let name = payload.get("name").and_then(|v| v.as_str()).map(|s| s.to_string());
+            
+            let dto = DictPageDTO {
+                code,
+                name,
+            };
+            
+            let page_request = PageRequest::new(1, 1000); // 默认查询前1000条
+
+            // 处理请求 - 使用分页查询支持条件筛选
+            match SysDict::select_page(rb, &page_request, &dto).await {
+                Ok(page) => {
                     // 打印响应体
-                    if let Ok(json_str) = serde_json::to_string(&dicts) {
+                    if let Ok(json_str) = serde_json::to_string(&page.records) {
                         tracing::debug!("Response body for /api/sys-dict/list (JSON): {}", json_str);
                     }
-                    axum::Json(dicts).into_response()
+                    axum::Json(page.records).into_response()
                 },
                 Err(e) => {
                     tracing::error!("Failed to get sys_dict list: {:?}", e);

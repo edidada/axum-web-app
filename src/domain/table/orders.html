@@ -3,17 +3,17 @@
 <select id="select_page">
     select * from orders
     <where>
-        <if test="dto.number != null">
-            and number = #{dto.number}
+        <if test="dto.number != null && dto.number != ''">
+            and number like '%' || #{dto.number} || '%'
         </if>
         <if test="dto.status != null">
             and status = #{dto.status}
         </if>
-        <if test="dto.user_id != null">
+        <if test="dto.user_id != null && dto.user_id != ''">
             and user_id = #{dto.user_id}
         </if>
-        <if test="dto.address_book_id != null">
-            and address_book_id = #{dto.address_book_id}
+        <if test="dto.pay_status != null">
+            and pay_status = #{dto.pay_status}
         </if>
     </where>
     <if test="do_count == false">

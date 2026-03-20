@@ -65,6 +65,7 @@ pub struct SetmealDishesReportQuery {
 #[derive(Deserialize)]
 pub struct ShoppingCartReportQuery {
     pub user_id: Option<String>,
+    pub cart_id: Option<String>,
 }
 
 /// 菜品完整信息查询参数
@@ -86,6 +87,7 @@ pub struct UserOrderStatsReportQuery {
 #[derive(Deserialize)]
 pub struct AddressBookReportQuery {
     pub user_id: Option<String>,
+    pub address_id: Option<String>,
     pub is_default: Option<i32>,
 }
 
@@ -150,6 +152,7 @@ pub async fn get_shopping_cart_report(
     match JoinQuery::select_shopping_cart_with_items(
         rb,
         params.user_id.as_deref(),
+        params.cart_id.as_deref(),
     )
     .await
     {
@@ -215,10 +218,11 @@ pub async fn get_user_order_stats_report(
 pub async fn get_address_book_report(
     Extension(rb): Extension<&'static RBatis>,
     Query(params): Query<AddressBookReportQuery>,
-) -> Json<ApiResponse<Vec<crate::domain::table::join_query::AddressBookWithUserDTO>>> {
+) -> Json<ApiResponse<Vec<crate::domain::dto::join_dto::AddressBookWithUserDTO>>> {
     match JoinQuery::select_address_book_with_user(
         rb,
         params.user_id.as_deref(),
+        params.address_id.as_deref(),
         params.is_default,
     )
     .await

@@ -17,7 +17,7 @@ pub struct Category {
 
 crud!(Category {});
 
-#[html_sql("src/domain/table/category.html")]
+#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/category.html")]
 impl Category {
     pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &CategoryPageDTO) -> rbatis::Result<rbatis::Page<Category>> { impled!() }
 }

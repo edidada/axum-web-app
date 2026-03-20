@@ -18,7 +18,7 @@ pub struct DishFlavor {
 
 crud!(DishFlavor {});
 
-#[html_sql("src/domain/table/dish_flavor.html")]
+#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/dish_flavor.html")]
 impl DishFlavor {
     pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &DishFlavorPageDTO) -> rbatis::Result<rbatis::Page<DishFlavor>> { impled!() }
 }

@@ -6,7 +6,7 @@ use rbatis::html_sql;
 #[derive(Clone, Debug)]
 pub struct JoinQuery;
 
-#[html_sql("src/domain/table/join_queries.html")]
+#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/join_queries.html")]
 impl JoinQuery {
     /// 查询订单及其详情
     pub async fn select_order_with_details(
@@ -28,15 +28,16 @@ impl JoinQuery {
         impled!()
     }
 
-    /// 查询购物车及商品信息
+    /// 查询购物车及其关联的菜品/套餐信息
     pub async fn select_shopping_cart_with_items(
         conn: &dyn Executor,
         user_id: Option<&str>,
-    ) -> rbatis::Result<Vec<ShoppingCartWithItemDTO>> {
+        cart_id: Option<&str>,
+    ) -> rbatis::Result<Vec<CartWithItemDTO>> {
         impled!()
     }
 
-    /// 查询菜品完整信息（含分类和口味）
+    /// 查询菜品完整信息
     pub async fn select_dish_full_info(
         conn: &dyn Executor,
         dish_id: Option<&str>,
@@ -46,7 +47,7 @@ impl JoinQuery {
         impled!()
     }
 
-    /// 查询用户及订单统计
+    /// 查询用户及其订单统计
     pub async fn select_user_with_order_stats(
         conn: &dyn Executor,
         user_id: Option<&str>,
@@ -55,33 +56,13 @@ impl JoinQuery {
         impled!()
     }
 
-    /// 查询地址簿及用户信息
+    /// 查询地址簿及其关联的用户信息
     pub async fn select_address_book_with_user(
         conn: &dyn Executor,
         user_id: Option<&str>,
+        address_id: Option<&str>,
         is_default: Option<i32>,
     ) -> rbatis::Result<Vec<AddressBookWithUserDTO>> {
         impled!()
     }
-}
-
-// 地址簿 JOIN 用户 DTO
-#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
-pub struct AddressBookWithUserDTO {
-    pub id: Option<String>,
-    pub user_id: Option<String>,
-    pub user_name: Option<String>,
-    pub user_phone: Option<String>,
-    pub consignee: Option<String>,
-    pub sex: Option<i32>,
-    pub phone: Option<String>,
-    pub province_code: Option<String>,
-    pub province_name: Option<String>,
-    pub city_code: Option<String>,
-    pub city_name: Option<String>,
-    pub district_code: Option<String>,
-    pub district_name: Option<String>,
-    pub detail: Option<String>,
-    pub label: Option<String>,
-    pub is_default: Option<i32>,
 }
