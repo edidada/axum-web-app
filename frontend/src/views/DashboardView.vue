@@ -674,8 +674,17 @@ function formatDateTime(value: any): string {
 function formatValue(value: any, header?: string): string {
   if (value === null || value === undefined) return '-';
   
-  // 检查是否是时间字段
-  if (header && (header.includes('time') || header.includes('Time'))) {
+  // 检查是否是时间字段（包括create_time, update_time等）
+  if (header && (
+    header.includes('time') || 
+    header.includes('Time') ||
+    header === 'create_time' ||
+    header === 'update_time' ||
+    header === 'createTime' ||
+    header === 'updateTime' ||
+    header === 'order_time' ||
+    header === 'checkout_time'
+  )) {
     return formatDateTime(value);
   }
   
