@@ -57,7 +57,7 @@ pub struct OrderWithDetail {
 
 crud!(Orders {});
 
-#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/orders.html")]
+#[html_sql("src/domain/table/orders.html")]
 impl Orders {
     pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &OrdersPageDTO) -> rbatis::Result<rbatis::Page<Orders>> { impled!() }
     pub async fn select_order_with_details(conn: &dyn Executor, order_id: Option<&str>, user_id: Option<&str>) -> rbatis::Result<Vec<OrderWithDetail>> { impled!() }

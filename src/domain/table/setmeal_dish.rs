@@ -19,7 +19,7 @@ pub struct SetmealDish {
 
 crud!(SetmealDish {});
 
-#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/setmeal_dish.html")]
+#[html_sql("src/domain/table/setmeal_dish.html")]
 impl SetmealDish {
     pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &SetmealDishPageDTO) -> rbatis::Result<rbatis::Page<SetmealDish>> { impled!() }
 }

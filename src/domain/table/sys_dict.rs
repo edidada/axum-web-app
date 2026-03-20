@@ -36,7 +36,7 @@ pub struct SysDict {
 
 crud!(SysDict {});
 
-#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/sys_dict.html")]
+#[html_sql("src/domain/table/sys_dict.html")]
 impl SysDict {
     pub async fn select_page(conn: &dyn rbatis::Executor, request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
 }

@@ -6,7 +6,7 @@ use rbatis::html_sql;
 #[derive(Clone, Debug)]
 pub struct JoinQuery;
 
-#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/join_queries.html")]
+#[html_sql("src/domain/table/join_queries.html")]
 impl JoinQuery {
     /// 查询订单及其详情
     pub async fn select_order_with_details(

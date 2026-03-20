@@ -21,7 +21,7 @@ pub struct Employee {
 
 crud!(Employee {});
 
-#[html_sql("/Users/ibqo/Develop/git/github/rust/axum-web-app/src/domain/table/employee.html")]
+#[html_sql("src/domain/table/employee.html")]
 impl Employee {
     pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &EmployeePageDTO) -> rbatis::Result<rbatis::Page<Employee>> { impled!() }
 }
