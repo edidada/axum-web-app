@@ -7,7 +7,7 @@ pub struct User {
     pub id: Option<String>,
     pub name: Option<String>,
     pub phone: Option<String>,
-    pub sex: Option<String>,
+    pub sex: Option<i32>,
     pub id_number: Option<String>,
     pub avatar: Option<String>,
     pub status: Option<i32>,

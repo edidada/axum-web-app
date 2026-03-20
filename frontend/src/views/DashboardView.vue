@@ -57,7 +57,7 @@
               <tr v-for="(row, index) in data" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td v-for="header in displayHeaders" :key="header">
-                  {{ formatValue(row[header]) }}
+                  {{ formatValue(row[header], header) }}
                 </td>
                 <td class="action-cell">
                   <button @click="showEditModal(row)" class="btn-edit">编辑</button>
@@ -635,8 +635,50 @@ async function fetchData() {
   }
 }
 
-function formatValue(value: any): string {
+function formatDateTime(value: any): string {
+  if (!value) return '-';
+  
+  try {
+    let date: Date;
+    
+    // 处理数字类型（时间戳）
+    if (typeof value === 'number') {
+      // 如果是13位时间戳（毫秒），转换为Date
+      date = new Date(value);
+    } else if (typeof value === 'string') {
+      // 处理ISO格式字符串
+      date = new Date(value);
+    } else {
+      return String(value);
+    }
+    
+    // 检查日期是否有效
+    if (isNaN(date.getTime())) {
+      return String(value);
+    }
+    
+    // 格式化为 yyyyMMdd hhmmss
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+    
+    return `${year}${month}${day} ${hours}${minutes}${seconds}`;
+  } catch (e) {
+    return String(value);
+  }
+}
+
+function formatValue(value: any, header?: string): string {
   if (value === null || value === undefined) return '-';
+  
+  // 检查是否是时间字段
+  if (header && (header.includes('time') || header.includes('Time'))) {
+    return formatDateTime(value);
+  }
+  
   if (typeof value === 'object') return JSON.stringify(value);
   return String(value);
 }

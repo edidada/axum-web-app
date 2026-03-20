@@ -9,10 +9,9 @@
         <if test="dto.dish_id != null">
             and dish_id = #{dto.dish_id}
         </if>
-        and is_deleted = 0
     </where>
     <if test="do_count == false">
-        order by sort
+        order by create_time desc
     </if>
 </select>
 </mapper>

@@ -11,12 +11,10 @@ pub struct SetmealDish {
     pub name: Option<String>,
     pub price: Option<String>,
     pub copies: Option<i32>,
-    pub sort: Option<i32>,
     pub create_time: Option<DateTime>,
     pub update_time: Option<DateTime>,
     pub create_user: Option<String>,
     pub update_user: Option<String>,
-    pub is_deleted: Option<i32>,
 }
 
 crud!(SetmealDish {});
