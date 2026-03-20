@@ -110,8 +110,9 @@ fn set_format_log() -> WorkerGuard {
     
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
 
-    // 创建一个滚动文件追加器
-    let file_appender = tracing_appender::rolling::daily("logs", "app.log");
+    // 创建一个按日期轮转的文件追加器
+    // 每天0点自动创建新的日志文件，文件名格式: app.YYYY-MM-DD.log
+    let file_appender = tracing_appender::rolling::daily("logs", "app");
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
 
     // 创建一个日志记录器层，将日志输出到文件
