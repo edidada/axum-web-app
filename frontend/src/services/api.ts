@@ -104,11 +104,11 @@ class ApiService {
     return result;
   }
 
-  async getSysDictList(): Promise<PaginatedResponse<any>> {
+  async getSysDictList(params: any = {}): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/api/sys-dict/list`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({}),
+      body: JSON.stringify(params),
       credentials: 'include',
     });
 
@@ -121,11 +121,11 @@ class ApiService {
     };
   }
 
-  async getAddressBookPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getAddressBookPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/address-book/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -139,11 +139,11 @@ class ApiService {
     };
   }
 
-  async getCategoryPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getCategoryPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/category/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -157,11 +157,11 @@ class ApiService {
     };
   }
 
-  async getDishPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getDishPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/dish/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -175,11 +175,11 @@ class ApiService {
     };
   }
 
-  async getDishFlavorPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getDishFlavorPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/dish-flavor/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -193,11 +193,11 @@ class ApiService {
     };
   }
 
-  async getEmployeePage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getEmployeePage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/employee/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -211,11 +211,11 @@ class ApiService {
     };
   }
 
-  async getUserPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getUserPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/user/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -229,11 +229,11 @@ class ApiService {
     };
   }
 
-  async getSetmealPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getSetmealPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/setmeal/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -247,11 +247,11 @@ class ApiService {
     };
   }
 
-  async getSetmealDishPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getSetmealDishPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/setmeal-dish/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -265,11 +265,11 @@ class ApiService {
     };
   }
 
-  async getOrdersPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getOrdersPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/orders/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -283,11 +283,11 @@ class ApiService {
     };
   }
 
-  async getOrderDetailPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getOrderDetailPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/order-detail/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 
@@ -301,11 +301,11 @@ class ApiService {
     };
   }
 
-  async getShoppingCartPage(page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
+  async getShoppingCartPage(params: any = {}, page: number = 1, pageSize: number = 10): Promise<PaginatedResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/shopping-cart/select-page`, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify({ page, pageSize }),
+      body: JSON.stringify({ ...params, page, pageSize }),
       credentials: 'include',
     });
 

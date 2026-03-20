@@ -34,8 +34,29 @@
             <button @click="showAddModal" class="btn-primary">
               新增
             </button>
-            <button @click="fetchData" :disabled="isLoading" class="btn-secondary">
-              {{ isLoading ? '加载中...' : '刷新' }}
+          </div>
+        </div>
+
+        <!-- 查询条件区域 -->
+        <div class="search-section">
+          <div class="search-fields">
+            <div v-for="field in searchFields" :key="field.key" class="search-field">
+              <label :for="'search-' + field.key">{{ field.label }}</label>
+              <input
+                :id="'search-' + field.key"
+                v-model="searchParams[field.key]"
+                :type="field.type || 'text'"
+                :placeholder="'请输入' + field.label"
+                @keyup.enter="handleSearch"
+              />
+            </div>
+          </div>
+          <div class="search-buttons">
+            <button @click="handleSearch" :disabled="isLoading" class="btn-primary">
+              {{ isLoading ? '查询中...' : '查询' }}
+            </button>
+            <button @click="handleReset" class="btn-secondary">
+              重置
             </button>
           </div>
         </div>
@@ -128,6 +149,7 @@ const isEdit = ref(false);
 const isSubmitting = ref(false);
 const formData = ref<any>({});
 const editingId = ref<string | null>(null);
+const searchParams = ref<any>({});
 
 const menuItems = [
   { id: 'dict', label: '字典管理', action: 'getSysDictList', type: 'sys-dict', group: '基础管理' },
@@ -167,7 +189,7 @@ const menuGroups = computed(() => {
 });
 
 const currentMenuItem = computed(() => {
-  return menuItems.find(item => item.id === activeTab.value) || menuItems[0];
+  return menuItems.find(item => item.id === activeTab.value) || menuItems[0] || { id: '', label: '', action: '', type: '' };
 });
 
 const tableHeaders = computed(() => {
@@ -548,6 +570,75 @@ const editableFields = computed(() => {
   return fieldConfigs[activeTab.value] || [];
 });
 
+// 查询字段配置
+const searchFields = computed(() => {
+  const fieldConfigs: Record<string, { key: string; label: string; type?: string }[]> = {
+    dict: [
+      { key: 'code', label: '编码' },
+      { key: 'name', label: '名称' },
+    ],
+    address: [
+      { key: 'consignee', label: '收货人' },
+      { key: 'phone', label: '电话' },
+    ],
+    category: [
+      { key: 'name', label: '分类名称' },
+      { key: 'type', label: '类型', type: 'number' },
+    ],
+    dish: [
+      { key: 'name', label: '菜品名称' },
+      { key: 'category_id', label: '分类ID' },
+      { key: 'status', label: '状态', type: 'number' },
+    ],
+    dish_flavor: [
+      { key: 'dish_id', label: '菜品ID' },
+      { key: 'name', label: '口味名称' },
+    ],
+    employee: [
+      { key: 'name', label: '姓名' },
+      { key: 'username', label: '用户名' },
+      { key: 'phone', label: '电话' },
+      { key: 'status', label: '状态', type: 'number' },
+    ],
+    user: [
+      { key: 'name', label: '姓名' },
+      { key: 'phone', label: '电话' },
+      { key: 'status', label: '状态', type: 'number' },
+    ],
+    setmeal: [
+      { key: 'name', label: '套餐名称' },
+      { key: 'category_id', label: '分类ID' },
+      { key: 'status', label: '状态', type: 'number' },
+    ],
+    setmeal_dish: [
+      { key: 'setmeal_id', label: '套餐ID' },
+      { key: 'dish_id', label: '菜品ID' },
+    ],
+    orders: [
+      { key: 'number', label: '订单号' },
+      { key: 'user_id', label: '用户ID' },
+      { key: 'status', label: '订单状态', type: 'number' },
+      { key: 'pay_status', label: '支付状态', type: 'number' },
+    ],
+    order_detail: [
+      { key: 'order_id', label: '订单ID' },
+      { key: 'name', label: '商品名称' },
+    ],
+    shopping_cart: [
+      { key: 'user_id', label: '用户ID' },
+      { key: 'dish_id', label: '菜品ID' },
+    ],
+    // JOIN 查询不支持条件查询
+    join_order_details: [],
+    join_setmeal_dishes: [],
+    join_shopping_cart: [],
+    join_dish_full: [],
+    join_user_stats: [],
+    join_address_user: [],
+  };
+  return fieldConfigs[activeTab.value] || [];
+});
+
 async function handleLogout() {
   await authStore.logout();
   router.push('/login');
@@ -633,6 +724,96 @@ async function fetchData() {
   } finally {
     isLoading.value = false;
   }
+}
+
+// 查询功能
+async function handleSearch() {
+  isLoading.value = true;
+  errorMessage.value = '';
+  data.value = [];
+
+  try {
+    let response;
+    const action = currentMenuItem.value.action;
+    const params = searchParams.value;
+
+    switch (action) {
+      case 'getSysDictList':
+        response = await apiService.getSysDictList(params);
+        break;
+      case 'getAddressBookPage':
+        response = await apiService.getAddressBookPage(params);
+        break;
+      case 'getCategoryPage':
+        response = await apiService.getCategoryPage(params);
+        break;
+      case 'getDishPage':
+        response = await apiService.getDishPage(params);
+        break;
+      case 'getDishFlavorPage':
+        response = await apiService.getDishFlavorPage(params);
+        break;
+      case 'getEmployeePage':
+        response = await apiService.getEmployeePage(params);
+        break;
+      case 'getUserPage':
+        response = await apiService.getUserPage(params);
+        break;
+      case 'getSetmealPage':
+        response = await apiService.getSetmealPage(params);
+        break;
+      case 'getSetmealDishPage':
+        response = await apiService.getSetmealDishPage(params);
+        break;
+      case 'getOrdersPage':
+        response = await apiService.getOrdersPage(params);
+        break;
+      case 'getOrderDetailPage':
+        response = await apiService.getOrderDetailPage(params);
+        break;
+      case 'getShoppingCartPage':
+        response = await apiService.getShoppingCartPage(params);
+        break;
+      // JOIN 查询不支持条件查询
+      case 'getOrderWithDetails':
+        response = await apiService.getOrderWithDetails();
+        break;
+      case 'getSetmealWithDishes':
+        response = await apiService.getSetmealWithDishes();
+        break;
+      case 'getShoppingCartWithItems':
+        response = await apiService.getShoppingCartWithItems();
+        break;
+      case 'getDishFullInfo':
+        response = await apiService.getDishFullInfo();
+        break;
+      case 'getUserWithOrderStats':
+        response = await apiService.getUserWithOrderStats();
+        break;
+      case 'getAddressBookWithUser':
+        response = await apiService.getAddressBookWithUser();
+        break;
+      default:
+        throw new Error('Unknown action');
+    }
+
+    if (response.success) {
+      data.value = response.records || [];
+    } else {
+      errorMessage.value = response.message || '查询失败';
+    }
+  } catch (error) {
+    errorMessage.value = '网络请求失败';
+    console.error('API error:', error);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+// 重置查询条件
+function handleReset() {
+  searchParams.value = {};
+  fetchData();
 }
 
 function formatDateTime(value: any): string {
@@ -779,6 +960,7 @@ async function handleDelete(row: any) {
 }
 
 watch(activeTab, () => {
+  searchParams.value = {};
   fetchData();
 });
 
@@ -912,6 +1094,55 @@ onMounted(() => {
 .header-actions {
   display: flex;
   gap: 0.5rem;
+}
+
+/* 查询区域样式 */
+.search-section {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e0e0e0;
+}
+
+.search-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 150px;
+  flex: 1;
+}
+
+.search-field label {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.search-field input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.search-field input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+.search-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
 }
 
 .btn-primary {
