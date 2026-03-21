@@ -34,8 +34,12 @@ class SearchTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         """测试类开始前执行一次"""
-        # 初始化浏览器
-        cls.driver = webdriver.Chrome()
+        # 初始化浏览器，使用项目目录下的 chromedriver
+        from selenium.webdriver.chrome.service import Service
+        import os
+        chromedriver_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'drivers', 'chromedriver')
+        service = Service(chromedriver_path)
+        cls.driver = webdriver.Chrome(service=service)
         cls.driver.implicitly_wait(10)
         
         # 连接数据库
@@ -185,25 +189,53 @@ class SearchTest(unittest.TestCase):
     @classmethod
     def login(cls):
         """登录系统"""
+        print("🌐 正在打开登录页面...")
         cls.driver.get("http://localhost:5173/login")
+        time.sleep(2)
+        
+        print("🔍 查找用户名输入框...")
+        # 等待页面加载完成
+        WebDriverWait(cls.driver, 10).until(
+            EC.presence_of_element_located((By.ID, "username"))
+        )
         
         # 输入用户名
         username_input = cls.driver.find_element(By.ID, "username")
         username_input.clear()
-        username_input.send_keys("admin")
+        username_input.send_keys("edidada")
+        print("✅ 用户名已输入")
         
         # 输入密码
+        print("🔍 查找密码输入框...")
         password_input = cls.driver.find_element(By.ID, "password")
         password_input.clear()
-        password_input.send_keys("123456")
+        password_input.send_keys("Pass123Qwe")
+        print("✅ 密码已输入")
         
         # 点击登录按钮
+        print("🔍 查找登录按钮...")
         login_button = cls.driver.find_element(By.CSS_SELECTOR, "button[type='submit']")
         login_button.click()
+        print("✅ 登录按钮已点击")
         
-        WebDriverWait(cls.driver, 5).until(
+        print("⏳ 等待页面跳转...")
+        time.sleep(3)
+        current_url = cls.driver.current_url
+        print(f"📍 当前URL: {current_url}")
+        
+        # 检查是否在 dashboard 页面
+        if "/dashboard" not in current_url:
+            # 检查是否有错误消息
+            try:
+                error_msg = cls.driver.find_element(By.CSS_SELECTOR, ".error-message").text
+                print(f"❌ 登录错误: {error_msg}")
+            except:
+                print(f"⚠️  页面内容: {cls.driver.page_source[:500]}")
+        
+        WebDriverWait(cls.driver, 10).until(
             EC.url_contains("/dashboard")
         )
+        print("✅ 登录成功，已进入仪表盘")
         time.sleep(1)
     
     def get_db_data(self, table_name, search_field=None, search_value=None):

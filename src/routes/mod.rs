@@ -7,6 +7,8 @@ use crate::handlers::logout_handler::logout_handler;
 use crate::handlers::paginate_handler::{paginate_handler, paginate_with_params_handler};
 use crate::handlers::crud_handler::*;
 use crate::handlers::report_handler::*;
+use crate::handlers::image_handler::{upload_image_from_url, delete_image, get_image_url};
+use crate::handlers::image_sync_handler::sync_images_to_minio;
 use crate::middleware::session_validation::validate_session;
 use serde_json;
 use crate::domain::table::sys_dict::SysDict;
@@ -216,4 +218,10 @@ pub fn setup_routes() -> Router {
         .route("/report/dish-full-info", get(get_dish_full_info_report).layer(axum::middleware::from_fn(validate_session)))
         .route("/report/user-order-stats", get(get_user_order_stats_report).layer(axum::middleware::from_fn(validate_session)))
         .route("/report/address-book", get(get_address_book_report).layer(axum::middleware::from_fn(validate_session)))
+        // 图片上传路由
+        .route("/api/image/upload-url", get(upload_image_from_url).layer(axum::middleware::from_fn(validate_session)))
+        .route("/api/image/:object_name", get(get_image_url).layer(axum::middleware::from_fn(validate_session)))
+        .route("/api/image/:object_name", post(delete_image).layer(axum::middleware::from_fn(validate_session)))
+        // 图片同步路由 - 将现有图片同步到 MinIO
+        .route("/api/image/sync", get(sync_images_to_minio).layer(axum::middleware::from_fn(validate_session)))
 }

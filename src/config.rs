@@ -58,7 +58,7 @@ impl Config {
         // 设置默认值
         settings.set("auth.username", "edidada").unwrap();
         settings.set("auth.password", "Pass123Qwe").unwrap();
-        settings.set("webapp.port", 9001).unwrap();
+        settings.set("webapp.port", 9002).unwrap();
         settings.set("webapp.redisurl", "redis://127.0.0.1:6379").unwrap();
         settings.set("redis.ip", "127.0.0.1").unwrap();
         settings.set("redis.port", 6379).unwrap();

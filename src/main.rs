@@ -23,6 +23,7 @@ mod routes;
 mod middleware;
 mod config;
 mod domain;
+mod infrastructure;
 
 // 定义静态的 RBatis 实例
 static mut RB: Option<RBatis> = None;
@@ -57,6 +58,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
     
     // 初始化 RBatis
     init_rbatis().await?;
+    
+    // 初始化 MinIO 客户端
+    if let Err(e) = infrastructure::minio_client::init_minio_client().await {
+        tracing::warn!("Failed to initialize MinIO client: {}", e);
+    }
 
     let _guard = set_format_log();
 

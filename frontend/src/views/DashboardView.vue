@@ -78,7 +78,20 @@
               <tr v-for="(row, index) in data" :key="index">
                 <td>{{ index + 1 }}</td>
                 <td v-for="header in displayHeaders" :key="header">
-                  {{ formatValue(row[header], header) }}
+                  <!-- 图片字段显示为 img 标签 -->
+                  <template v-if="isImageField(header)">
+                    <img 
+                      v-if="row[header]" 
+                      :src="getImageUrl(row[header])" 
+                      :alt="header"
+                      class="table-image"
+                      @error="handleImageError"
+                    />
+                    <span v-else>-</span>
+                  </template>
+                  <template v-else>
+                    {{ formatValue(row[header], header) }}
+                  </template>
                 </td>
                 <td class="action-cell">
                   <button @click="showEditModal(row)" class="btn-edit">编辑</button>
@@ -104,8 +117,36 @@
         <div class="modal-body">
           <div v-for="field in editableFields" :key="field.key" class="form-group">
             <label :for="field.key">{{ field.label }}</label>
+            <!-- 图片字段显示为图片上传组件 -->
+            <template v-if="isImageField(field.key)">
+              <div class="image-upload-container">
+                <img
+                  v-if="formData[field.key]"
+                  :src="getImageUrl(formData[field.key])"
+                  class="preview-image"
+                  @error="handleImageError"
+                />
+                <div v-else class="no-image">暂无图片</div>
+                <div class="image-actions">
+                  <input
+                    type="text"
+                    v-model="formData[field.key]"
+                    :placeholder="'输入图片URL或上传图片'"
+                    class="image-url-input"
+                  />
+                  <button
+                    type="button"
+                    @click="uploadImageFromUrl(formData[field.key], field.key)"
+                    :disabled="!formData[field.key] || isUploading"
+                    class="btn-upload"
+                  >
+                    {{ isUploading ? '上传中...' : '上传到MinIO' }}
+                  </button>
+                </div>
+              </div>
+            </template>
             <input
-              v-if="field.type !== 'textarea'"
+              v-else-if="field.type !== 'textarea'"
               :id="field.key"
               v-model="formData[field.key]"
               :type="field.type || 'text'"
@@ -147,6 +188,7 @@ const data = ref<any[]>([]);
 const showModal = ref(false);
 const isEdit = ref(false);
 const isSubmitting = ref(false);
+const isUploading = ref(false);
 const formData = ref<any>({});
 const editingId = ref<string | null>(null);
 const searchParams = ref<any>({});
@@ -854,10 +896,10 @@ function formatDateTime(value: any): string {
 
 function formatValue(value: any, header?: string): string {
   if (value === null || value === undefined) return '-';
-  
+
   // 检查是否是时间字段（包括create_time, update_time等）
   if (header && (
-    header.includes('time') || 
+    header.includes('time') ||
     header.includes('Time') ||
     header === 'create_time' ||
     header === 'update_time' ||
@@ -868,9 +910,78 @@ function formatValue(value: any, header?: string): string {
   )) {
     return formatDateTime(value);
   }
-  
+
+  // 图片字段不在这里格式化，由模板单独处理
+  if (isImageField(header)) {
+    return String(value || '');
+  }
+
   if (typeof value === 'object') return JSON.stringify(value);
   return String(value);
+}
+
+// 判断是否是图片字段
+function isImageField(header?: string): boolean {
+  if (!header) return false;
+  return header === 'image' ||
+         header.includes('image') ||
+         header.includes('pic') ||
+         header.includes('photo') ||
+         header.includes('_image') ||
+         header.endsWith('Image');
+}
+
+// 获取图片URL（如果是相对路径，添加MinIO基础URL）
+function getImageUrl(url: string): string {
+  if (!url) return '';
+
+  // 如果已经是完整的URL（以http或https开头），直接返回
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
+  }
+
+  // 如果是相对路径，添加MinIO基础URL
+  // 默认MinIO地址
+  const minioBaseUrl = 'http://127.0.0.1:9000/images';
+  return `${minioBaseUrl}/${url}`;
+}
+
+// 处理图片加载错误
+function handleImageError(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.src = '/placeholder-image.png'; // 使用占位图
+  img.classList.add('image-error');
+}
+
+// 从URL上传图片到MinIO
+async function uploadImageFromUrl(imageUrl: string, fieldKey: string) {
+  if (!imageUrl) return;
+
+  isUploading.value = true;
+  try {
+    const response = await fetch(`/api/image/upload-url?url=${encodeURIComponent(imageUrl)}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // 更新表单中的图片URL为MinIO的URL
+      formData.value[fieldKey] = result.url;
+      alert('图片上传成功！');
+    } else {
+      alert('图片上传失败: ' + result.message);
+    }
+  } catch (error) {
+    console.error('Upload error:', error);
+    alert('图片上传失败');
+  } finally {
+    isUploading.value = false;
+  }
 }
 
 function showAddModal() {
@@ -1359,5 +1470,94 @@ tr:hover {
 
 .btn-cancel:hover {
   background: #e0e0e0;
+}
+
+/* 表格中的图片样式 */
+.table-image {
+  max-width: 80px;
+  max-height: 80px;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.table-image:hover {
+  transform: scale(1.5);
+  z-index: 10;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.table-image.image-error {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}
+
+/* 图片上传组件样式 */
+.image-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.no-image {
+  width: 200px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border: 2px dashed #ddd;
+  border-radius: 4px;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.image-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.image-url-input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #d0d0d0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+
+.btn-upload {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: opacity 0.2s;
+}
+
+.btn-upload:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.btn-upload:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>
