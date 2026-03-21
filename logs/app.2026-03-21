@@ -459,3 +459,5 @@
 2026-03-22 03:21:39.060254  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 49.05285ms
 2026-03-22 03:21:39.060374 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "789"}
 2026-03-22 03:21:39.060616 DEBUG hyper::proto::h1::io: flushed 1079 bytes
+2026-03-22 03:26:44.060636 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:26:44.060653 DEBUG hyper::proto::h1::conn: read eof
