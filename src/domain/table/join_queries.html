@@ -131,7 +131,7 @@
         d.sort as dish_sort,
         c.id as category_id,
         c.name as category_name,
-        string_agg(df.name || ':' || df.value, ', ') as flavors
+        group_concat(df.name || ':' || df.value, ', ') as flavors
     from dish d
     left join category c on d.category_id = c.id
     left join dish_flavor df on d.id = df.dish_id and df.is_deleted = 0

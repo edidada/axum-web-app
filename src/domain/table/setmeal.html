@@ -19,7 +19,7 @@
     </if>
 </select>
 <select id="select_setmeal_with_dishes">
-    select s.*, sd.id as setmeal_dish_id, sd.dish_id, sd.name as dish_name, sd.price as dish_price, sd.copies, sd.sort
+    select s.*, sd.id as setmeal_dish_id, sd.dish_id, sd.name as dish_name, sd.price as dish_price, sd.copies
     from setmeal s
     left join setmeal_dish sd on s.id = sd.setmeal_id
     <where>

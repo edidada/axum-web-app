@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS dish (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255),
     category_id VARCHAR(255),
-    price DECIMAL(10,2),
+    price VARCHAR(255),
     code VARCHAR(255),
     image VARCHAR(255),
     description VARCHAR(255),
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS order_detail (
     setmeal_id VARCHAR(255),
     dish_flavor VARCHAR(255),
     number INTEGER,
-    amount DECIMAL(10,2),
+    amount VARCHAR(255),
     create_time TIMESTAMP
 );
 
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS orders (
     checkout_time TIMESTAMP,
     pay_method INTEGER,
     pay_status INTEGER,
-    amount DECIMAL(10,2),
+    amount VARCHAR(255),
     remark VARCHAR(255),
     phone VARCHAR(255),
     address VARCHAR(255),
@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS setmeal (
     id VARCHAR(255) PRIMARY KEY,
     category_id VARCHAR(255),
     name VARCHAR(255),
-    price DECIMAL(10,2),
+    price VARCHAR(255),
     status INTEGER,
     code VARCHAR(255),
     description VARCHAR(255),
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS setmeal_dish (
     setmeal_id VARCHAR(255),
     dish_id VARCHAR(255),
     name VARCHAR(255),
-    price DECIMAL(10,2),
+    price VARCHAR(255),
     copies INTEGER,
     create_time TIMESTAMP,
     update_time TIMESTAMP,
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS shopping_cart (
     setmeal_id VARCHAR(255),
     dish_flavor VARCHAR(255),
     number INTEGER,
-    amount DECIMAL(10,2),
+    amount VARCHAR(255),
     create_time TIMESTAMP
 );
 

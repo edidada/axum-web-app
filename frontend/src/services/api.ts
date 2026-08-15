@@ -33,18 +33,31 @@ export interface PaginatedResponse<T> {
 class ApiService {
   private sessionId: string | null = null;
 
+  constructor() {
+    // 页面刷新后从 localStorage 恢复会话，保证后续请求能携带认证信息
+    this.sessionId = localStorage.getItem('sessionId');
+  }
+
   setSessionId(sessionId: string) {
     this.sessionId = sessionId;
+    localStorage.setItem('sessionId', sessionId);
   }
 
   clearSessionId() {
     this.sessionId = null;
+    localStorage.removeItem('sessionId');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('username');
   }
 
   private getHeaders(): HeadersInit {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
+    const sessionId = this.sessionId || localStorage.getItem('sessionId');
+    if (sessionId) {
+      headers['Authorization'] = `Bearer ${sessionId}`;
+    }
     return headers;
   }
 
