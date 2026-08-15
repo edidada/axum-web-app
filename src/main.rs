@@ -189,12 +189,12 @@ mod tests {
             VALUES (?, ?, ?, ?, ?, ?)
         "#;
         rb.exec(insert_order_sql, vec![
-            rbs::to_value!("order_001"),
-            rbs::to_value!("ORD20240307001"),
-            rbs::to_value!(1),
-            rbs::to_value!("user_001"),
-            rbs::to_value!("99.99"),
-            rbs::to_value!("张三"),
+            rbs::value!("order_001"),
+            rbs::value!("ORD20240307001"),
+            rbs::value!(1),
+            rbs::value!("user_001"),
+            rbs::value!("99.99"),
+            rbs::value!("张三"),
         ]).await?;
 
         // 插入测试数据到 order_detail
@@ -203,21 +203,21 @@ mod tests {
             VALUES (?, ?, ?, ?, ?, ?)
         "#;
         rb.exec(insert_detail_sql, vec![
-            rbs::to_value!("detail_001"),
-            rbs::to_value!("宫保鸡丁"),
-            rbs::to_value!("order_001"),
-            rbs::to_value!("dish_001"),
-            rbs::to_value!(2),
-            rbs::to_value!("49.99"),
+            rbs::value!("detail_001"),
+            rbs::value!("宫保鸡丁"),
+            rbs::value!("order_001"),
+            rbs::value!("dish_001"),
+            rbs::value!(2),
+            rbs::value!("49.99"),
         ]).await?;
 
         rb.exec(insert_detail_sql, vec![
-            rbs::to_value!("detail_002"),
-            rbs::to_value!("麻婆豆腐"),
-            rbs::to_value!("order_001"),
-            rbs::to_value!("dish_002"),
-            rbs::to_value!(1),
-            rbs::to_value!("29.99"),
+            rbs::value!("detail_002"),
+            rbs::value!("麻婆豆腐"),
+            rbs::value!("order_001"),
+            rbs::value!("dish_002"),
+            rbs::value!(1),
+            rbs::value!("29.99"),
         ]).await?;
 
         // 测试关联查询
