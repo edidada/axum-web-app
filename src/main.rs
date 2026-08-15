@@ -144,7 +144,7 @@ mod tests {
                 checkout_time TEXT,
                 pay_method INTEGER,
                 pay_status INTEGER,
-                amount REAL,
+                amount TEXT,
                 remark TEXT,
                 phone TEXT,
                 address TEXT,
@@ -174,7 +174,7 @@ mod tests {
                 setmeal_id TEXT,
                 dish_flavor TEXT,
                 number INTEGER,
-                amount REAL
+                amount TEXT
             )
         "#;
         rb.exec(create_detail_sql, vec![]).await?;
@@ -189,7 +189,7 @@ mod tests {
             rbs::to_value!("ORD20240307001"),
             rbs::to_value!(1),
             rbs::to_value!("user_001"),
-            rbs::to_value!(99.99),
+            rbs::to_value!("99.99"),
             rbs::to_value!("张三"),
         ]).await?;
 
@@ -204,7 +204,7 @@ mod tests {
             rbs::to_value!("order_001"),
             rbs::to_value!("dish_001"),
             rbs::to_value!(2),
-            rbs::to_value!(49.99),
+            rbs::to_value!("49.99"),
         ]).await?;
 
         rb.exec(insert_detail_sql, vec![
@@ -213,7 +213,7 @@ mod tests {
             rbs::to_value!("order_001"),
             rbs::to_value!("dish_002"),
             rbs::to_value!(1),
-            rbs::to_value!(29.99),
+            rbs::to_value!("29.99"),
         ]).await?;
 
         // 测试关联查询
@@ -226,6 +226,7 @@ mod tests {
                     tracing::info!("订单号: {:?}, 明细名称: {:?}", row.number, row.name);
                 }
                 assert!(!rows.is_empty(), "应该返回关联数据");
+                assert_eq!(rows[0].name.as_deref(), Some("宫保鸡丁"));
             }
             Err(e) => {
                 tracing::error!("查询失败: {:?}", e);
