@@ -41,9 +41,9 @@ pub struct Config {
 
 impl Config {
     /// 加载公共配置与由 APP_PROFILE 指定的数据库 profile。
-    /// 可选 profile：postgresql（默认）、mysql、sqlite。
+    /// 可选 profile：postgresql、mysql、sqlite（默认）。
     pub fn from_file() -> Result<Self, config::ConfigError> {
-        let profile = std::env::var("APP_PROFILE").unwrap_or_else(|_| "postgresql".to_string());
+        let profile = std::env::var("APP_PROFILE").unwrap_or_else(|_| "sqlite".to_string());
         let mut settings = config::Config::default();
 
         settings.set_default("auth.username", "edidada")?;
@@ -54,7 +54,7 @@ impl Config {
         settings.set_default("redis.port", 6379)?;
         settings.set_default("redis.expiration", 3600)?;
         settings.set_default("redis.key_prefix", "session:")?;
-        settings.set_default("database.db_type", "postgresql")?;
+        settings.set_default("database.db_type", "sqlite")?;
 
         settings.merge(config::File::with_name("config/default").required(true))?;
         settings.merge(config::File::with_name(&format!("config/{profile}")).required(true))?;
@@ -84,10 +84,10 @@ mod tests {
     use super::*;
 
     #[test]
-    fn default_profile_is_postgresql() {
+    fn default_profile_is_sqlite() {
         std::env::remove_var("APP_PROFILE");
-        let config = Config::from_file().expect("load postgresql profile");
-        assert_eq!(config.database.db_type, "postgresql");
+        let config = Config::from_file().expect("load sqlite profile");
+        assert_eq!(config.database.db_type, "sqlite");
         assert_eq!(config.webapp.port, 9002);
     }
 }

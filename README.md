@@ -138,7 +138,7 @@ axum-web-app
 
 ## Database Profiles
 
-The server selects its database configuration through `APP_PROFILE`. The default is `postgresql`; use `mysql` or `sqlite` to load `config/mysql.toml` or `config/sqlite.toml` respectively. Shared authentication, HTTP, and Redis settings remain in `config/default.toml`.
+The server selects its database configuration through `APP_PROFILE`. The default is `sqlite`; use `postgresql` or `mysql` to load `config/postgresql.toml` or `config/mysql.toml` respectively. Shared authentication, HTTP, and Redis settings remain in `config/default.toml`.
 
 ```bash
 APP_PROFILE=sqlite cargo run --bin main
