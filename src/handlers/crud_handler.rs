@@ -37,7 +37,7 @@ fn generate_id() -> String {    let mut rng = rand::thread_rng();    let id: u64
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PageQuery {
     pub page: u64,
-    pub pageSize: u64,
+    pub page_size: u64,
 }
 
 // SysDict 相关接口
@@ -112,7 +112,7 @@ pub async fn address_book_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<AddressBook>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = AddressBookPageDTO::default();
     let result: std::result::Result<rbatis::Page<AddressBook>, rbatis::Error> = AddressBook::select_page(rb, &page_request, &dto).await;
     match result {
@@ -167,7 +167,7 @@ pub async fn category_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Category>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = CategoryPageDTO::default();
     let result: std::result::Result<rbatis::Page<Category>, rbatis::Error> = Category::select_page(rb, &page_request, &dto).await;
     match result {
@@ -222,7 +222,7 @@ pub async fn dish_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<serde_json::Value>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = DishPageDTO::default();
     let result: std::result::Result<rbatis::Page<Dish>, rbatis::Error> = Dish::select_page(rb, &page_request, &dto).await;
     match result {
@@ -285,7 +285,7 @@ pub async fn dish_flavor_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<DishFlavor>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = DishFlavorPageDTO::default();
     let result: std::result::Result<rbatis::Page<DishFlavor>, rbatis::Error> = DishFlavor::select_page(rb, &page_request, &dto).await;
     match result {
@@ -340,7 +340,7 @@ pub async fn employee_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Employee>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = EmployeePageDTO::default();
     let result: std::result::Result<rbatis::Page<Employee>, rbatis::Error> = Employee::select_page(rb, &page_request, &dto).await;
     match result {
@@ -395,7 +395,7 @@ pub async fn order_detail_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<OrderDetail>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = OrderDetailPageDTO::default();
     let result: std::result::Result<rbatis::Page<OrderDetail>, rbatis::Error> = OrderDetail::select_page(rb, &page_request, &dto).await;
     match result {
@@ -450,7 +450,7 @@ pub async fn orders_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Orders>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = OrdersPageDTO::default();
     let result: std::result::Result<rbatis::Page<Orders>, rbatis::Error> = Orders::select_page(rb, &page_request, &dto).await;
     match result {
@@ -505,7 +505,7 @@ pub async fn setmeal_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<Setmeal>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = SetmealPageDTO::default();
     let result: std::result::Result<rbatis::Page<Setmeal>, rbatis::Error> = Setmeal::select_page(rb, &page_request, &dto).await;
     match result {
@@ -560,7 +560,7 @@ pub async fn setmeal_dish_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<SetmealDish>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = SetmealDishPageDTO::default();
     let result: std::result::Result<rbatis::Page<SetmealDish>, rbatis::Error> = SetmealDish::select_page(rb, &page_request, &dto).await;
     match result {
@@ -615,7 +615,7 @@ pub async fn shopping_cart_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<ShoppingCart>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = ShoppingCartPageDTO::default();
     let result: std::result::Result<rbatis::Page<ShoppingCart>, rbatis::Error> = ShoppingCart::select_page(rb, &page_request, &dto).await;
     match result {
@@ -671,7 +671,7 @@ pub async fn user_select_page(
     Json(payload): Json<PageQuery>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<rbatis::Page<User>>, (StatusCode, String)> {
-    let page_request = PageRequest::new(payload.page, payload.pageSize);
+    let page_request = PageRequest::new(payload.page, payload.page_size);
     let dto = UserPageDTO::default();
     let result: std::result::Result<rbatis::Page<User>, rbatis::Error> = User::select_page(rb, &page_request, &dto).await;
     match result {

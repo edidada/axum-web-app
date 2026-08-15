@@ -19,7 +19,7 @@ impl PaginateMapper {
     pub async fn paginate_query(
         conn: &dyn Executor,
         query: &str,
-        pageSize: u32,
+        page_size: u32,
         offset: u32,
     ) -> rbatis::Result<Vec<Value>> {
         impled!()

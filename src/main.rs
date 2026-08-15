@@ -110,7 +110,7 @@ impl FormatTime for LocalTimer {
 
 #[cfg(test)]
 mod tests {
-    use rbatis::{PageRequest, RBatis};
+    use rbatis::{RBatis};
     use rbdc_sqlite::SqliteDriver;
     use crate::domain::table::orders::Orders;
 

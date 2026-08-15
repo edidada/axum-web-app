@@ -58,8 +58,7 @@ pub fn setup_routes() -> Router {
         }).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/insert", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<SysDict>| async move {
             use axum::response::IntoResponse;
-            use crate::domain::table::sys_dict::SysDict;
-            
+
             // 打印请求体
             if let Ok(json_str) = serde_json::to_string(&payload) {
                 tracing::debug!("Request body for /sys-dict/insert (JSON): {}", json_str);
@@ -82,8 +81,7 @@ pub fn setup_routes() -> Router {
         }).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/update", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<SysDict>| async move {
             use axum::response::IntoResponse;
-            use crate::domain::table::sys_dict::SysDict;
-            
+
             // 打印请求体
             if let Ok(json_str) = serde_json::to_string(&payload) {
                 tracing::debug!("Request body for /sys-dict/update (JSON): {}", json_str);

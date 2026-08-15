@@ -8,13 +8,13 @@ thread ThreadId(4), 2026-03-02T04:53:29.021250Z DEBUG hyper::proto::h1::io: pars
 thread ThreadId(4), 2026-03-02T04:53:29.021437Z DEBUG hyper::proto::h1::conn: incoming body is content-length (58 bytes)
 thread ThreadId(4), 2026-03-02T04:53:29.023303Z DEBUG hyper::proto::h1::io: flushed 25 bytes
 thread ThreadId(4), 2026-03-02T04:53:29.023429Z DEBUG hyper::proto::h1::conn: incoming body completed
-thread ThreadId(4), 2026-03-02T04:53:29.024935Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7434097916001783808] => `SELECT * FROM users LIMIT #{pageSize} OFFSET #{offset}` []
+thread ThreadId(4), 2026-03-02T04:53:29.024935Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7434097916001783808] => `SELECT * FROM users LIMIT #{page_size} OFFSET #{offset}` []
 thread ThreadId(16), 2026-03-02T04:53:50.083124Z DEBUG hyper::proto::h1::io: flushed 259 bytes
 thread ThreadId(16), 2026-03-02T04:53:50.360146Z DEBUG hyper::proto::h1::io: parsed 6 headers
 thread ThreadId(16), 2026-03-02T04:53:50.360332Z DEBUG hyper::proto::h1::conn: incoming body is content-length (88 bytes)
 thread ThreadId(16), 2026-03-02T04:53:50.362589Z DEBUG hyper::proto::h1::io: flushed 25 bytes
 thread ThreadId(16), 2026-03-02T04:53:50.362761Z DEBUG hyper::proto::h1::conn: incoming body completed
-thread ThreadId(16), 2026-03-02T04:53:50.363023Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7434097916001783809] => `SELECT * FROM users WHERE age > ? LIMIT #{pageSize} OFFSET #{offset}` []
+thread ThreadId(16), 2026-03-02T04:53:50.363023Z DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7434097916001783809] => `SELECT * FROM users WHERE age > ? LIMIT #{page_size} OFFSET #{offset}` []
 thread ThreadId(16), 2026-03-02T04:54:11.400953Z DEBUG hyper::proto::h1::io: flushed 259 bytes
 thread ThreadId(16), 2026-03-02T04:54:11.444314Z DEBUG hyper::proto::h1::conn: read eof
 thread ThreadId(1), 2026-03-02T05:06:22.427697Z  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001

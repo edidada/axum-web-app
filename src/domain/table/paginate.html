@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
 <select id="paginate_query">
-    ${query} LIMIT #{pageSize} OFFSET #{offset}
+    ${query} LIMIT #{page_size} OFFSET #{offset}
 </select>
 <select id="count_query">
     SELECT COUNT(*) FROM (${query}) as total

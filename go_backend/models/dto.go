@@ -3,7 +3,7 @@ package models
 // PageQuery 通用分页请求
 type PageQuery struct {
 	Page     int `json:"page" form:"page"`
-	PageSize int `json:"pageSize" form:"pageSize"`
+	PageSize int `json:"page_size" form:"page_size"`
 }
 
 // PageResult 通用分页响应
