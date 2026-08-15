@@ -1,8 +1,9 @@
 use axum::{response::Json, extract::Extension, http::StatusCode};
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use rbatis::rbatis::RBatis;
 use rbs::Value;
 use std::error::Error;
+use crate::domain::table::paginate::PaginateResult;
 
 #[derive(Deserialize)]
 pub struct PaginateRequest {
@@ -11,13 +12,8 @@ pub struct PaginateRequest {
     page_size: u32,
 }
 
-#[derive(Serialize)]
-pub struct PaginateResponse {
-    total: u64,
-    page: u32,
-    page_size: u32,
-    data: Vec<Value>,
-}
+/// HTTP response reuses the typed pagination result shared by mapper callers.
+pub type PaginateResponse = PaginateResult;
 
 pub async fn paginate_query(
     rb: &RBatis,
@@ -118,5 +114,25 @@ pub async fn paginate_with_params_handler(
     match result {
         Ok(response) => Ok(Json(response)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn paginate_response_keeps_page_metadata_and_rows() {
+        let response = PaginateResponse {
+            total: 7,
+            page: 2,
+            page_size: 3,
+            data: vec![rbs::value!({"id": "order-4"})],
+        };
+
+        assert_eq!(response.total, 7);
+        assert_eq!(response.page, 2);
+        assert_eq!(response.page_size, 3);
+        assert_eq!(response.data.len(), 1);
     }
 }

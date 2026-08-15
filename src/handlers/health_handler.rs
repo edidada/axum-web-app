@@ -17,6 +17,15 @@ pub struct SystemInfo {
     pub active_connections: u32,
 }
 
+#[derive(Serialize)]
+pub struct DetailedHealthResponse {
+    pub status: String,
+    pub timestamp: u64,
+    pub version: String,
+    pub uptime_seconds: u64,
+    pub system: SystemInfo,
+}
+
 // 应用启动时间
 static START_TIME: std::sync::OnceLock<SystemTime> = std::sync::OnceLock::new();
 
@@ -49,7 +58,7 @@ pub async fn health_check() -> Json<HealthResponse> {
 }
 
 /// 详细健康检查接口 - 包含系统信息
-pub async fn health_check_detailed() -> Json<serde_json::Value> {
+pub async fn health_check_detailed() -> Json<DetailedHealthResponse> {
     let current_time = SystemTime::now();
     let start_time = START_TIME.get().unwrap_or(&current_time);
     let uptime = SystemTime::now()
@@ -71,16 +80,18 @@ pub async fn health_check_detailed() -> Json<serde_json::Value> {
         db_connected
     );
 
-    Json(serde_json::json!({
-        "status": if db_connected { "healthy" } else { "degraded" },
-        "timestamp": timestamp,
-        "version": env!("CARGO_PKG_VERSION"),
-        "uptime_seconds": uptime,
-        "system": {
-            "database_connected": db_connected,
-            "memory_usage_mb": get_memory_usage(),
-        }
-    }))
+    Json(DetailedHealthResponse {
+        status: if db_connected { "healthy" } else { "degraded" }.to_string(),
+        timestamp,
+        version: env!("CARGO_PKG_VERSION").to_string(),
+        uptime_seconds: uptime,
+        system: SystemInfo {
+            database_connected: db_connected,
+            memory_usage_mb: get_memory_usage(),
+            // This application does not maintain a connection-pool metric yet.
+            active_connections: 0,
+        },
+    })
 }
 
 /// 就绪检查接口 - 用于 Kubernetes 等环境
@@ -117,4 +128,19 @@ async fn check_database_connection() -> bool {
 fn get_memory_usage() -> u64 {
     // 在实际应用中，可以使用 sysinfo 等库获取真实内存使用
     0
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[tokio::test]
+    async fn detailed_health_check_includes_system_info() {
+        init_start_time();
+        let response = health_check_detailed().await.0;
+
+        assert!(response.system.database_connected);
+        assert_eq!(response.system.active_connections, 0);
+        assert!(!response.version.is_empty());
+    }
 }
