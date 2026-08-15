@@ -3,7 +3,7 @@ use axum::{Extension, Router};
 use std::net::SocketAddr;
 use std::thread;
 use chrono::Local;
-use tracing_subscriber::{fmt, Registry, Layer};
+use tracing_subscriber::{fmt, Registry};
 use tracing_subscriber::fmt::format::{Format, Writer};
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
@@ -15,7 +15,7 @@ use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
 use rbdc_mysql::driver::MysqlDriver;
-use rbs::Value;
+use rbdc_sqlite::driver::SqliteDriver;
 
 mod handlers;
 mod routes;
@@ -23,50 +23,32 @@ mod middleware;
 mod config;
 mod domain;
 
-// 定义静态的 RBatis 实例
-static mut RB: Option<RBatis> = None;
-
-// 异步初始化函数
-async fn init_rbatis() -> Result<(), Box<dyn Error>> {
+fn init_rbatis(config: &Config) -> Result<RBatis, Box<dyn Error>> {
     let rb = RBatis::new();
-    // rbatis 默认已经启用了 SQL 日志，日志级别为 Debug
-    rb.init(MysqlDriver {}, "mysql://github:5%25Edidadas@114.55.62.154:3306/testdb")?;
-    unsafe {
-        RB = Some(rb);
+    match config.database.db_type.as_str() {
+        "sqlite" => rb.init(SqliteDriver {}, &config.database.url)?,
+        "mysql" => rb.init(MysqlDriver {}, &config.database.url)?,
+        other => return Err(format!("unsupported database type: {other}").into()),
     }
-    Ok(())
-}
-
-// 获取单例的函数
-fn get_rbatis() -> &'static RBatis {
-    unsafe {
-        RB.as_ref().expect("RBatis is not initialized")
-    }
+    Ok(rb)
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    // 初始化 RBatis
-    init_rbatis().await?;
-
     let _guard = set_format_log();
-
-    let config_file = Config::from_file();
-    // Initialize Redis client
-    let redis_client = Client::open(config_file.webapp.redisurl).unwrap_or_else(|e| {
-        eprintln!("Warning: Failed to connect to Redis: {}. Using fallback.", e);
-        // 使用本地 Redis 作为 fallback
-        Client::open("redis://127.0.0.1:6379").unwrap()
-    });
-
-    // 获取 RBatis 实例
-    let rb = get_rbatis();
+    let config_file = Config::from_file().map_err(|error| {
+        tracing::error!("Failed to load config/default.toml: {error}");
+        error
+    })?;
+    let rb = init_rbatis(&config_file)?;
+    let redis_client = Client::open(config_file.webapp.redisurl.clone())?;
 
     let app = Router::new()
         .merge(routes::setup_routes())
         .layer(
             ServiceBuilder::new()
                 .layer(Extension(redis_client))
+                .layer(Extension(config_file.clone()))
                 .layer(Extension(rb))
         );
 
