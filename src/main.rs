@@ -25,6 +25,9 @@ mod middleware;
 mod config;
 mod jwt;
 mod domain;
+
+#[cfg(test)]
+mod html_mapper_tests;
 #[cfg(feature = "minio")]
 mod infrastructure;
 

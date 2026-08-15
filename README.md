@@ -160,6 +160,14 @@ Redis still records the active token, so `POST http://127.0.0.1:9002/api/logout`
 
 The application logs JWT issuance and validation at `INFO` level. To show the signing/validation flow safely, logs include the algorithm, decoded header, claims, and a short token prefix—but never the signing secret or complete bearer token.
 
+### MyBatis-style HTML Mapper Tests
+
+Every file in `src/domain/table/*.html` has a SQLite execution regression test, including the pagination mapper and all six JOIN reports. Run the mapper suite with:
+
+```powershell
+cargo test --bin main html_mapper_tests --offline
+```
+
 ## Usage
 
 Once the application is running, you can access it at `http://127.0.0.1:9002`. You can test the endpoints using tools like `curl` or Postman.

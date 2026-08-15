@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
 <select id="select_page">
-    select * from category
+    select id, type as category_type, name, sort, create_time, update_time, create_user, update_user from category
     <where>
         <if test="dto.category_type != null">
             and type = #{dto.category_type}

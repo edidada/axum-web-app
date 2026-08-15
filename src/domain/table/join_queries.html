@@ -8,7 +8,7 @@
         o.number as order_number,
         o.status as order_status,
         o.user_id,
-        o.order_time::text as order_time,
+        cast(o.order_time as text) as order_time,
         o.pay_method,
         o.pay_status,
         o.amount as order_amount,
@@ -83,7 +83,7 @@
         sc.dish_flavor,
         sc.number,
         sc.amount as cart_amount,
-        sc.create_time::text as create_time,
+        cast(sc.create_time as text) as create_time,
         case 
             when sc.dish_id is not null then sc.dish_id
             else sc.setmeal_id
@@ -110,6 +110,9 @@
     <where>
         <if test="user_id != null">
             and sc.user_id = #{user_id}
+        </if>
+        <if test="cart_id != null">
+            and sc.id = #{cart_id}
         </if>
     </where>
     order by sc.create_time desc
@@ -157,7 +160,7 @@
         u.phone,
         u.sex,
         count(o.id) as order_count,
-        coalesce(sum(o.amount), 0) as total_amount
+        cast(coalesce(sum(o.amount), 0) as text) as total_amount
     from "user" u
     left join orders o on u.id = o.user_id
     <where>
@@ -175,7 +178,7 @@
 <!-- 地址簿 JOIN 用户信息查询 -->
 <select id="select_address_book_with_user">
     select 
-        ab.id,
+        ab.id as address_id,
         ab.user_id,
         u.name as user_name,
         u.phone as user_phone,
@@ -197,6 +200,9 @@
         ab.is_deleted = 0
         <if test="user_id != null">
             and ab.user_id = #{user_id}
+        </if>
+        <if test="address_id != null">
+            and ab.id = #{address_id}
         </if>
         <if test="is_default != null">
             and ab.is_default = #{is_default}
