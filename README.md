@@ -136,14 +136,91 @@ axum-web-app
    cargo run
    ```
 
+## Database Profiles
+
+The server selects its database configuration through `APP_PROFILE`. The default is `postgresql`; use `mysql` or `sqlite` to load `config/mysql.toml` or `config/sqlite.toml` respectively. Shared authentication, HTTP, and Redis settings remain in `config/default.toml`.
+
+```bash
+APP_PROFILE=sqlite cargo run --bin main
+APP_PROFILE=mysql cargo run --bin main
+APP_PROFILE=postgresql cargo run --bin main
+```
+
+```powershell
+$env:APP_PROFILE = 'sqlite'; cargo run --bin main
+$env:APP_PROFILE = 'mysql'; cargo run --bin main
+$env:APP_PROFILE = 'postgresql'; cargo run --bin main
+```
+
 ## Usage
 
-Once the application is running, you can access it at `http://localhost:3000`. You can test the endpoints using tools like `curl` or Postman.
+Once the application is running, you can access it at `http://127.0.0.1:9002`. You can test the endpoints using tools like `curl` or Postman.
 
-### Example Endpoints
+### HTTP Command-Line Smoke Tests
 
-- GET /users: Retrieve a list of users.
-- POST /users: Create a new user.
+The commands below use the credentials and port in `config/default.toml`. Every request uses a complete HTTP URL.
+
+#### curl (Bash)
+
+```bash
+LOGIN_RESPONSE="$(curl --silent --show-error --request POST 'http://127.0.0.1:9002/api/login' \
+  --header 'Content-Type: application/json' \
+  --data '{"username":"edidada","password":"Pass123Qwe"}')"
+
+SESSION_ID="$(printf '%s' "$LOGIN_RESPONSE" | sed -n 's/.*"session_id":"\([^"]*\)".*/\1/p')"
+test -n "$SESSION_ID" || { echo "Login failed: $LOGIN_RESPONSE"; exit 1; }
+
+curl --silent --show-error --request GET 'http://127.0.0.1:9002/get' \
+  --header "Authorization: Bearer $SESSION_ID"
+
+curl --silent --show-error --request POST 'http://127.0.0.1:9002/getBody' \
+  --header 'Content-Type: application/json' \
+  --header "Authorization: Bearer $SESSION_ID" \
+  --data '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
+
+curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate' \
+  --header 'Content-Type: application/json' \
+  --header "Authorization: Bearer $SESSION_ID" \
+  --data '{"sql":"SELECT id, number, status FROM orders ORDER BY id","page":1,"page_size":2}'
+
+curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate-with-params' \
+  --header 'Content-Type: application/json' \
+  --header "Authorization: Bearer $SESSION_ID" \
+  --data '{"sql":"SELECT id FROM orders WHERE status > ?","page":1,"page_size":2,"params":[0]}'
+
+curl --silent --show-error --request POST 'http://127.0.0.1:9002/api/logout' \
+  --header "Authorization: Bearer $SESSION_ID"
+```
+
+#### PowerShell (`Invoke-RestMethod`)
+
+```powershell
+$loginResponse = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/login' `
+  -ContentType 'application/json' `
+  -Body '{"username":"edidada","password":"Pass123Qwe"}'
+
+$sessionId = $loginResponse.session_id
+if ([string]::IsNullOrWhiteSpace($sessionId)) {
+  throw "Login failed: $loginResponse"
+}
+$headers = @{ Authorization = "Bearer $sessionId" }
+
+Invoke-RestMethod -Method Get -Uri 'http://127.0.0.1:9002/get' -Headers $headers
+
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/getBody' `
+  -Headers $headers -ContentType 'application/json' `
+  -Body '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
+
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/paginate' `
+  -Headers $headers -ContentType 'application/json' `
+  -Body '{"sql":"SELECT id, number, status FROM orders ORDER BY id","page":1,"page_size":2}'
+
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/paginate-with-params' `
+  -Headers $headers -ContentType 'application/json' `
+  -Body '{"sql":"SELECT id FROM orders WHERE status > ?","page":1,"page_size":2,"params":[0]}'
+
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/logout' -Headers $headers
+```
 
 ## Contributing
 
@@ -163,9 +240,9 @@ cargo update -p mio@1.0.3 --precise ver
 where `ver` is the latest version of `mio` supporting rustc 1.65.0
 ```
 
-127.0.0.1:9001/get
-127.0.0.1:9001/post
-curl -X POST 'http://127.0.0.1:9001/getBody' -H 'Content-Type: application/json' -d '{
+http://127.0.0.1:9002/get
+http://127.0.0.1:9002/post
+curl -X POST 'http://127.0.0.1:9002/getBody' -H 'Content-Type: application/json' -d '{
 "html_code": "a"
 }'
 
@@ -371,7 +448,7 @@ brew install httpd
 ### 3. 执行 AB 性能测试
 使用 AB 命令进行性能测试，下面是具体的命令示例：
 ```bash
-ab -n 1000 -c 100 -p request.json -T application/json -H "Authorization: Bearer 0b6cc057-a6a1-46a6-80e1-5c83ff28af9a" http://127.0.0.1:9001/getBody
+ab -n 1000 -c 100 -p request.json -T application/json -H "Authorization: Bearer 0b6cc057-a6a1-46a6-80e1-5c83ff28af9a" http://127.0.0.1:9002/getBody
 ```
 #### 参数解释：
 - `-n 1000`：总共要发送 1000 个请求。
@@ -379,7 +456,7 @@ ab -n 1000 -c 100 -p request.json -T application/json -H "Authorization: Bearer 
 - `-p request.json`：指定包含 POST 请求数据的文件。
 - `-T application/json`：设置请求的 Content-Type 为 `application/json`。
 - `-H "Authorization: Bearer 0b6cc057-a6a1-46a6-80e1-5c83ff28af9a"`：添加请求头 `Authorization`。
-- `http://127.0.0.1:9001/getBody`：目标 URL。
+- `http://127.0.0.1:9002/getBody`：目标 URL。
 
 ### 4. 分析测试结果
 执行完 AB 命令后，会输出一系列测试结果，下面是部分关键指标的解释：

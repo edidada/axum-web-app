@@ -4,10 +4,10 @@ use crate::config::Config;
 
 pub async fn logout_handler(
     Extension(redis_client): Extension<redis::Client>,
+    Extension(config): Extension<Config>,
     Extension(session_id): Extension<String>,
 ) -> Result<Html<String>, (StatusCode, String)> {
-    let config = Config::from_file();
-    let mut conn = redis_client.get_async_connection().await.map_err(|_| {
+    let mut conn = redis_client.get_multiplexed_async_connection().await.map_err(|_| {
         (StatusCode::INTERNAL_SERVER_ERROR, "Failed to connect to Redis".to_string())
     })?;
 

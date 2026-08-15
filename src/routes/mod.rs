@@ -1,20 +1,23 @@
 use axum::{routing::get, routing::post, Extension, Router, Json};
 use rbatis::RBatis;
 use crate::handlers::health_handler::{health_check, health_check_detailed, readiness_check, liveness_check};
+use crate::handlers::get_handler::{get_body_handler, get_handler};
 use crate::handlers::post_handler::post_handler;
 use crate::handlers::login_handler::login_handler;
 use crate::handlers::logout_handler::logout_handler;
 use crate::handlers::paginate_handler::{paginate_handler, paginate_with_params_handler};
 use crate::handlers::crud_handler::*;
 use crate::handlers::report_handler::*;
+#[cfg(feature = "minio")]
 use crate::handlers::image_handler::{upload_image_from_url, delete_image, get_image_url};
+#[cfg(feature = "minio")]
 use crate::handlers::image_sync_handler::sync_images_to_minio;
 use crate::middleware::session_validation::validate_session;
 use serde_json;
 use crate::domain::table::sys_dict::SysDict;
 
 pub fn setup_routes() -> Router {
-    Router::new()
+    let router = Router::new()
         // 健康检查路由
         .route("/health", get(health_check))
         .route("/health/detailed", get(health_check_detailed))
@@ -24,8 +27,9 @@ pub fn setup_routes() -> Router {
         .route("/api/login", post(login_handler))
         .route("/api/logout", post(logout_handler).layer(axum::middleware::from_fn(validate_session)))
         // 保留的旧路由（兼容）
-        .route("/get", get(health_check).layer(axum::middleware::from_fn(validate_session)))
+        .route("/get", get(get_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/post", post(post_handler).layer(axum::middleware::from_fn(validate_session)))
+        .route("/getBody", post(get_body_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/paginate", post(paginate_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/paginate-with-params", post(paginate_with_params_handler).layer(axum::middleware::from_fn(validate_session)))
         // SysDict 相关路由
@@ -217,11 +221,17 @@ pub fn setup_routes() -> Router {
         .route("/report/shopping-cart", get(get_shopping_cart_report).layer(axum::middleware::from_fn(validate_session)))
         .route("/report/dish-full-info", get(get_dish_full_info_report).layer(axum::middleware::from_fn(validate_session)))
         .route("/report/user-order-stats", get(get_user_order_stats_report).layer(axum::middleware::from_fn(validate_session)))
-        .route("/report/address-book", get(get_address_book_report).layer(axum::middleware::from_fn(validate_session)))
-        // 图片上传路由
-        .route("/api/image/upload-url", get(upload_image_from_url).layer(axum::middleware::from_fn(validate_session)))
-        .route("/api/image/:object_name", get(get_image_url).layer(axum::middleware::from_fn(validate_session)))
-        .route("/api/image/:object_name", post(delete_image).layer(axum::middleware::from_fn(validate_session)))
-        // 图片同步路由 - 将现有图片同步到 MinIO
-        .route("/api/image/sync", get(sync_images_to_minio).layer(axum::middleware::from_fn(validate_session)))
+        .route("/report/address-book", get(get_address_book_report).layer(axum::middleware::from_fn(validate_session)));
+
+    #[cfg(feature = "minio")]
+    {
+        router
+            .route("/api/image/upload-url", get(upload_image_from_url).layer(axum::middleware::from_fn(validate_session)))
+            .route("/api/image/:object_name", get(get_image_url).layer(axum::middleware::from_fn(validate_session)))
+            .route("/api/image/:object_name", post(delete_image).layer(axum::middleware::from_fn(validate_session)))
+            .route("/api/image/sync", get(sync_images_to_minio).layer(axum::middleware::from_fn(validate_session)))
+    }
+
+    #[cfg(not(feature = "minio"))]
+    router
 }

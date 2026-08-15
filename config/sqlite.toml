@@ -1,0 +1,3 @@
+[database]
+db_type = "sqlite"
+url = "sqlite://./test.db"
