@@ -151,6 +151,34 @@
     order by d.sort
 </select>
 
+<!-- 员工 JOIN 创建人和更新人查询（employee 自关联） -->
+<select id="select_employee_with_operators">
+    select
+        e.id,
+        e.name,
+        e.username,
+        e.phone,
+        e.sex,
+        e.id_number,
+        e.status,
+        cast(e.create_time as text) as create_time,
+        cast(e.update_time as text) as update_time,
+        creator.name as create_user_name,
+        updater.name as update_user_name
+    from employee e
+    left join employee creator on e.create_user = creator.id
+    left join employee updater on e.update_user = updater.id
+    <where>
+        <if test="employee_id != null">
+            and e.id = #{employee_id}
+        </if>
+        <if test="status != null">
+            and e.status = #{status}
+        </if>
+    </where>
+    order by e.id
+</select>
+
 <!-- 用户 JOIN 订单统计查询 -->
 <select id="select_user_with_order_stats">
     select 

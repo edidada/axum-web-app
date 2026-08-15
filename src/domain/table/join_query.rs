@@ -47,6 +47,15 @@ impl JoinQuery {
         impled!()
     }
 
+    /// 查询员工及其创建人、更新人（employee 自关联）
+    pub async fn select_employee_with_operators(
+        conn: &dyn Executor,
+        employee_id: Option<&str>,
+        status: Option<i32>,
+    ) -> rbatis::Result<Vec<EmployeeWithOperatorDTO>> {
+        impled!()
+    }
+
     /// 查询用户及其订单统计
     pub async fn select_user_with_order_stats(
         conn: &dyn Executor,

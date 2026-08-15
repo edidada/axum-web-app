@@ -206,7 +206,7 @@ async fn paginate_html_applies_limit_offset_and_count() -> Result<(), Box<dyn Er
 }
 
 #[tokio::test]
-async fn join_queries_html_executes_all_six_reports() -> Result<(), Box<dyn Error>> {
+async fn join_queries_html_executes_all_seven_reports() -> Result<(), Box<dyn Error>> {
     let rb = test_db().await;
     insert(&rb, "INSERT INTO category (id,type,name,sort) VALUES ('c-1',1,'Main course',1)").await;
     insert(&rb, "INSERT INTO dish (id,name,category_id,price,code,image,description,status,sort,is_deleted) VALUES ('d-1','Kung Pao','c-1','20.00','D-1','dish.jpg','spicy',1,1,0)").await;
@@ -220,6 +220,8 @@ async fn join_queries_html_executes_all_six_reports() -> Result<(), Box<dyn Erro
     insert(&rb, "INSERT INTO order_detail (id,name,order_id,dish_id,number,amount) VALUES ('od-1','Kung Pao','o-1','d-1',1,'20.00')").await;
     insert(&rb, "INSERT INTO shopping_cart (id,user_id,dish_id,number,amount,create_time) VALUES ('sc-1','u-1','d-1',1,'20.00','2026-08-15 12:00:00')").await;
     insert(&rb, "INSERT INTO shopping_cart (id,user_id,dish_id,number,amount,create_time) VALUES ('sc-2','u-1','d-1',1,'20.00','2026-08-15 12:00:01')").await;
+    insert(&rb, "INSERT INTO employee (id,name,username,status) VALUES ('e-admin','Admin','admin',1)").await;
+    insert(&rb, "INSERT INTO employee (id,name,username,status,create_time,update_time,create_user,update_user) VALUES ('e-1','Bob','bob',1,'2026-08-15 10:00:00','2026-08-15 11:00:00','e-admin','e-admin')").await;
 
     let orders = JoinQuery::select_order_with_details(&rb, Some("o-1"), Some("u-1"), Some(1)).await?;
     assert_eq!(orders[0].dish_name.as_deref(), Some("Kung Pao"));
@@ -230,6 +232,11 @@ async fn join_queries_html_executes_all_six_reports() -> Result<(), Box<dyn Erro
     assert_eq!(carts[0].item_type.as_deref(), Some("dish"));
     let dishes = JoinQuery::select_dish_full_info(&rb, Some("d-1"), Some("c-1"), Some(1)).await?;
     assert!(dishes[0].flavors.as_deref().is_some_and(|flavors| flavors.contains("spice:hot")));
+    let employees = JoinQuery::select_employee_with_operators(&rb, Some("e-1"), Some(1)).await?;
+    assert_eq!(employees.len(), 1);
+    assert_eq!(employees[0].name.as_deref(), Some("Bob"));
+    assert_eq!(employees[0].create_user_name.as_deref(), Some("Admin"));
+    assert_eq!(employees[0].update_user_name.as_deref(), Some("Admin"));
     let users = JoinQuery::select_user_with_order_stats(&rb, Some("u-1"), Some("13800000000")).await?;
     assert_eq!(users[0].order_count, Some(1));
     let addresses = JoinQuery::select_address_book_with_user(&rb, Some("u-1"), Some("ab-1"), Some(1)).await?;
