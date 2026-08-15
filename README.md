@@ -178,6 +178,11 @@ curl --silent --show-error --request POST 'http://127.0.0.1:9002/getBody' \
   --header "Authorization: Bearer $SESSION_ID" \
   --data '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
 
+curl --silent --show-error --request POST 'http://127.0.0.1:9002/post' \
+  --header "Authorization: Bearer $SESSION_ID" \
+  --data-urlencode 'custom_username=tester' \
+  --data-urlencode 'custom_password=secret'
+
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate' \
   --header 'Content-Type: application/json' \
   --header "Authorization: Bearer $SESSION_ID" \
@@ -210,6 +215,10 @@ Invoke-RestMethod -Method Get -Uri 'http://127.0.0.1:9002/get' -Headers $headers
 Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/getBody' `
   -Headers $headers -ContentType 'application/json' `
   -Body '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
+
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/post' `
+  -Headers $headers -ContentType 'application/x-www-form-urlencoded' `
+  -Body @{ custom_username = 'tester'; custom_password = 'secret' }
 
 Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/paginate' `
   -Headers $headers -ContentType 'application/json' `
