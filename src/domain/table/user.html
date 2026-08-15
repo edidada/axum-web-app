@@ -1,13 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
 <select id="select_page">
-    select * from user
+    select * from "user"
     <where>
-        <if test="dto.name != null">
-            and name = #{dto.name}
+        <if test="dto.name != null && dto.name != ''">
+            and name like '%' || #{dto.name} || '%'
         </if>
-        <if test="dto.phone != null">
-            and phone = #{dto.phone}
+        <if test="dto.phone != null && dto.phone != ''">
+            and phone like '%' || #{dto.phone} || '%'
         </if>
         <if test="dto.status != null">
             and status = #{dto.status}

@@ -57,7 +57,7 @@ pub async fn login_handler(
             Json(serde_json::json!({
                 "code": 1,
                 "status": "error",
-                "message": "Invalid username or password"
+                "message": "用户名或密码错误"
             }))
         )
     }

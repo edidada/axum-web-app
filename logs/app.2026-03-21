@@ -1,0 +1,463 @@
+2026-03-22 03:08:50.352833  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9001
+2026-03-22 03:18:13.975549  INFO main: thread ThreadId(1),Listening on 127.0.0.1:9002
+2026-03-22 03:18:48.037831 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:18:48.038015 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:18:48.038473 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:18:48.040187 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:18:48.040311 DEBUG hyper::proto::h1::conn: incoming body is content-length (40 bytes)
+2026-03-22 03:18:48.040497 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:18:48.040653 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:18:48.040819 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "40", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9"}
+2026-03-22 03:18:48.044297  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:18:48.044787  INFO main::middleware::request_logging: Response: POST /api/login - 401 Unauthorized in 4.099322ms
+2026-03-22 03:18:48.044888 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "64"}
+2026-03-22 03:18:48.045580 DEBUG hyper::proto::h1::io: flushed 363 bytes
+2026-03-22 03:19:01.291206 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:19:01.291567 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:19:31.591596 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:19:31.591941 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:31.592797 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:19:31.595066 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:19:31.595156 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-22 03:19:31.595361 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:19:31.595628 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:19:31.595991 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9"}
+2026-03-22 03:19:31.600617  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:19:42.765454 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:19:42.765928 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:42.766850 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:19:42.790680 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:19:42.791053 DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+2026-03-22 03:19:42.791347 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:19:42.791713 DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+2026-03-22 03:19:42.791895 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "2", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-22 03:19:42.796162  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 401 Unauthorized in 4.547117ms
+2026-03-22 03:19:42.796266 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "30"}
+2026-03-22 03:19:42.798115 DEBUG hyper::proto::h1::io: flushed 338 bytes
+2026-03-22 03:19:45.124929 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:19:45.749588 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:19:45.749701 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:45.750163 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:19:45.754458 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:19:45.754548 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:45.755220 DEBUG main::middleware::request_logging: Request: POST /api/logout
+2026-03-22 03:19:45.755379 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "0", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-22 03:19:45.758494  INFO main::middleware::request_logging: Response: POST /api/logout - 401 Unauthorized in 3.252661ms
+2026-03-22 03:19:45.758626 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/plain; charset=utf-8", "content-length": "30"}
+2026-03-22 03:19:45.758990 DEBUG hyper::proto::h1::io: flushed 338 bytes
+2026-03-22 03:19:47.267616 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:19:47.267729 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:47.268038 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:19:47.270703 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:19:47.270793 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-22 03:19:47.270976 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:19:47.271103 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:19:47.271197 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-22 03:19:47.272851  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:19:47.276224 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:19:47.276303 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-22 03:19:47.276432 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:19:47.276630 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:19:47.276795 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-22 03:19:47.278261  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:19:56.755715 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:19:56.755850 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:56.756150 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:19:56.764747 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:19:56.764880 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-22 03:19:56.765190 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:19:56.765316 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:19:56.765453 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8"}
+2026-03-22 03:19:56.767506  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:19:56.770943  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 3.770239ms
+2026-03-22 03:19:56.772408 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+2026-03-22 03:19:56.772704 DEBUG hyper::proto::h1::io: flushed 460 bytes
+2026-03-22 03:19:56.864782 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:19:56.865030 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:19:56.869196 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:19:56.876521 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:19:56.876603 DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+2026-03-22 03:19:56.876773 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:19:56.877140 DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+2026-03-22 03:19:56.877626 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "2", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:19:56.899695 DEBUG main::routes: Request body for /api/sys-dict/list (JSON): {}
+2026-03-22 03:19:56.933961 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300097] => `select count(1) as count from sys_dict` []
+2026-03-22 03:19:57.078591 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300097] <= len=1
+2026-03-22 03:19:57.079225 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300098] => `select id ,name ,code ,state ,create_date from sys_dict order by create_date desc limit 1000 offset 0` []
+2026-03-22 03:19:57.255892 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300098] <= len=6
+2026-03-22 03:19:57.256603 DEBUG main::routes: Response body for /api/sys-dict/list (JSON): [{"id":"13495353817396943331","name":"232","code":"232","value":null,"sort":null,"remark":null,"state":null,"create_date":null},{"id":"1","name":"字典项1","code":"dict_001","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"2","name":"字典项2","code":"dict_002","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"3","name":"字典项3","code":"dict_003","value":null,"sort":null,"remark":null,"state":0,"create_date":"20260319 075556"},{"id":"4","name":"用户状态","code":"user_status","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"5","name":"订单状态","code":"order_status","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"}]
+2026-03-22 03:19:57.257559  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 380.483888ms
+2026-03-22 03:19:57.257662 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "789"}
+2026-03-22 03:19:57.258046 DEBUG hyper::proto::h1::io: flushed 1079 bytes
+2026-03-22 03:20:08.217580 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:20:08.217721 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:20:08.218147 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:20:08.219972 DEBUG hyper::proto::h1::io: parsed 16 headers
+2026-03-22 03:20:08.220027 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-22 03:20:08.220136 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:20:08.220234 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:20:08.220349 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9"}
+2026-03-22 03:20:08.222005  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:20:08.222957  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 2.672485ms
+2026-03-22 03:20:08.223075 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=f16d8dad-c14e-4b3f-8754-77c591f933f5; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+2026-03-22 03:20:08.223266 DEBUG hyper::proto::h1::io: flushed 460 bytes
+2026-03-22 03:20:08.250029 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:20:08.250126 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:20:08.250630 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:20:08.251695 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:20:08.251804 DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+2026-03-22 03:20:08.252117 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:20:08.252304 DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+2026-03-22 03:20:08.252509 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "2", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9", "cookie": "session=f16d8dad-c14e-4b3f-8754-77c591f933f5"}
+2026-03-22 03:20:08.255216 DEBUG main::routes: Request body for /api/sys-dict/list (JSON): {}
+2026-03-22 03:20:08.346839 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300100] => `select count(1) as count from sys_dict` []
+2026-03-22 03:20:08.347550 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300100] <= len=1
+2026-03-22 03:20:08.347744 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300101] => `select id ,name ,code ,state ,create_date from sys_dict order by create_date desc limit 1000 offset 0` []
+2026-03-22 03:20:08.348435 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300101] <= len=6
+2026-03-22 03:20:08.348844 DEBUG main::routes: Response body for /api/sys-dict/list (JSON): [{"id":"13495353817396943331","name":"232","code":"232","value":null,"sort":null,"remark":null,"state":null,"create_date":null},{"id":"1","name":"字典项1","code":"dict_001","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"2","name":"字典项2","code":"dict_002","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"3","name":"字典项3","code":"dict_003","value":null,"sort":null,"remark":null,"state":0,"create_date":"20260319 075556"},{"id":"4","name":"用户状态","code":"user_status","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"5","name":"订单状态","code":"order_status","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"}]
+2026-03-22 03:20:08.349269  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 96.978068ms
+2026-03-22 03:20:08.349357 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "789"}
+2026-03-22 03:20:08.349561 DEBUG hyper::proto::h1::io: flushed 1079 bytes
+2026-03-22 03:21:12.774737 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:21:12.776002 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:21:33.517693 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:33.517816 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:33.518144 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:33.527886 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:33.527969 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-22 03:21:33.528126 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:33.528361 DEBUG main::middleware::request_logging: Request: POST /address-book/select-page
+2026-03-22 03:21:33.534271 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "24", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:33.566120 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300103] => `select count(1) as count from address_book where is_deleted = 0` []
+2026-03-22 03:21:33.641641 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300103] <= len=1
+2026-03-22 03:21:33.642025 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300104] => `select * from address_book where is_deleted = 0 order by create_time desc limit 10 offset 0` []
+2026-03-22 03:21:33.644185 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300104] <= len=3
+2026-03-22 03:21:33.644953  INFO main::middleware::request_logging: Response: POST /address-book/select-page - 200 OK in 116.611277ms
+2026-03-22 03:21:33.645085 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1245"}
+2026-03-22 03:21:33.645308 DEBUG hyper::proto::h1::io: flushed 1536 bytes
+2026-03-22 03:21:34.299743 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:34.299894 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:34.300313 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:34.309102 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:34.309218 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-22 03:21:34.309342 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:34.309465 DEBUG main::middleware::request_logging: Request: POST /category/select-page
+2026-03-22 03:21:34.309660 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "24", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:34.334651 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300106] => `select count(1) as count from category` []
+2026-03-22 03:21:34.338764 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300106] <= len=1
+2026-03-22 03:21:34.342142 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300107] => `select * from category order by sort limit 10 offset 0` []
+2026-03-22 03:21:34.345169 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300107] <= len=5
+2026-03-22 03:21:34.346001  INFO main::middleware::request_logging: Response: POST /category/select-page - 200 OK in 36.479796ms
+2026-03-22 03:21:34.346168 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "826"}
+2026-03-22 03:21:34.346643 DEBUG hyper::proto::h1::io: flushed 1116 bytes
+2026-03-22 03:21:35.758205 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:35.758943 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:35.759384 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:35.766574 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:35.766672 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-22 03:21:35.766818 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:35.767078 DEBUG main::middleware::request_logging: Request: POST /dish/select-page
+2026-03-22 03:21:35.767222 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "24", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:35.782232 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300109] => `select count(1) as count from dish` []
+2026-03-22 03:21:35.792767 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300109] <= len=1
+2026-03-22 03:21:35.793100 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300110] => `select * from dish order by sort limit 10 offset 0` []
+2026-03-22 03:21:35.802665 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300110] <= len=5
+2026-03-22 03:21:35.808465  INFO main::middleware::request_logging: Response: POST /dish/select-page - 200 OK in 41.374315ms
+2026-03-22 03:21:35.808933 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "1313"}
+2026-03-22 03:21:35.809579 DEBUG hyper::proto::h1::io: flushed 1604 bytes
+2026-03-22 03:21:36.184086 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:36.184284 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:36.185273 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:36.210996 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:36.212131 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-22 03:21:36.212512 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:36.212804 DEBUG main::middleware::request_logging: Request: POST /dish-flavor/select-page
+2026-03-22 03:21:36.213235 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "24", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:36.250718 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300112] => `select count(1) as count from dish_flavor where is_deleted = 0` []
+2026-03-22 03:21:36.259744 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300112] <= len=1
+2026-03-22 03:21:36.260006 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300113] => `select * from dish_flavor where is_deleted = 0 order by create_time limit 10 offset 0` []
+2026-03-22 03:21:36.261571 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300113] <= len=5
+2026-03-22 03:21:36.262464  INFO main::middleware::request_logging: Response: POST /dish-flavor/select-page - 200 OK in 49.664455ms
+2026-03-22 03:21:36.262640 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "963"}
+2026-03-22 03:21:36.262890 DEBUG hyper::proto::h1::io: flushed 1253 bytes
+2026-03-22 03:21:36.868038 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:36.868464 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:36.868932 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:36.881344 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:36.881615 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-22 03:21:36.881798 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:36.882010 DEBUG main::middleware::request_logging: Request: POST /employee/select-page
+2026-03-22 03:21:36.882427 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "24", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:36.900652 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300115] => `select count(1) as count from employee` []
+2026-03-22 03:21:36.915124 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300115] <= len=1
+2026-03-22 03:21:36.915701 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300116] => `select * from employee order by create_time limit 10 offset 0` []
+2026-03-22 03:21:36.923663 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300116] <= len=3
+2026-03-22 03:21:36.925464  INFO main::middleware::request_logging: Response: POST /employee/select-page - 200 OK in 43.322455ms
+2026-03-22 03:21:36.925618 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "784"}
+2026-03-22 03:21:36.934926 DEBUG hyper::proto::h1::io: flushed 1074 bytes
+2026-03-22 03:21:37.252870 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:37.253119 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:37.253522 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:37.282678 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:37.282905 DEBUG hyper::proto::h1::conn: incoming body is content-length (24 bytes)
+2026-03-22 03:21:37.283211 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:37.283538 DEBUG main::middleware::request_logging: Request: POST /user/select-page
+2026-03-22 03:21:37.284377 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "24", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:37.361668 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300118] => `select count(1) as count from "user"` []
+2026-03-22 03:21:37.373148 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300118] <= len=1
+2026-03-22 03:21:37.373431 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300119] => `select * from "user" order by id limit 10 offset 0` []
+2026-03-22 03:21:37.381172 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300119] <= len=3
+2026-03-22 03:21:37.381988  INFO main::middleware::request_logging: Response: POST /user/select-page - 200 OK in 98.431263ms
+2026-03-22 03:21:37.382258 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "375"}
+2026-03-22 03:21:37.382477 DEBUG hyper::proto::h1::io: flushed 665 bytes
+2026-03-22 03:21:37.814433 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:37.814540 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:37.816354 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:37.820538 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:37.820628 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:37.825742 DEBUG main::middleware::request_logging: Request: POST /api/logout
+2026-03-22 03:21:37.826156 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "0", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:37.832474  INFO main::middleware::request_logging: Response: POST /api/logout - 200 OK in 6.933788ms
+2026-03-22 03:21:37.832542 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "text/html; charset=utf-8", "content-length": "23"}
+2026-03-22 03:21:37.832707 DEBUG hyper::proto::h1::io: flushed 320 bytes
+2026-03-22 03:21:38.865740 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:38.866109 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:38.869380 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:38.885716 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:38.885963 DEBUG hyper::proto::h1::conn: incoming body is content-length (46 bytes)
+2026-03-22 03:21:38.886173 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:38.894330 DEBUG main::middleware::request_logging: Request: POST /api/login
+2026-03-22 03:21:38.894506 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "46", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=ada85b19-2ea2-4326-bb77-bbeb1e7fb430"}
+2026-03-22 03:21:38.899131  INFO main::handlers::login_handler: Configuration: {
+  "auth": {
+    "username": "edidada",
+    "password": "Pass123Qwe"
+  },
+  "webapp": {
+    "port": 9002,
+    "redisurl": "redis://127.0.0.1:6379"
+  },
+  "redis": {
+    "ip": "127.0.0.1",
+    "port": 6379,
+    "expiration": 3600,
+    "key_prefix": "session:"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  },
+  "database": {
+    "db_type": "mysql",
+    "host": "127.0.0.1",
+    "port": 3306,
+    "username": "root",
+    "password": "",
+    "database": "ruiji"
+  }
+}
+2026-03-22 03:21:38.906809  INFO main::middleware::request_logging: Response: POST /api/login - 200 OK in 12.131662ms
+2026-03-22 03:21:38.906941 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "set-cookie": "session=39ca19e1-0d92-45a9-b2e4-3f986573fd1e; Path=/; HttpOnly; Max-Age=3600", "content-length": "81"}
+2026-03-22 03:21:38.907271 DEBUG hyper::proto::h1::io: flushed 460 bytes
+2026-03-22 03:21:39.006160 DEBUG hyper::proto::h1::io: parsed 13 headers
+2026-03-22 03:21:39.006268 DEBUG hyper::proto::h1::conn: incoming body is empty
+2026-03-22 03:21:39.006713 DEBUG hyper::proto::h1::io: flushed 386 bytes
+2026-03-22 03:21:39.010676 DEBUG hyper::proto::h1::io: parsed 17 headers
+2026-03-22 03:21:39.010764 DEBUG hyper::proto::h1::conn: incoming body is content-length (2 bytes)
+2026-03-22 03:21:39.011006 DEBUG hyper::proto::h1::conn: incoming body completed
+2026-03-22 03:21:39.011186 DEBUG main::middleware::request_logging: Request: POST /api/sys-dict/list
+2026-03-22 03:21:39.011449 DEBUG main::middleware::request_logging: Headers: {"host": "localhost:9002", "connection": "keep-alive", "content-length": "2", "sec-ch-ua-platform": "\"macOS\"", "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36", "sec-ch-ua": "\"Chromium\";v=\"146\", \"Not-A.Brand\";v=\"24\", \"Google Chrome\";v=\"146\"", "content-type": "application/json", "sec-ch-ua-mobile": "?0", "accept": "*/*", "origin": "http://localhost:5173", "sec-fetch-site": "same-site", "sec-fetch-mode": "cors", "sec-fetch-dest": "empty", "referer": "http://localhost:5173/", "accept-encoding": "gzip, deflate, br, zstd", "accept-language": "zh-CN,zh;q=0.9,en;q=0.8", "cookie": "session=39ca19e1-0d92-45a9-b2e4-3f986573fd1e"}
+2026-03-22 03:21:39.015696 DEBUG main::routes: Request body for /api/sys-dict/list (JSON): {}
+2026-03-22 03:21:39.048863 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300121] => `select count(1) as count from sys_dict` []
+2026-03-22 03:21:39.054668 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300121] <= len=1
+2026-03-22 03:21:39.055484 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300122] => `select id ,name ,code ,state ,create_date from sys_dict order by create_date desc limit 1000 offset 0` []
+2026-03-22 03:21:39.058976 DEBUG rbatis::plugin::intercept::intercept_log: [rb] [7441201516855300122] <= len=6
+2026-03-22 03:21:39.059675 DEBUG main::routes: Response body for /api/sys-dict/list (JSON): [{"id":"13495353817396943331","name":"232","code":"232","value":null,"sort":null,"remark":null,"state":null,"create_date":null},{"id":"1","name":"字典项1","code":"dict_001","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"2","name":"字典项2","code":"dict_002","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"3","name":"字典项3","code":"dict_003","value":null,"sort":null,"remark":null,"state":0,"create_date":"20260319 075556"},{"id":"4","name":"用户状态","code":"user_status","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"},{"id":"5","name":"订单状态","code":"order_status","value":null,"sort":null,"remark":null,"state":1,"create_date":"20260319 075556"}]
+2026-03-22 03:21:39.060254  INFO main::middleware::request_logging: Response: POST /api/sys-dict/list - 200 OK in 49.05285ms
+2026-03-22 03:21:39.060374 DEBUG main::middleware::request_logging: Response Headers: {"content-type": "application/json", "content-length": "789"}
+2026-03-22 03:21:39.060616 DEBUG hyper::proto::h1::io: flushed 1079 bytes
+2026-03-22 03:26:44.060636 DEBUG hyper::proto::h1::conn: read eof
+2026-03-22 03:26:44.060653 DEBUG hyper::proto::h1::conn: read eof

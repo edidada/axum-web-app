@@ -4,20 +4,18 @@ use std::net::SocketAddr;
 use std::{fs, thread};
 use chrono::Local;
 use tracing_subscriber::{fmt, Registry, EnvFilter};
-use tracing_subscriber::fmt::format::{Format, Writer};
+use tracing_subscriber::fmt::format::Writer;
 use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use redis::Client;
 use tower::ServiceBuilder;
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use tracing_appender::non_blocking::{WorkerGuard};
-use tracing_subscriber::fmt::{FmtContext, FormatEvent, FormatFields};
-use tracing_subscriber::registry::LookupSpan;
 use crate::config::Config;
 use rbatis::rbatis::RBatis;
+use crate::handlers::health_handler::init_start_time;
 
 // 导入数据库驱动
-use rbdc_mysql::driver::MysqlDriver;
 use rbdc_pg::driver::PgDriver;
 
 mod handlers;
@@ -25,6 +23,7 @@ mod routes;
 mod middleware;
 mod config;
 mod domain;
+mod infrastructure;
 
 // 定义静态的 RBatis 实例
 static mut RB: Option<RBatis> = None;
@@ -34,18 +33,10 @@ async fn init_rbatis() -> Result<(), Box<dyn Error>> {
     let config = Config::from_file();
     let rb = RBatis::new();
     
-    // 根据配置选择数据库驱动
-    let db_url = config.get_database_url();
-    
-    if config.is_postgresql() {
-        // PostgreSQL 连接
-        tracing::info!("Initializing PostgreSQL connection to {}", config.database.host);
-        rb.init(PgDriver {}, &db_url)?;
-    } else {
-        // MySQL 连接 (默认)
-        tracing::info!("Initializing MySQL connection to {}", config.database.host);
-        rb.init(MysqlDriver {}, &db_url)?;
-    }
+    // 直接使用 PostgreSQL 配置
+    let db_url = "postgres://ibqo:@127.0.0.1:5432/axum_db";
+    tracing::info!("Initializing PostgreSQL connection to 127.0.0.1:5432");
+    rb.init(PgDriver {}, db_url)?;
     
     unsafe {
         RB = Some(rb);
@@ -62,8 +53,16 @@ fn get_rbatis() -> &'static RBatis {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    // 初始化启动时间（用于健康检查）
+    init_start_time();
+    
     // 初始化 RBatis
     init_rbatis().await?;
+    
+    // 初始化 MinIO 客户端
+    if let Err(e) = infrastructure::minio_client::init_minio_client().await {
+        tracing::warn!("Failed to initialize MinIO client: {}", e);
+    }
 
     let _guard = set_format_log();
 
@@ -117,8 +116,9 @@ fn set_format_log() -> WorkerGuard {
     
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
 
-    // 创建一个滚动文件追加器
-    let file_appender = tracing_appender::rolling::daily("logs", "app.log");
+    // 创建一个按日期轮转的文件追加器
+    // 每天0点自动创建新的日志文件，文件名格式: app.YYYY-MM-DD.log
+    let file_appender = tracing_appender::rolling::daily("logs", "app");
     let (non_blocking, guard) = tracing_appender::non_blocking(file_appender);
 
     // 创建一个日志记录器层，将日志输出到文件

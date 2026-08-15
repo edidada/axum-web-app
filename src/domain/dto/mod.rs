@@ -10,3 +10,4 @@ pub mod setmeal_dto;
 pub mod setmeal_dish_dto;
 pub mod shopping_cart_dto;
 pub mod user_dto;
+pub mod join_dto;

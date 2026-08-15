@@ -3,11 +3,11 @@
 <select id="select_page">
     `select id ,name ,code ,state ,create_date from sys_dict`
     <where>
-        <if test="dto.code != null">
-            ` and code = #{dto.code}`
+        <if test="dto.code != null && dto.code != ''">
+            ` and code like '%' || #{dto.code} || '%'`
         </if>
-        <if test="dto.name != null">
-            ` and name = #{dto.name}`
+        <if test="dto.name != null && dto.name != ''">
+            ` and name like '%' || #{dto.name} || '%'`
         </if>
     </where>
     <if test="do_count == false">

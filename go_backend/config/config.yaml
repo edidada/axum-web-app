@@ -1,0 +1,28 @@
+auth:
+  username: edidada
+  password: Pass123Qwe
+
+webapp:
+  port: 9003
+  redisurl: "redis://127.0.0.1:6379"
+
+redis:
+  ip: 127.0.0.1
+  port: 6379
+  expiration: 3600
+  key_prefix: "session:"
+
+database:
+  db_type: postgresql
+  host: 127.0.0.1
+  port: 5432
+  username: ibqo
+  password: ""
+  database: axum_db
+
+minio:
+  endpoint: localhost:9000
+  access_key: minioadmin
+  secret_key: minioadmin
+  use_ssl: false
+  bucket: images

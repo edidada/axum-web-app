@@ -55,15 +55,15 @@ where
 
         // 从 Authorization 头部或 Cookie 中获取 session_id
         let session_id = extract_session_id(req)
-            .ok_or((StatusCode::UNAUTHORIZED, "Missing or invalid session"))?;
+            .ok_or((StatusCode::UNAUTHORIZED, "缺少或无效的会话"))?;
 
         let mut conn = redis_client.get_async_connection().await.map_err(|_| {
-            (StatusCode::INTERNAL_SERVER_ERROR, "Failed to connect to Redis")
+            (StatusCode::INTERNAL_SERVER_ERROR, "Redis连接失败")
         })?;
 
         let key = format!("{}{}", config.redis.key_prefix, session_id);
         let username: Option<String> = conn.get(&key).await.map_err(|_| {
-            (StatusCode::INTERNAL_SERVER_ERROR, "Failed to query Redis")
+            (StatusCode::INTERNAL_SERVER_ERROR, "Redis查询失败")
         })?;
 
         if let Some(username) = username {
@@ -71,7 +71,7 @@ where
             req.extensions_mut().insert(session_id.clone());
             Ok(ValidSession(username))
         } else {
-            Err((StatusCode::UNAUTHORIZED, "Invalid session"))
+            Err((StatusCode::UNAUTHORIZED, "会话无效"))
         }
     }
 }
@@ -115,5 +115,5 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
         }
     }
 
-    (StatusCode::UNAUTHORIZED, "Invalid session").into_response()
+    (StatusCode::UNAUTHORIZED, "会话无效，请重新登录").into_response()
 }

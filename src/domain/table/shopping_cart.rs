@@ -13,7 +13,7 @@ pub struct ShoppingCart {
     pub setmeal_id: Option<String>,
     pub dish_flavor: Option<String>,
     pub number: Option<i32>,
-    pub amount: Option<f64>,
+    pub amount: Option<String>,
     pub create_time: Option<DateTime>,
 }
 

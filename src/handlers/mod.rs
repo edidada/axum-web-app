@@ -1,6 +1,9 @@
-pub mod get_handler;
+pub mod health_handler;
 pub mod post_handler;
 pub mod login_handler;
 pub mod logout_handler;
 pub mod paginate_handler;
 pub mod crud_handler;
+pub mod report_handler;
+pub mod image_handler;
+pub mod image_sync_handler;

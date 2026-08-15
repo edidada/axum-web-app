@@ -3,14 +3,14 @@
 <select id="select_page">
     select * from employee
     <where>
-        <if test="dto.name != null">
-            and name = #{dto.name}
+        <if test="dto.name != null && dto.name != ''">
+            and name like '%' || #{dto.name} || '%'
         </if>
-        <if test="dto.username != null">
-            and username = #{dto.username}
+        <if test="dto.username != null && dto.username != ''">
+            and username like '%' || #{dto.username} || '%'
         </if>
-        <if test="dto.phone != null">
-            and phone = #{dto.phone}
+        <if test="dto.phone != null && dto.phone != ''">
+            and phone like '%' || #{dto.phone} || '%'
         </if>
         <if test="dto.status != null">
             and status = #{dto.status}
