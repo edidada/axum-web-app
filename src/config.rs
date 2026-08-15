@@ -21,6 +21,12 @@ pub struct RedisConfig {
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct JwtConfig {
+    pub secret: String,
+    pub expiration: usize,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct DbConfig {
     pub db_type: String,
     pub url: Option<String>,
@@ -36,6 +42,7 @@ pub struct Config {
     pub auth: AuthConfig,
     pub webapp: WebappConfig,
     pub redis: RedisConfig,
+    pub jwt: JwtConfig,
     pub database: DbConfig,
 }
 
@@ -54,6 +61,8 @@ impl Config {
         settings.set_default("redis.port", 6379)?;
         settings.set_default("redis.expiration", 3600)?;
         settings.set_default("redis.key_prefix", "session:")?;
+        settings.set_default("jwt.secret", "change-this-development-jwt-secret-before-production")?;
+        settings.set_default("jwt.expiration", 3600)?;
         settings.set_default("database.db_type", "sqlite")?;
 
         settings.merge(config::File::with_name("config/default").required(true))?;

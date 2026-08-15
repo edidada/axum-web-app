@@ -23,6 +23,7 @@ mod handlers;
 mod routes;
 mod middleware;
 mod config;
+mod jwt;
 mod domain;
 #[cfg(feature = "minio")]
 mod infrastructure;

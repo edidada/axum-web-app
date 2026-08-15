@@ -6,6 +6,7 @@ use axum::{
 use redis::{AsyncCommands, Client};
 
 use crate::config::Config;
+use crate::jwt;
 
 fn extract_session_id<B>(req: &Request<B>) -> Option<String> {
     req.headers().get("Authorization")
@@ -35,6 +36,14 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
         None => return (StatusCode::UNAUTHORIZED, "缺少或无效的会话").into_response(),
     };
 
+    let claims = match jwt::validate(&session_id, &config.jwt) {
+        Ok(claims) => claims,
+        Err(error) => {
+            tracing::warn!(reason = %error, "JWT rejected");
+            return (StatusCode::UNAUTHORIZED, "JWT无效、已过期或签名不匹配").into_response();
+        }
+    };
+
     let mut conn = match redis_client.get_multiplexed_async_connection().await {
         Ok(conn) => conn,
         Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "Redis连接失败").into_response(),
@@ -48,6 +57,7 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl Int
         return (StatusCode::UNAUTHORIZED, "会话无效，请重新登录").into_response();
     }
 
+    req.extensions_mut().insert(claims);
     req.extensions_mut().insert(session_id);
     next.run(req).await
 }

@@ -9,6 +9,8 @@ use tower::ServiceBuilder;
 
 #[path = "../config.rs"]
 mod config;
+#[path = "../jwt.rs"]
+mod jwt;
 #[path = "../domain/mod.rs"]
 mod domain;
 #[path = "../handlers/mod.rs"]
@@ -71,10 +73,16 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .await?;
     assert_eq!(login.status(), StatusCode::OK);
     let valid_login_status = login.status();
-    let session_id = login.json::<Value>().await?["session_id"]
+    let login_json = login.json::<Value>().await?;
+    let session_id = login_json["session_id"]
         .as_str()
         .expect("login returns session_id")
         .to_owned();
+    let access_token = login_json["access_token"]
+        .as_str()
+        .expect("login returns access_token");
+    assert_eq!(session_id, access_token, "session_id remains a JWT compatibility alias");
+    assert_eq!(access_token.split('.').count(), 3, "JWT has header.payload.signature");
     let auth = format!("Bearer {session_id}");
 
     let get_body = client.get(format!("{base}/get")).header("Authorization", &auth).send().await?.text().await?;

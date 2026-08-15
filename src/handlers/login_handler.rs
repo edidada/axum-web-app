@@ -6,9 +6,9 @@ use axum::{
 };
 use redis::AsyncCommands;
 use serde::Deserialize;
-use uuid::Uuid;
 
 use crate::config::Config;
+use crate::jwt;
 
 #[derive(Deserialize)]
 pub struct LoginRequest {
@@ -32,8 +32,11 @@ pub async fn login_handler(
         Ok(conn) => conn,
         Err(error) => return (StatusCode::INTERNAL_SERVER_ERROR, format!("Redis连接失败: {error}")).into_response(),
     };
-    let session_id = Uuid::new_v4().to_string();
-    let key = format!("{}{}", config.redis.key_prefix, session_id);
+    let (access_token, claims) = match jwt::issue(&payload.username, &config.jwt) {
+        Ok(token) => token,
+        Err(error) => return (StatusCode::INTERNAL_SERVER_ERROR, error).into_response(),
+    };
+    let key = format!("{}{}", config.redis.key_prefix, access_token);
     if let Err(error) = conn.set_ex::<_, _, ()>(&key, &payload.username, config.redis.expiration as u64).await {
         return (StatusCode::INTERNAL_SERVER_ERROR, format!("保存会话失败: {error}")).into_response();
     }
@@ -41,11 +44,15 @@ pub async fn login_handler(
     let mut headers = HeaderMap::new();
     headers.insert(
         axum::http::header::SET_COOKIE,
-        HeaderValue::from_str(&format!("session={session_id}; Path=/; HttpOnly; Max-Age={}", config.redis.expiration)).expect("valid session cookie"),
+        HeaderValue::from_str(&format!("session={access_token}; Path=/; HttpOnly; Max-Age={}", config.redis.expiration)).expect("valid session cookie"),
     );
     (StatusCode::OK, headers, Json(serde_json::json!({
         "code": 0,
         "status": "success",
-        "session_id": session_id
+        "session_id": access_token,
+        "access_token": access_token,
+        "token_type": "Bearer",
+        "expires_in": config.jwt.expiration,
+        "jti": claims.jti
     }))).into_response()
 }

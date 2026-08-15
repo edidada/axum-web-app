@@ -152,6 +152,14 @@ $env:APP_PROFILE = 'mysql'; cargo run --bin main
 $env:APP_PROFILE = 'postgresql'; cargo run --bin main
 ```
 
+### JWT Authentication and Logs
+
+`POST http://127.0.0.1:9002/api/login` now returns an HS256 JWT in `access_token` (with `session_id` retained as a compatibility alias). The claims contain `sub` (user), `iat` (issued-at), `exp` (expiration), and `jti` (token ID). Protected endpoints require `Authorization: Bearer <access_token>`.
+
+Redis still records the active token, so `POST http://127.0.0.1:9002/api/logout` invalidates the token immediately even before its JWT expiration time. Configure the signing key and lifetime under `[jwt]` in `config/default.toml`; replace the development key before production.
+
+The application logs JWT issuance and validation at `INFO` level. To show the signing/validation flow safely, logs include the algorithm, decoded header, claims, and a short token prefix—but never the signing secret or complete bearer token.
+
 ## Usage
 
 Once the application is running, you can access it at `http://127.0.0.1:9002`. You can test the endpoints using tools like `curl` or Postman.
@@ -167,34 +175,34 @@ LOGIN_RESPONSE="$(curl --silent --show-error --request POST 'http://127.0.0.1:90
   --header 'Content-Type: application/json' \
   --data '{"username":"edidada","password":"Pass123Qwe"}')"
 
-SESSION_ID="$(printf '%s' "$LOGIN_RESPONSE" | sed -n 's/.*"session_id":"\([^"]*\)".*/\1/p')"
-test -n "$SESSION_ID" || { echo "Login failed: $LOGIN_RESPONSE"; exit 1; }
+ACCESS_TOKEN="$(printf '%s' "$LOGIN_RESPONSE" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')"
+test -n "$ACCESS_TOKEN" || { echo "Login failed: $LOGIN_RESPONSE"; exit 1; }
 
 curl --silent --show-error --request GET 'http://127.0.0.1:9002/get' \
-  --header "Authorization: Bearer $SESSION_ID"
+  --header "Authorization: Bearer $ACCESS_TOKEN"
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/getBody' \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $SESSION_ID" \
+  --header "Authorization: Bearer $ACCESS_TOKEN" \
   --data '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/post' \
-  --header "Authorization: Bearer $SESSION_ID" \
+  --header "Authorization: Bearer $ACCESS_TOKEN" \
   --data-urlencode 'custom_username=tester' \
   --data-urlencode 'custom_password=secret'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate' \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $SESSION_ID" \
+  --header "Authorization: Bearer $ACCESS_TOKEN" \
   --data '{"sql":"SELECT id, number, status FROM orders ORDER BY id","page":1,"page_size":2}'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate-with-params' \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $SESSION_ID" \
+  --header "Authorization: Bearer $ACCESS_TOKEN" \
   --data '{"sql":"SELECT id FROM orders WHERE status > ?","page":1,"page_size":2,"params":[0]}'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/api/logout' \
-  --header "Authorization: Bearer $SESSION_ID"
+  --header "Authorization: Bearer $ACCESS_TOKEN"
 ```
 
 #### PowerShell (`Invoke-RestMethod`)
@@ -204,11 +212,11 @@ $loginResponse = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/
   -ContentType 'application/json' `
   -Body '{"username":"edidada","password":"Pass123Qwe"}'
 
-$sessionId = $loginResponse.session_id
-if ([string]::IsNullOrWhiteSpace($sessionId)) {
+$accessToken = $loginResponse.access_token
+if ([string]::IsNullOrWhiteSpace($accessToken)) {
   throw "Login failed: $loginResponse"
 }
-$headers = @{ Authorization = "Bearer $sessionId" }
+$headers = @{ Authorization = "Bearer $accessToken" }
 
 Invoke-RestMethod -Method Get -Uri 'http://127.0.0.1:9002/get' -Headers $headers
 

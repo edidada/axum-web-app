@@ -11,3 +11,8 @@ ip = "127.0.0.1"
 port = 6379
 expiration = 3600
 key_prefix = "session:"
+
+[jwt]
+# 生产环境请通过受管密钥覆盖此值，且不要将真实密钥提交到仓库。
+secret = "change-this-development-jwt-secret-before-production"
+expiration = 3600

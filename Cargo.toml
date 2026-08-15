@@ -67,6 +67,7 @@ rand = "0.8"
 simplelog = "0.12"
 log = "0.4"
 hyper = "0.14"
+jsonwebtoken = "9.3"
 
 [dev-dependencies]
 criterion = "0.5"
