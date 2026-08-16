@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "https://raw.githubusercontent.com/rbatis/rbatis/master/rbatis-codegen/mybatis-3-mapper.dtd">
 <mapper>
 <select id="select_page">
-    select id, category_type, name, sort, create_time, update_time, create_user, update_user from category
+    select id, type as category_type, name, sort, create_time, update_time, create_user, update_user from category
     <where>
         <if test="dto.category_type != null">
-            and category_type = #{dto.category_type}
+            and type = #{dto.category_type}
         </if>
         <if test="dto.name != null && dto.name != ''">
             and name like '%' || #{dto.name} || '%'

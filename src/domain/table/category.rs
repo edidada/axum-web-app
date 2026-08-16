@@ -3,6 +3,9 @@ use crate::domain::dto::category_dto::CategoryPageDTO;
 use rbatis::rbdc::DateTime;
 use rbatis::{crud, html_sql};
 
+// Make Cargo track the mapper file so HTML-only edits re-run `html_sql!` code generation.
+const _: &str = include_str!("category.html");
+
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct Category {
     pub id: Option<String>,
