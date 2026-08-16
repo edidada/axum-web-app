@@ -26,7 +26,7 @@ async fn test_db() -> RBatis {
 
     for statement in [
         "CREATE TABLE address_book (id TEXT, user_id TEXT, consignee TEXT, sex INTEGER, phone TEXT, province_code TEXT, province_name TEXT, city_code TEXT, city_name TEXT, district_code TEXT, district_name TEXT, detail TEXT, label TEXT, is_default INTEGER, create_time TEXT, update_time TEXT, create_user TEXT, update_user TEXT, is_deleted INTEGER)",
-        "CREATE TABLE category (id TEXT, type INTEGER, name TEXT, sort INTEGER, create_time TEXT, update_time TEXT, create_user TEXT, update_user TEXT)",
+        "CREATE TABLE category (id TEXT, category_type INTEGER, name TEXT, sort INTEGER, create_time TEXT, update_time TEXT, create_user TEXT, update_user TEXT)",
         "CREATE TABLE dish (id TEXT, name TEXT, category_id TEXT, price TEXT, code TEXT, image TEXT, description TEXT, status INTEGER, sort INTEGER, create_time TEXT, update_time TEXT, create_user TEXT, update_user TEXT, is_deleted INTEGER)",
         "CREATE TABLE dish_flavor (id TEXT, dish_id TEXT, name TEXT, value TEXT, create_time TEXT, update_time TEXT, create_user TEXT, update_user TEXT, is_deleted INTEGER)",
         "CREATE TABLE employee (id TEXT, name TEXT, username TEXT, password TEXT, phone TEXT, sex INTEGER, id_number TEXT, status INTEGER, create_time TEXT, update_time TEXT, create_user TEXT, update_user TEXT)",
@@ -66,7 +66,7 @@ async fn address_book_html_filters_deleted_and_user() -> Result<(), Box<dyn Erro
 #[tokio::test]
 async fn category_html_filters_type_and_name() -> Result<(), Box<dyn Error>> {
     let rb = test_db().await;
-    insert(&rb, "INSERT INTO category (id,type,name,sort) VALUES ('c-1',1,'Hot dishes',1),('c-2',2,'Cold dishes',2)").await;
+    insert(&rb, "INSERT INTO category (id,category_type,name,sort) VALUES ('c-1',1,'Hot dishes',1),('c-2',2,'Cold dishes',2)").await;
 
     let page = Category::select_page(&rb, &page_request(), &CategoryPageDTO { category_type: Some(1), name: Some("Hot".into()) }).await?;
     assert_eq!(page.total, 1);
@@ -208,7 +208,7 @@ async fn paginate_html_applies_limit_offset_and_count() -> Result<(), Box<dyn Er
 #[tokio::test]
 async fn join_queries_html_executes_all_seven_reports() -> Result<(), Box<dyn Error>> {
     let rb = test_db().await;
-    insert(&rb, "INSERT INTO category (id,type,name,sort) VALUES ('c-1',1,'Main course',1)").await;
+    insert(&rb, "INSERT INTO category (id,category_type,name,sort) VALUES ('c-1',1,'Main course',1)").await;
     insert(&rb, "INSERT INTO dish (id,name,category_id,price,code,image,description,status,sort,is_deleted) VALUES ('d-1','Kung Pao','c-1','20.00','D-1','dish.jpg','spicy',1,1,0)").await;
     insert(&rb, "INSERT INTO dish_flavor (id,dish_id,name,value,is_deleted) VALUES ('f-1','d-1','spice','hot',0)").await;
     insert(&rb, "INSERT INTO setmeal (id,category_id,name,price,status,code,description,image,is_deleted) VALUES ('s-1','c-1','Lunch set','30.00',1,'S-1','daily','set.jpg',0)").await;
