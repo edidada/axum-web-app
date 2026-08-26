@@ -14,20 +14,7 @@ use serde_json::{json, Value};
 use tower::{ServiceBuilder, ServiceExt};
 use uuid::Uuid;
 
-#[path = "../src/auth_session.rs"]
-mod auth_session;
-#[path = "../src/config.rs"]
-mod config;
-#[path = "../src/domain/mod.rs"]
-mod domain;
-#[path = "../src/handlers/mod.rs"]
-mod handlers;
-#[path = "../src/jwt.rs"]
-mod jwt;
-#[path = "../src/middleware/mod.rs"]
-mod middleware;
-#[path = "../src/routes/mod.rs"]
-mod routes;
+use axum_web_app::{auth_session, config, jwt, middleware, routes};
 
 async fn test_app() -> (Router, config::Config, &'static RBatis) {
     std::env::set_var("APP_PROFILE", "sqlite");

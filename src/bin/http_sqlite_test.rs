@@ -10,20 +10,7 @@ use std::{
 use tower::ServiceBuilder;
 use uuid::Uuid;
 
-#[path = "../auth_session.rs"]
-mod auth_session;
-#[path = "../config.rs"]
-mod config;
-#[path = "../domain/mod.rs"]
-mod domain;
-#[path = "../handlers/mod.rs"]
-mod handlers;
-#[path = "../jwt.rs"]
-mod jwt;
-#[path = "../middleware/mod.rs"]
-mod middleware;
-#[path = "../routes/mod.rs"]
-mod routes;
+use axum_web_app::{auth_session, config, jwt, middleware, routes};
 
 fn percentile(values: &[f64], percentile: f64) -> f64 {
     let index = ((values.len() as f64 * percentile).ceil() as usize).saturating_sub(1);

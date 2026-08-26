@@ -103,12 +103,10 @@ This is a simple web application built using the Axum framework in Rust. The app
 axum-web-app
 ├── src
 │   ├── main.rs          # Entry point of the application
-│   ├── handlers         # Contains request handlers
-│   │   └── mod.rs
-│   ├── routes           # Defines application routes
-│   │   └── mod.rs
-│   └── models           # Data models used in the application
-│       └── mod.rs
+│   ├── handlers.rs      # Request handler module entry
+│   ├── handlers         # Request handler submodules
+│   ├── routes.rs        # Application route module entry
+│   └── models.rs        # Data models used in the application
 ├── Cargo.toml           # Cargo configuration file
 └── README.md            # Project documentation
 ```

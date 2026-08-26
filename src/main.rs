@@ -15,21 +15,11 @@ use tracing_subscriber::fmt::time::FormatTime;
 use tracing_subscriber::layer::SubscriberExt;
 use tracing_subscriber::{fmt, EnvFilter, Registry};
 
-use crate::config::Config;
-use crate::handlers::health_handler::init_start_time;
-
-mod auth_session;
-mod config;
-mod domain;
-mod handlers;
-mod jwt;
-mod middleware;
-mod routes;
-
-#[cfg(test)]
-mod html_mapper_tests;
 #[cfg(feature = "minio")]
-mod infrastructure;
+use axum_web_app::infrastructure;
+use axum_web_app::{
+    auth_session, config::Config, handlers::health_handler::init_start_time, middleware, routes,
+};
 
 static RB: OnceCell<RBatis> = OnceCell::new();
 
@@ -155,7 +145,7 @@ impl FormatTime for LocalTimer {
 
 #[cfg(test)]
 mod tests {
-    use crate::domain::table::orders::Orders;
+    use axum_web_app::domain::table::orders::Orders;
     use rbatis::RBatis;
     use rbdc_sqlite::SqliteDriver;
 

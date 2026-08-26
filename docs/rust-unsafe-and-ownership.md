@@ -92,7 +92,7 @@ tasks.push(tokio::spawn(async move {
 
 `reqwest::Client::clone()` 只是增加内部共享状态的引用计数，成本远低于复制整个连接池；`String::clone()` 则会复制字符数据。二者虽然都写作 `clone()`，成本模型不同。
 
-`src/routes/mod.rs` 的多个 `async move` handler closure 会把 extractor 已交给 closure 的 `payload` 和复制出来的引用移入其 future。这样数据能跨 `.await`，同时由类型系统阻止悬垂引用。
+`src/routes.rs` 的多个 `async move` handler closure 会把 extractor 已交给 closure 的 `payload` 和复制出来的引用移入其 future。这样数据能跨 `.await`，同时由类型系统阻止悬垂引用。
 
 ### 4. 消费型转换：`into_iter` 与 `into_response`
 
