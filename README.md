@@ -138,7 +138,7 @@ axum-web-app
 
 ## Database Profiles
 
-The server selects its database configuration through `APP_PROFILE`. The default is `sqlite`; use `postgresql` or `mysql` to load `config/postgresql.toml` or `config/mysql.toml` respectively. Shared authentication, HTTP, and Redis settings remain in `config/default.toml`.
+The server selects its database configuration through `APP_PROFILE`. The default is `sqlite`; use `postgresql` or `mysql` to load `config/postgresql.toml` or `config/mysql.toml` respectively. Shared authentication, HTTP, JWT, and browser-security settings remain in `config/default.toml`.
 
 ```bash
 APP_PROFILE=sqlite cargo run --bin main
@@ -154,11 +154,11 @@ $env:APP_PROFILE = 'postgresql'; cargo run --bin main
 
 ### JWT Authentication and Logs
 
-`POST http://127.0.0.1:9002/api/login` now returns an HS256 JWT in `access_token` (with `session_id` retained as a compatibility alias). The claims contain `sub` (user), `iat` (issued-at), `exp` (expiration), and `jti` (token ID). Protected endpoints require `Authorization: Bearer <access_token>`.
+`POST http://127.0.0.1:9002/api/login` signs an HS256 JWT whose claims include `sub`, `role`, `iat`, `exp`, `jti`, `iss`, and `aud`. Browser responses store it only in an `HttpOnly; SameSite=Lax` cookie; the JSON body intentionally contains neither `access_token` nor `session_id`. The frontend never stores credentials in `localStorage`.
 
-Redis still records the active token, so `POST http://127.0.0.1:9002/api/logout` invalidates the token immediately even before its JWT expiration time. Configure the signing key and lifetime under `[jwt]` in `config/default.toml`; replace the development key before production.
+SQLite records each active `jti`, role, expiration, and CSRF digest. Logout marks that session revoked, so replay fails immediately even before JWT expiration. Cookie-authenticated POST/PUT/PATCH/DELETE requests must send the readable `csrf_token` cookie value in `X-CSRF-Token`; Bearer remains supported for non-browser clients that obtain the token from `Set-Cookie` outside browser JavaScript.
 
-The application logs JWT issuance and validation at `INFO` level. To show the signing/validation flow safely, logs include the algorithm, decoded header, claims, and a short token prefix—but never the signing secret or complete bearer token.
+The application logs only JWT algorithm and non-secret session metadata. It never logs the signing secret, token, `Authorization`, `Cookie`, or `Set-Cookie`. See `docs/auth-security-design.md` for the方案 comparison and deployment requirements. In production override the development values with `APP_JWT__SECRET`, `APP_AUTH__PASSWORD`, and `APP_SECURITY__COOKIE_SECURE=true`.
 
 ### MyBatis-style HTML Mapper Tests
 
@@ -179,72 +179,70 @@ The commands below use the credentials and port in `config/default.toml`. Every 
 #### curl (Bash)
 
 ```bash
-LOGIN_RESPONSE="$(curl --silent --show-error --request POST 'http://127.0.0.1:9002/api/login' \
+COOKIE_JAR="$(mktemp)"
+LOGIN_RESPONSE="$(curl --silent --show-error --cookie-jar "$COOKIE_JAR" --request POST 'http://127.0.0.1:9002/api/login' \
   --header 'Content-Type: application/json' \
   --data '{"username":"edidada","password":"Pass123Qwe"}')"
 
-ACCESS_TOKEN="$(printf '%s' "$LOGIN_RESPONSE" | sed -n 's/.*"access_token":"\([^"]*\)".*/\1/p')"
-test -n "$ACCESS_TOKEN" || { echo "Login failed: $LOGIN_RESPONSE"; exit 1; }
+CSRF_TOKEN="$(awk '$6 == "csrf_token" { print $7 }' "$COOKIE_JAR")"
+test -n "$CSRF_TOKEN" || { echo "Login failed: $LOGIN_RESPONSE"; exit 1; }
 
 curl --silent --show-error --request GET 'http://127.0.0.1:9002/get' \
-  --header "Authorization: Bearer $ACCESS_TOKEN"
+  --cookie "$COOKIE_JAR"
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/getBody' \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $ACCESS_TOKEN" \
+  --header "X-CSRF-Token: $CSRF_TOKEN" --cookie "$COOKIE_JAR" \
   --data '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/post' \
-  --header "Authorization: Bearer $ACCESS_TOKEN" \
+  --header "X-CSRF-Token: $CSRF_TOKEN" --cookie "$COOKIE_JAR" \
   --data-urlencode 'custom_username=tester' \
   --data-urlencode 'custom_password=secret'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate' \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $ACCESS_TOKEN" \
+  --header "X-CSRF-Token: $CSRF_TOKEN" --cookie "$COOKIE_JAR" \
   --data '{"sql":"SELECT id, number, status FROM orders ORDER BY id","page":1,"page_size":2}'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/paginate-with-params' \
   --header 'Content-Type: application/json' \
-  --header "Authorization: Bearer $ACCESS_TOKEN" \
+  --header "X-CSRF-Token: $CSRF_TOKEN" --cookie "$COOKIE_JAR" \
   --data '{"sql":"SELECT id FROM orders WHERE status > ?","page":1,"page_size":2,"params":[0]}'
 
 curl --silent --show-error --request POST 'http://127.0.0.1:9002/api/logout' \
-  --header "Authorization: Bearer $ACCESS_TOKEN"
+  --header "X-CSRF-Token: $CSRF_TOKEN" --cookie "$COOKIE_JAR"
 ```
 
 #### PowerShell (`Invoke-RestMethod`)
 
 ```powershell
-$loginResponse = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/login' `
+$loginResponse = Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/login' -SessionVariable webSession `
   -ContentType 'application/json' `
   -Body '{"username":"edidada","password":"Pass123Qwe"}'
 
-$accessToken = $loginResponse.access_token
-if ([string]::IsNullOrWhiteSpace($accessToken)) {
-  throw "Login failed: $loginResponse"
-}
-$headers = @{ Authorization = "Bearer $accessToken" }
+$csrfToken = ($webSession.Cookies.GetCookies([uri]'http://127.0.0.1:9002') | Where-Object Name -eq 'csrf_token').Value
+$headers = @{ 'X-CSRF-Token' = $csrfToken }
 
-Invoke-RestMethod -Method Get -Uri 'http://127.0.0.1:9002/get' -Headers $headers
+Invoke-RestMethod -Method Get -Uri 'http://127.0.0.1:9002/get' -WebSession $webSession
 
 Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/getBody' `
-  -Headers $headers -ContentType 'application/json' `
+  -WebSession $webSession -Headers $headers -ContentType 'application/json' `
   -Body '{"html_code":"<h1>safe</h1><script>alert(1)</script>"}'
 
 Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/post' `
-  -Headers $headers -ContentType 'application/x-www-form-urlencoded' `
+  -WebSession $webSession -Headers $headers -ContentType 'application/x-www-form-urlencoded' `
   -Body @{ custom_username = 'tester'; custom_password = 'secret' }
 
 Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/paginate' `
-  -Headers $headers -ContentType 'application/json' `
+  -WebSession $webSession -Headers $headers -ContentType 'application/json' `
   -Body '{"sql":"SELECT id, number, status FROM orders ORDER BY id","page":1,"page_size":2}'
 
 Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/paginate-with-params' `
-  -Headers $headers -ContentType 'application/json' `
+  -WebSession $webSession -Headers $headers -ContentType 'application/json' `
   -Body '{"sql":"SELECT id FROM orders WHERE status > ?","page":1,"page_size":2,"params":[0]}'
 
-Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/logout' -Headers $headers
+Invoke-RestMethod -Method Post -Uri 'http://127.0.0.1:9002/api/logout' -WebSession $webSession -Headers $headers
 ```
 
 ## Contributing

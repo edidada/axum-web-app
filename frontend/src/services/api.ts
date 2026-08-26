@@ -8,9 +8,16 @@ export interface LoginRequest {
 export interface LoginResponse {
   success: boolean;
   message: string;
-  session_id?: string;
+  username?: string;
+  role?: string;
   code?: number;
   status?: string;
+}
+
+export interface CurrentUser {
+  username: string;
+  role: string;
+  expires_at: number;
 }
 
 export interface ApiResponse<T> {
@@ -31,38 +38,25 @@ export interface PaginatedResponse<T> {
 }
 
 class ApiService {
-  private sessionId: string | null = null;
-
-  constructor() {
-    // 页面刷新后从 localStorage 恢复会话，保证后续请求能携带认证信息
-    this.sessionId = localStorage.getItem('sessionId');
-  }
-
-  setSessionId(sessionId: string) {
-    this.sessionId = sessionId;
-    localStorage.setItem('sessionId', sessionId);
-  }
-
-  clearSessionId() {
-    this.sessionId = null;
-    localStorage.removeItem('sessionId');
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('username');
+  private getCookie(name: string): string | null {
+    const prefix = `${name}=`;
+    const item = document.cookie.split(';').map(value => value.trim()).find(value => value.startsWith(prefix));
+    return item ? item.slice(prefix.length) : null;
   }
 
   private getHeaders(): HeadersInit {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
     };
-    const sessionId = this.sessionId || localStorage.getItem('sessionId');
-    if (sessionId) {
-      headers['Authorization'] = `Bearer ${sessionId}`;
+    // JWT 在 HttpOnly cookie 中，JavaScript 不可读取；这里只读取独立的 CSRF cookie。
+    const csrfToken = this.getCookie('csrf_token');
+    if (csrfToken) {
+      headers['X-CSRF-Token'] = csrfToken;
     }
     return headers;
   }
 
   async login(username: string, password: string): Promise<LoginResponse> {
-    console.log('API login called with:', { username, password });
     try {
       const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
@@ -71,23 +65,14 @@ class ApiService {
         credentials: 'include',
       });
 
-      console.log('API login response status:', response.status);
-      console.log('API login response headers:', response.headers);
-
       const data = await response.json();
-      console.log('API login response data:', data);
       
       const result: LoginResponse = {
         success: data.code === 0 || data.status === 'success',
         message: data.message || (data.status === 'success' ? '登录成功' : '登录失败'),
-        session_id: data.session_id,
+        username: data.username,
+        role: data.role,
       };
-      
-      console.log('API login result:', result);
-      
-      if (result.success && result.session_id) {
-        this.setSessionId(result.session_id);
-      }
       
       return result;
     } catch (error) {
@@ -99,6 +84,27 @@ class ApiService {
     }
   }
 
+  async me(): Promise<ApiResponse<CurrentUser>> {
+    const response = await fetch(`${API_BASE_URL}/api/me`, {
+      method: 'GET',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      return { success: false, message: '会话无效' };
+    }
+    const data = await response.json();
+    return {
+      success: data.status === 'success',
+      message: data.status === 'success' ? '会话有效' : '会话无效',
+      data: {
+        username: data.username,
+        role: data.role,
+        expires_at: data.expires_at,
+      },
+    };
+  }
+
   async logout(): Promise<ApiResponse<any>> {
     const response = await fetch(`${API_BASE_URL}/api/logout`, {
       method: 'POST',
@@ -106,15 +112,28 @@ class ApiService {
       credentials: 'include',
     });
 
-    const data = await response.json();
+    const data = await response.json().catch(() => ({}));
     
     const result: ApiResponse<any> = {
       success: data.code === 0 || data.status === 'success',
       message: data.message || (data.status === 'success' ? '退出成功' : '退出失败'),
     };
     
-    this.clearSessionId();
     return result;
+  }
+
+  async uploadImageFromUrl(imageUrl: string): Promise<{ success: boolean; message: string; url?: string }> {
+    const response = await fetch(`${API_BASE_URL}/api/image/upload-url?url=${encodeURIComponent(imageUrl)}`, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      credentials: 'include',
+    });
+    const data = await response.json();
+    return {
+      success: response.ok && data.success === true,
+      message: data.message || (response.ok ? '上传成功' : '上传失败'),
+      url: data.url,
+    };
   }
 
   async getSysDictList(params: any = {}): Promise<PaginatedResponse<any>> {

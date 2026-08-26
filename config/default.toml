@@ -1,18 +1,19 @@
 [auth]
 username = "edidada"
 password = "Pass123Qwe"
+role = "admin"
 
 [webapp]
 port = 9002
-redisurl = "redis://127.0.0.1:6379"
-
-[redis]
-ip = "127.0.0.1"
-port = 6379
-expiration = 3600
-key_prefix = "session:"
 
 [jwt]
 # 生产环境请通过受管密钥覆盖此值，且不要将真实密钥提交到仓库。
 secret = "change-this-development-jwt-secret-before-production"
-expiration = 3600
+expiration = 900
+issuer = "axum-web-app"
+audience = "axum-web-frontend"
+
+[security]
+# 本地 HTTP 开发为 false；生产 HTTPS 必须覆盖为 true。
+cookie_secure = false
+allowed_origins = ["http://localhost:5173", "http://127.0.0.1:5173"]

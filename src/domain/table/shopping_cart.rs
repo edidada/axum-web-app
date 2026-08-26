@@ -21,5 +21,11 @@ crud!(ShoppingCart {});
 
 #[html_sql("src/domain/table/shopping_cart.html")]
 impl ShoppingCart {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &ShoppingCartPageDTO) -> rbatis::Result<rbatis::Page<ShoppingCart>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &ShoppingCartPageDTO,
+    ) -> rbatis::Result<rbatis::Page<ShoppingCart>> {
+        impled!()
+    }
 }

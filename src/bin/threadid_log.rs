@@ -1,15 +1,10 @@
-use std::fmt::Write;
-use std::thread;
-use tracing::{span, Level, info};
-use tracing_subscriber::{
-    fmt::{
-        format::Writer,
-        FmtContext, FormatEvent, FormatFields, time::FormatTime,
-    },
-    registry::LookupSpan,
-    Layer,
-};
 use chrono::Local;
+use std::thread;
+use tracing::{info, span, Level};
+use tracing_subscriber::{
+    fmt::{format::Writer, time::FormatTime, FmtContext, FormatEvent, FormatFields},
+    registry::LookupSpan,
+};
 
 // 自定义时间格式化结构体
 struct LocalTimer;

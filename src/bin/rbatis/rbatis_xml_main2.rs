@@ -1,12 +1,12 @@
-use std::fs;
 use log::LevelFilter;
-use rbatis::rbatis::RBatis;
-use rbdc_sqlite::driver::SqliteDriver;
-use rbatis::PageRequest;
-use rbatis::rbdc::DateTime;
-use rbatis::{crud, html_sql};
-use simplelog::{CombinedLogger, Config, WriteLogger};
 use rand::Rng;
+use rbatis::rbatis::RBatis;
+use rbatis::rbdc::DateTime;
+use rbatis::PageRequest;
+use rbatis::{crud, html_sql};
+use rbdc_sqlite::driver::SqliteDriver;
+use simplelog::{CombinedLogger, Config, WriteLogger};
+use std::fs;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct SysDict {
@@ -27,7 +27,13 @@ pub struct DictPageDTO {
 
 #[html_sql("src/domain/table/sys_dict.html")]
 impl SysDict {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &DictPageDTO,
+    ) -> rbatis::Result<rbatis::Page<SysDict>> {
+        impled!()
+    }
 }
 
 #[tokio::main]
@@ -35,13 +41,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Set up logging
     fs::create_dir_all("logs").unwrap();
     let log_file = std::fs::File::create("logs/rbatis.log").unwrap();
-    CombinedLogger::init(vec![
-        WriteLogger::new(LevelFilter::Debug, Config::default(), log_file),
-    ]).unwrap();
+    CombinedLogger::init(vec![WriteLogger::new(
+        LevelFilter::Debug,
+        Config::default(),
+        log_file,
+    )])
+    .unwrap();
     // 初始化 RBatis
     let rb = RBatis::new();
     rb.init(SqliteDriver {}, "sqlite://./test.db")?;
-    
+
     // 创建表
     println!("=== 创建表 ===");
     let create_table_sql = r#"
@@ -68,13 +77,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         state: Some(1),
         create_date: Some(rbatis::rbdc::DateTime::now()),
     };
-    
+
     let result = SysDict::insert(&rb, &dict).await;
     match result {
         Ok(_) => println!("增加数据成功"),
         Err(e) => println!("增加数据失败: {:?}", e),
     }
-    
+
     // 测试查询数据
     println!("\n=== 测试查询数据 ===");
     let result = SysDict::select_all(&rb).await;
@@ -87,7 +96,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => println!("查询数据失败: {:?}", e),
     }
-    
+
     // 测试使用 select_page API
     println!("\n=== 测试使用 select_page API ===");
     let page_request = PageRequest::new(1, 10);
@@ -95,7 +104,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         name: None,
         code: None,
     };
-    
+
     let result = SysDict::select_page(&rb, &page_request, &dto).await;
     match result {
         Ok(page) => {
@@ -109,10 +118,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => println!("分页查询失败: {:?}", e),
     }
-    
+
     // 测试使用其他 CRUD API
     println!("\n=== 测试使用其他 CRUD API ===");
-    
+
     // 测试查询所有数据
     let result = SysDict::select_all(&rb).await;
     match result {
@@ -124,6 +133,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => println!("查询数据失败: {:?}", e),
     }
-    
+
     Ok(())
 }

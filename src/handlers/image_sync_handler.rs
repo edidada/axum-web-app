@@ -1,7 +1,7 @@
 use axum::{
     extract::Query,
-    response::{IntoResponse, Json},
     http::StatusCode,
+    response::{IntoResponse, Json},
 };
 use serde::{Deserialize, Serialize};
 
@@ -24,9 +24,7 @@ pub struct SyncImagesResponse {
 
 /// 同步图片到 MinIO
 /// 从数据库中读取现有的图片URL，下载并上传到 MinIO，然后更新数据库
-pub async fn sync_images_to_minio(
-    Query(query): Query<SyncImagesQuery>,
-) -> impl IntoResponse {
+pub async fn sync_images_to_minio(Query(query): Query<SyncImagesQuery>) -> impl IntoResponse {
     let client = match get_minio_client() {
         Some(c) => c,
         None => {
@@ -56,10 +54,9 @@ pub async fn sync_images_to_minio(
 
     // 注意：实际的同步操作需要通过后台任务或单独的 API 来完成
     // 这里返回一个提示信息，告知用户如何使用其他 API 来同步
-    response.details.push("Please use /api/image/upload-url?url=IMAGE_URL to upload individual images".to_string());
+    response.details.push(
+        "Please use /api/image/upload-url?url=IMAGE_URL to upload individual images".to_string(),
+    );
 
-    (
-        StatusCode::OK,
-        Json(response),
-    )
+    (StatusCode::OK, Json(response))
 }

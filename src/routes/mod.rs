@@ -1,20 +1,22 @@
-use axum::{routing::get, routing::post, Extension, Router, Json};
-use rbatis::RBatis;
-use crate::handlers::health_handler::{health_check, health_check_detailed, readiness_check, liveness_check};
-use crate::handlers::get_handler::{get_body_handler, get_handler};
-use crate::handlers::post_handler::post_handler;
-use crate::handlers::login_handler::login_handler;
-use crate::handlers::logout_handler::logout_handler;
-use crate::handlers::paginate_handler::{paginate_handler, paginate_with_params_handler};
+use crate::domain::table::sys_dict::SysDict;
 use crate::handlers::crud_handler::*;
-use crate::handlers::report_handler::*;
+use crate::handlers::get_handler::{get_body_handler, get_handler};
+use crate::handlers::health_handler::{
+    health_check, health_check_detailed, liveness_check, readiness_check,
+};
 #[cfg(feature = "minio")]
-use crate::handlers::image_handler::{upload_image_from_url, delete_image, get_image_url};
+use crate::handlers::image_handler::{delete_image, get_image_url, upload_image_from_url};
 #[cfg(feature = "minio")]
 use crate::handlers::image_sync_handler::sync_images_to_minio;
+use crate::handlers::login_handler::{login_handler, me_handler};
+use crate::handlers::logout_handler::logout_handler;
+use crate::handlers::paginate_handler::{paginate_handler, paginate_with_params_handler};
+use crate::handlers::post_handler::post_handler;
+use crate::handlers::report_handler::*;
 use crate::middleware::session_validation::validate_session;
+use axum::{routing::get, routing::post, Extension, Json, Router};
+use rbatis::RBatis;
 use serde_json;
-use crate::domain::table::sys_dict::SysDict;
 
 pub fn setup_routes() -> Router {
     let router = Router::new()
@@ -25,6 +27,7 @@ pub fn setup_routes() -> Router {
         .route("/live", get(liveness_check))
         // 认证路由
         .route("/api/login", post(login_handler))
+        .route("/api/me", get(me_handler).layer(axum::middleware::from_fn(validate_session)))
         .route("/api/logout", post(logout_handler).layer(axum::middleware::from_fn(validate_session)))
         // 保留的旧路由（兼容）
         .route("/get", get(get_handler).layer(axum::middleware::from_fn(validate_session)))
@@ -35,12 +38,12 @@ pub fn setup_routes() -> Router {
         // SysDict 相关路由
         .route("/sys-dict/select-page", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<SysDictPageRequest>| async move {
             use axum::response::IntoResponse;
-            
+
             // 打印请求体
             if let Ok(json_str) = serde_json::to_string(&payload) {
                 tracing::debug!("Request body for /sys-dict/select-page (JSON): {}", json_str);
             }
-            
+
             // 处理请求
             match sys_dict_select_page(Json(payload), Extension(rb)).await {
                 Ok(json_response) => {
@@ -63,7 +66,7 @@ pub fn setup_routes() -> Router {
             if let Ok(json_str) = serde_json::to_string(&payload) {
                 tracing::debug!("Request body for /sys-dict/insert (JSON): {}", json_str);
             }
-            
+
             // 处理请求
             match sys_dict_insert(Json(payload), Extension(rb)).await {
                 Ok(json_response) => {
@@ -86,7 +89,7 @@ pub fn setup_routes() -> Router {
             if let Ok(json_str) = serde_json::to_string(&payload) {
                 tracing::debug!("Request body for /sys-dict/update (JSON): {}", json_str);
             }
-            
+
             // 处理请求
             match sys_dict_update(Json(payload), Extension(rb)).await {
                 Ok(json_response) => {
@@ -104,10 +107,10 @@ pub fn setup_routes() -> Router {
         }).layer(axum::middleware::from_fn(validate_session)))
         .route("/sys-dict/delete", post(|Extension(rb): Extension<&'static RBatis>, Json(payload): Json<String>| async move {
             use axum::response::IntoResponse;
-            
+
             // 打印请求体
             tracing::debug!("Request body for /sys-dict/delete (JSON): {}", payload);
-            
+
             // 处理请求
             match sys_dict_delete(Json(payload), Extension(rb)).await {
                 Ok(json_response) => {
@@ -135,12 +138,12 @@ pub fn setup_routes() -> Router {
             // 解析查询参数
             let code = payload.get("code").and_then(|v| v.as_str()).map(|s| s.to_string());
             let name = payload.get("name").and_then(|v| v.as_str()).map(|s| s.to_string());
-            
+
             let dto = DictPageDTO {
                 code,
                 name,
             };
-            
+
             let page_request = PageRequest::new(1, 1000); // 默认查询前1000条
 
             // 处理请求 - 使用分页查询支持条件筛选
@@ -224,10 +227,22 @@ pub fn setup_routes() -> Router {
     #[cfg(feature = "minio")]
     {
         router
-            .route("/api/image/upload-url", get(upload_image_from_url).layer(axum::middleware::from_fn(validate_session)))
-            .route("/api/image/:object_name", get(get_image_url).layer(axum::middleware::from_fn(validate_session)))
-            .route("/api/image/:object_name", post(delete_image).layer(axum::middleware::from_fn(validate_session)))
-            .route("/api/image/sync", get(sync_images_to_minio).layer(axum::middleware::from_fn(validate_session)))
+            .route(
+                "/api/image/upload-url",
+                post(upload_image_from_url).layer(axum::middleware::from_fn(validate_session)),
+            )
+            .route(
+                "/api/image/:object_name",
+                get(get_image_url).layer(axum::middleware::from_fn(validate_session)),
+            )
+            .route(
+                "/api/image/:object_name",
+                post(delete_image).layer(axum::middleware::from_fn(validate_session)),
+            )
+            .route(
+                "/api/image/sync",
+                post(sync_images_to_minio).layer(axum::middleware::from_fn(validate_session)),
+            )
     }
 
     #[cfg(not(feature = "minio"))]

@@ -1,63 +1,196 @@
+use std::time::{SystemTime, UNIX_EPOCH};
+
 use axum::{
-    http::{header::COOKIE, Request, StatusCode},
+    http::{header::COOKIE, HeaderMap, Method, Request, StatusCode},
     middleware::Next,
-    response::IntoResponse,
+    response::{IntoResponse, Response},
+    Json,
 };
-use redis::{AsyncCommands, Client};
+use rbatis::RBatis;
+use subtle::ConstantTimeEq;
 
-use crate::config::Config;
-use crate::jwt;
+use crate::{auth_session, config::Config, jwt};
 
-fn extract_session_id<B>(req: &Request<B>) -> Option<String> {
-    req.headers().get("Authorization")
+pub const ACCESS_COOKIE: &str = "access_token";
+pub const CSRF_COOKIE: &str = "csrf_token";
+pub const CSRF_HEADER: &str = "x-csrf-token";
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum CredentialSource {
+    Bearer,
+    Cookie,
+}
+
+fn cookie_value(headers: &HeaderMap, name: &str) -> Option<String> {
+    headers
+        .get(COOKIE)
         .and_then(|header| header.to_str().ok())
-        .and_then(|auth| auth.strip_prefix("Bearer "))
-        .map(str::to_owned)
-        .or_else(|| {
-            req.headers().get(COOKIE)
-                .and_then(|header| header.to_str().ok())
-                .and_then(|cookie| cookie.split(';').find_map(|part| {
-                    part.trim().strip_prefix("session=").map(str::to_owned)
-                }))
+        .and_then(|cookie| {
+            cookie.split(';').find_map(|part| {
+                let (key, value) = part.trim().split_once('=')?;
+                (key == name).then(|| value.to_owned())
+            })
         })
 }
 
-pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> impl IntoResponse {
-    let redis_client = match req.extensions().get::<Client>().cloned() {
-        Some(client) => client,
-        None => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+fn extract_token(headers: &HeaderMap) -> Option<(String, CredentialSource)> {
+    headers
+        .get(axum::http::header::AUTHORIZATION)
+        .and_then(|header| header.to_str().ok())
+        .and_then(|auth| auth.strip_prefix("Bearer "))
+        .filter(|token| !token.is_empty())
+        .map(|token| (token.to_owned(), CredentialSource::Bearer))
+        .or_else(|| {
+            cookie_value(headers, ACCESS_COOKIE).map(|token| (token, CredentialSource::Cookie))
+        })
+}
+
+pub fn origin_allowed(headers: &HeaderMap, config: &Config) -> bool {
+    let Some(origin) = headers.get(axum::http::header::ORIGIN) else {
+        // 非浏览器客户端通常没有 Origin；cookie 请求仍必须持有 CSRF secret。
+        return true;
     };
+    let Ok(origin) = origin.to_str() else {
+        return false;
+    };
+    config
+        .security
+        .allowed_origins
+        .iter()
+        .any(|allowed| allowed == origin)
+}
+
+fn is_unsafe_method(method: &Method) -> bool {
+    !matches!(*method, Method::GET | Method::HEAD | Method::OPTIONS)
+}
+
+fn requires_admin(method: &Method, path: &str) -> bool {
+    path.ends_with("/insert")
+        || path.ends_with("/update")
+        || path.ends_with("/delete")
+        || (is_unsafe_method(method) && path.starts_with("/api/image/"))
+}
+
+fn now_seconds() -> Result<i64, String> {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .map(|duration| duration.as_secs() as i64)
+        .map_err(|error| format!("system time error: {error}"))
+}
+
+fn error(status: StatusCode, message: &str) -> Response {
+    (
+        status,
+        Json(serde_json::json!({
+            "code": status.as_u16(),
+            "status": "error",
+            "message": message
+        })),
+    )
+        .into_response()
+}
+
+pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> Response {
     let config = match req.extensions().get::<Config>().cloned() {
         Some(config) => config,
-        None => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
+        None => return error(StatusCode::INTERNAL_SERVER_ERROR, "认证配置不可用"),
     };
-    let session_id = match extract_session_id(&req) {
-        Some(session_id) => session_id,
-        None => return (StatusCode::UNAUTHORIZED, "缺少或无效的会话").into_response(),
+    let rb = match req.extensions().get::<&'static RBatis>().copied() {
+        Some(rb) => rb,
+        None => return error(StatusCode::INTERNAL_SERVER_ERROR, "认证数据库不可用"),
     };
-
-    let claims = match jwt::validate(&session_id, &config.jwt) {
+    let (token, source) = match extract_token(req.headers()) {
+        Some(value) => value,
+        None => return error(StatusCode::UNAUTHORIZED, "缺少登录凭据"),
+    };
+    let claims = match jwt::validate(&token, &config.jwt) {
         Ok(claims) => claims,
-        Err(error) => {
-            tracing::warn!(reason = %error, "JWT rejected");
-            return (StatusCode::UNAUTHORIZED, "JWT无效、已过期或签名不匹配").into_response();
+        Err(reason) => {
+            tracing::warn!(%reason, "JWT rejected");
+            return error(StatusCode::UNAUTHORIZED, "登录凭据无效或已过期");
+        }
+    };
+    let now = match now_seconds() {
+        Ok(now) => now,
+        Err(reason) => {
+            tracing::error!(%reason, "Clock unavailable during authentication");
+            return error(StatusCode::INTERNAL_SERVER_ERROR, "认证服务不可用");
+        }
+    };
+    let session = match auth_session::find_active(rb, &claims, now).await {
+        Ok(Some(session)) => session,
+        Ok(None) => return error(StatusCode::UNAUTHORIZED, "会话已撤销、已过期或权限已变化"),
+        Err(reason) => {
+            tracing::error!(%reason, "Auth session lookup failed");
+            return error(StatusCode::INTERNAL_SERVER_ERROR, "认证服务不可用");
         }
     };
 
-    let mut conn = match redis_client.get_multiplexed_async_connection().await {
-        Ok(conn) => conn,
-        Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "Redis连接失败").into_response(),
-    };
-    let key = format!("{}{}", config.redis.key_prefix, session_id);
-    let username: Option<String> = match conn.get(&key).await {
-        Ok(username) => username,
-        Err(_) => return (StatusCode::INTERNAL_SERVER_ERROR, "Redis查询失败").into_response(),
-    };
-    if username.is_none() {
-        return (StatusCode::UNAUTHORIZED, "会话无效，请重新登录").into_response();
+    if claims.role != "admin" && claims.role != "viewer" {
+        return error(StatusCode::FORBIDDEN, "会话包含未知角色");
+    }
+    if requires_admin(req.method(), req.uri().path()) && claims.role != "admin" {
+        return error(StatusCode::FORBIDDEN, "当前角色无权执行此操作");
+    }
+
+    if source == CredentialSource::Cookie && is_unsafe_method(req.method()) {
+        if !origin_allowed(req.headers(), &config) {
+            return error(StatusCode::FORBIDDEN, "请求来源不受信任");
+        }
+        let cookie_token = cookie_value(req.headers(), CSRF_COOKIE);
+        let header_token = req
+            .headers()
+            .get(CSRF_HEADER)
+            .and_then(|value| value.to_str().ok())
+            .map(str::to_owned);
+        let csrf_valid = match (cookie_token, header_token) {
+            (Some(cookie), Some(header)) => {
+                bool::from(cookie.as_bytes().ct_eq(header.as_bytes()))
+                    && auth_session::verify_csrf(&header, &session.csrf_hash)
+            }
+            _ => false,
+        };
+        if !csrf_valid {
+            return error(StatusCode::FORBIDDEN, "CSRF 校验失败");
+        }
     }
 
     req.extensions_mut().insert(claims);
-    req.extensions_mut().insert(session_id);
     next.run(req).await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn mutating_paths_require_admin_but_queries_do_not() {
+        assert!(requires_admin(&Method::POST, "/category/insert"));
+        assert!(requires_admin(&Method::POST, "/category/update"));
+        assert!(requires_admin(&Method::POST, "/category/delete"));
+        assert!(requires_admin(&Method::POST, "/api/image/photo.jpg"));
+        assert!(!requires_admin(&Method::GET, "/api/image/photo.jpg"));
+        assert!(!requires_admin(&Method::POST, "/category/select-page"));
+        assert!(!requires_admin(&Method::POST, "/api/logout"));
+    }
+
+    #[test]
+    fn bearer_takes_precedence_and_cookie_parser_is_exact() {
+        let mut headers = HeaderMap::new();
+        headers.insert(
+            COOKIE,
+            "not_access_token=x; access_token=cookie-token; csrf_token=csrf"
+                .parse()
+                .unwrap(),
+        );
+        headers.insert(
+            axum::http::header::AUTHORIZATION,
+            "Bearer api-token".parse().unwrap(),
+        );
+        assert_eq!(
+            extract_token(&headers),
+            Some(("api-token".to_string(), CredentialSource::Bearer))
+        );
+        assert_eq!(cookie_value(&headers, CSRF_COOKIE).as_deref(), Some("csrf"));
+    }
 }

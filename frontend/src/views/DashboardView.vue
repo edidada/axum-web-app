@@ -5,7 +5,7 @@
         <h1>后台管理系统</h1>
       </div>
       <div class="header-right">
-        <span class="username">{{ authStore.username }}</span>
+        <span class="username">{{ authStore.username }}（{{ authStore.role }}）</span>
         <button @click="handleLogout" class="logout-btn">退出</button>
       </div>
     </header>
@@ -31,7 +31,7 @@
         <div class="api-header">
           <h2>{{ currentMenuItem.label }}</h2>
           <div class="header-actions">
-            <button @click="showAddModal" class="btn-primary">
+            <button v-if="authStore.canManage" @click="showAddModal" class="btn-primary">
               新增
             </button>
           </div>
@@ -94,8 +94,11 @@
                   </template>
                 </td>
                 <td class="action-cell">
-                  <button @click="showEditModal(row)" class="btn-edit">编辑</button>
-                  <button @click="handleDelete(row)" class="btn-delete">删除</button>
+                  <template v-if="authStore.canManage">
+                    <button @click="showEditModal(row)" class="btn-edit">编辑</button>
+                    <button @click="handleDelete(row)" class="btn-delete">删除</button>
+                  </template>
+                  <span v-else>只读</span>
                 </td>
               </tr>
             </tbody>
@@ -959,15 +962,7 @@ async function uploadImageFromUrl(imageUrl: string, fieldKey: string) {
 
   isUploading.value = true;
   try {
-    const response = await fetch(`/api/image/upload-url?url=${encodeURIComponent(imageUrl)}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-
-    const result = await response.json();
+    const result = await apiService.uploadImageFromUrl(imageUrl);
 
     if (result.success) {
       // 更新表单中的图片URL为MinIO的URL

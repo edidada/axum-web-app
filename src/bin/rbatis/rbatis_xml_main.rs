@@ -1,12 +1,12 @@
-use std::fs;
 use log::LevelFilter;
 use rand::Rng;
 use rbatis::rbatis::RBatis;
-use rbdc_sqlite::driver::SqliteDriver;
-use rbatis::{crud, html_sql};
 use rbatis::rbdc::DateTime;
 use rbatis::PageRequest;
+use rbatis::{crud, html_sql};
+use rbdc_sqlite::driver::SqliteDriver;
 use simplelog::{CombinedLogger, Config, WriteLogger};
+use std::fs;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 pub struct SysDict {
@@ -27,7 +27,13 @@ pub struct DictPageDTO {
 
 #[html_sql("src/domain/table/sys_dict.html")]
 impl SysDict {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &DictPageDTO,
+    ) -> rbatis::Result<rbatis::Page<SysDict>> {
+        impled!()
+    }
 }
 
 #[tokio::main]
@@ -35,13 +41,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Set up logging
     fs::create_dir_all("logs").unwrap();
     let log_file = std::fs::File::create("logs/rbatis.log").unwrap();
-    CombinedLogger::init(vec![
-        WriteLogger::new(LevelFilter::Debug, Config::default(), log_file),
-    ]).unwrap();
+    CombinedLogger::init(vec![WriteLogger::new(
+        LevelFilter::Debug,
+        Config::default(),
+        log_file,
+    )])
+    .unwrap();
     // 初始化 RBatis
     let rb = RBatis::new();
     rb.init(SqliteDriver {}, "sqlite://./test.db")?;
-    
+
     // 创建表
     println!("=== 创建表 ===");
     let create_table_sql = r#"
@@ -55,7 +64,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     "#;
     rb.exec(create_table_sql, vec![]).await?;
     println!("表创建成功");
-    
+
     // 测试增加数据
     println!("\n=== 测试增加数据 ===");
     let mut rng = rand::thread_rng();
@@ -67,7 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         state: Some(1),
         create_date: Some(DateTime::now()),
     };
-    
+
     let dict2 = SysDict {
         id: Some("2".to_string()),
         name: Some("测试字典2".to_string()),
@@ -75,19 +84,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         state: Some(1),
         create_date: Some(DateTime::now()),
     };
-    
+
     let result1 = SysDict::insert(&rb, &dict1).await;
     match result1 {
         Ok(_) => println!("增加数据1成功"),
         Err(e) => println!("增加数据1失败: {:?}", e),
     }
-    
+
     let result2 = SysDict::insert(&rb, &dict2).await;
     match result2 {
         Ok(_) => println!("增加数据2成功"),
         Err(e) => println!("增加数据2失败: {:?}", e),
     }
-    
+
     // 测试查询数据
     println!("\n=== 测试查询数据 ===");
     let result = SysDict::select_all(&rb).await;
@@ -100,7 +109,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => println!("查询数据失败: {:?}", e),
     }
-    
+
     // 测试使用 HTML SQL 模板的分页查询
     println!("\n=== 测试使用 HTML SQL 模板的分页查询 ===");
     let page_request = PageRequest::new(1, 10);
@@ -108,7 +117,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         name: None,
         code: None,
     };
-    
+
     let result = SysDict::select_page(&rb, &page_request, &dto).await;
     match result {
         Ok(page) => {
@@ -122,14 +131,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => println!("分页查询失败: {:?}", e),
     }
-    
+
     // 测试带条件的分页查询
     println!("\n=== 测试带条件的分页查询 ===");
     let dto_with_condition = DictPageDTO {
         name: Some("测试字典1".to_string()),
         code: None,
     };
-    
+
     let result = SysDict::select_page(&rb, &page_request, &dto_with_condition).await;
     match result {
         Ok(page) => {
@@ -143,6 +152,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
         Err(e) => println!("带条件的分页查询失败: {:?}", e),
     }
-    
+
     Ok(())
 }

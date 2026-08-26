@@ -185,3 +185,16 @@ CREATE TABLE IF NOT EXISTS "user" (
     create_time TIMESTAMP,
     update_time TIMESTAMP
 );
+
+-- JWT 只证明签名；此表保存当前授权状态，用于 CSRF 绑定、角色核对和立即撤销。
+CREATE TABLE IF NOT EXISTS auth_sessions (
+    jti VARCHAR(64) PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    role VARCHAR(32) NOT NULL,
+    csrf_hash VARCHAR(64) NOT NULL,
+    issued_at BIGINT NOT NULL,
+    expires_at BIGINT NOT NULL,
+    revoked_at BIGINT
+);
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires_at ON auth_sessions (expires_at);

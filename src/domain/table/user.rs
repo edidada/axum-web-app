@@ -17,5 +17,11 @@ crud!(User {});
 
 #[html_sql("src/domain/table/user.html")]
 impl User {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &UserPageDTO) -> rbatis::Result<rbatis::Page<User>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &UserPageDTO,
+    ) -> rbatis::Result<rbatis::Page<User>> {
+        impled!()
+    }
 }

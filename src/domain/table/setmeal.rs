@@ -1,7 +1,7 @@
 use crate::domain::dto::setmeal_dto::SetmealPageDTO;
 
-use rbatis::rbdc::DateTime;
 use rbatis::executor::Executor;
+use rbatis::rbdc::DateTime;
 use rbatis::{crud, html_sql};
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
@@ -43,6 +43,18 @@ crud!(Setmeal {});
 
 #[html_sql("src/domain/table/setmeal.html")]
 impl Setmeal {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &SetmealPageDTO) -> rbatis::Result<rbatis::Page<Setmeal>> { impled!() }
-    pub async fn select_setmeal_with_dishes(conn: &dyn Executor, setmeal_id: Option<&str>, name: Option<&str>) -> rbatis::Result<Vec<SetmealWithDish>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &SetmealPageDTO,
+    ) -> rbatis::Result<rbatis::Page<Setmeal>> {
+        impled!()
+    }
+    pub async fn select_setmeal_with_dishes(
+        conn: &dyn Executor,
+        setmeal_id: Option<&str>,
+        name: Option<&str>,
+    ) -> rbatis::Result<Vec<SetmealWithDish>> {
+        impled!()
+    }
 }

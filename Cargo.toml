@@ -3,6 +3,9 @@ name = "axum-web-app"
 version = "0.1.0"
 edition = "2021"
 
+[lints.rust]
+unsafe_code = "forbid"
+
 [features]
 default = []
 minio = ["dep:aws-sdk-s3", "dep:aws-config", "dep:aws-credential-types"]
@@ -46,7 +49,6 @@ tracing-appender = "0.2"
 tracing-log = "0.2"
 chrono = "0.4"
 reqwest = { version = "0.11", features = ["json"] }
-redis = { version = "0.32", features = ["tokio-comp"] }
 serde_json = "1.0"
 uuid = { version = "1", features = ["v4"] }
 tower = "0.4.13"
@@ -68,6 +70,8 @@ simplelog = "0.12"
 log = "0.4"
 hyper = "0.14"
 jsonwebtoken = "9.3"
+sha2 = "0.10"
+subtle = "2.6"
 
 [dev-dependencies]
 criterion = "0.5"

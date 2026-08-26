@@ -1,7 +1,7 @@
 use crate::domain::dto::orders_dto::OrdersPageDTO;
 
-use rbatis::rbdc::DateTime;
 use rbatis::executor::Executor;
+use rbatis::rbdc::DateTime;
 use rbatis::{crud, html_sql};
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
@@ -59,6 +59,18 @@ crud!(Orders {});
 
 #[html_sql("src/domain/table/orders.html")]
 impl Orders {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &OrdersPageDTO) -> rbatis::Result<rbatis::Page<Orders>> { impled!() }
-    pub async fn select_order_with_details(conn: &dyn Executor, order_id: Option<&str>, user_id: Option<&str>) -> rbatis::Result<Vec<OrderWithDetail>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &OrdersPageDTO,
+    ) -> rbatis::Result<rbatis::Page<Orders>> {
+        impled!()
+    }
+    pub async fn select_order_with_details(
+        conn: &dyn Executor,
+        order_id: Option<&str>,
+        user_id: Option<&str>,
+    ) -> rbatis::Result<Vec<OrderWithDetail>> {
+        impled!()
+    }
 }

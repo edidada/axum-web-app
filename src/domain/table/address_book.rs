@@ -30,5 +30,11 @@ crud!(AddressBook {});
 
 #[html_sql("src/domain/table/address_book.html")]
 impl AddressBook {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &AddressBookPageDTO) -> rbatis::Result<rbatis::Page<AddressBook>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &AddressBookPageDTO,
+    ) -> rbatis::Result<rbatis::Page<AddressBook>> {
+        impled!()
+    }
 }

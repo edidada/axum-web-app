@@ -3,31 +3,46 @@ import { defineStore } from 'pinia';
 import { apiService } from '../services/api';
 
 export const useAuthStore = defineStore('auth', () => {
-  const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true');
-  const username = ref(localStorage.getItem('username') || '');
-  const sessionId = ref(localStorage.getItem('sessionId') || '');
+  const username = ref('');
+  const role = ref('');
+  const initialized = ref(false);
 
-  const isAuthenticated = computed(() => isLoggedIn.value && !!sessionId.value);
+  const isAuthenticated = computed(() => Boolean(username.value));
+  const canManage = computed(() => role.value === 'admin');
+
+  function clearUser() {
+    username.value = '';
+    role.value = '';
+  }
+
+  async function initialize() {
+    if (initialized.value) return;
+    try {
+      const response = await apiService.me();
+      if (response.success && response.data) {
+        username.value = response.data.username;
+        role.value = response.data.role;
+      } else {
+        clearUser();
+      }
+    } catch {
+      clearUser();
+    } finally {
+      initialized.value = true;
+    }
+  }
 
   async function login(user: string, password: string) {
     try {
-      console.log('Auth store login called with:', { user, password });
       const response = await apiService.login(user, password);
-      console.log('Auth store login response:', response);
-      if (response.success && response.session_id) {
-        isLoggedIn.value = true;
-        username.value = user;
-        sessionId.value = response.session_id;
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('username', user);
-        localStorage.setItem('sessionId', response.session_id);
-        console.log('Auth store login success:', { sessionId: response.session_id });
+      if (response.success && response.username && response.role) {
+        username.value = response.username;
+        role.value = response.role;
+        initialized.value = true;
         return { success: true, message: response.message };
       }
-      console.log('Auth store login failed:', response.message);
       return { success: false, message: response.message || '登录失败' };
-    } catch (error) {
-      console.error('Auth store login error:', error);
+    } catch {
       return { success: false, message: '登录请求失败' };
     }
   }
@@ -35,24 +50,20 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout() {
     try {
       await apiService.logout();
-    } catch (error) {
-      console.error('Logout error:', error);
     } finally {
-      isLoggedIn.value = false;
-      username.value = '';
-      sessionId.value = '';
-      localStorage.removeItem('isLoggedIn');
-      localStorage.removeItem('username');
-      localStorage.removeItem('sessionId');
+      clearUser();
+      initialized.value = true;
     }
   }
 
   return {
-    isLoggedIn,
     username,
-    sessionId,
+    role,
+    initialized,
     isAuthenticated,
+    canManage,
+    initialize,
     login,
-    logout
+    logout,
   };
 });

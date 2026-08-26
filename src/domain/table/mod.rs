@@ -1,14 +1,14 @@
-pub mod sys_dict;
 pub mod address_book;
 pub mod category;
 pub mod dish;
 pub mod dish_flavor;
 pub mod employee;
+pub mod join_query;
 pub mod order_detail;
 pub mod orders;
+pub mod paginate;
 pub mod setmeal;
 pub mod setmeal_dish;
 pub mod shopping_cart;
+pub mod sys_dict;
 pub mod user;
-pub mod paginate;
-pub mod join_query;

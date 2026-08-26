@@ -19,5 +19,11 @@ crud!(OrderDetail {});
 
 #[html_sql("src/domain/table/order_detail.html")]
 impl OrderDetail {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &OrderDetailPageDTO) -> rbatis::Result<rbatis::Page<OrderDetail>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &OrderDetailPageDTO,
+    ) -> rbatis::Result<rbatis::Page<OrderDetail>> {
+        impled!()
+    }
 }

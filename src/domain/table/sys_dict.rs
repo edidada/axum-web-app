@@ -11,9 +11,14 @@ where
     match date {
         Some(d) => {
             // 格式化为 yyyyMMdd hhmmss
-            let formatted = format!("{}{:02}{:02} {:02}{:02}{:02}", 
-                d.year(), d.mon(), d.day(),
-                d.hour(), d.minute(), d.sec()
+            let formatted = format!(
+                "{}{:02}{:02} {:02}{:02}{:02}",
+                d.year(),
+                d.mon(),
+                d.day(),
+                d.hour(),
+                d.minute(),
+                d.sec()
             );
             serializer.serialize_str(&formatted)
         }
@@ -38,5 +43,11 @@ crud!(SysDict {});
 
 #[html_sql("src/domain/table/sys_dict.html")]
 impl SysDict {
-    pub async fn select_page(conn: &dyn rbatis::Executor, request: &rbatis::PageRequest, dto: &DictPageDTO) -> rbatis::Result<rbatis::Page<SysDict>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        request: &rbatis::PageRequest,
+        dto: &DictPageDTO,
+    ) -> rbatis::Result<rbatis::Page<SysDict>> {
+        impled!()
+    }
 }

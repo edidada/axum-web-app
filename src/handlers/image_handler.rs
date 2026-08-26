@@ -1,7 +1,7 @@
 use axum::{
     extract::{Path, Query},
-    response::{IntoResponse, Json},
     http::StatusCode,
+    response::{IntoResponse, Json},
 };
 use serde::{Deserialize, Serialize};
 
@@ -21,9 +21,7 @@ pub struct ImageQuery {
 }
 
 /// 从 URL 下载图片并上传到 MinIO
-pub async fn upload_image_from_url(
-    Query(query): Query<ImageQuery>,
-) -> impl IntoResponse {
+pub async fn upload_image_from_url(Query(query): Query<ImageQuery>) -> impl IntoResponse {
     let client = match get_minio_client() {
         Some(c) => c,
         None => {
@@ -43,7 +41,10 @@ pub async fn upload_image_from_url(
     let object_name = format!("images/{}.jpg", uuid::Uuid::new_v4());
 
     // 下载并上传图片
-    match client.download_and_upload_image(&query.url, &object_name).await {
+    match client
+        .download_and_upload_image(&query.url, &object_name)
+        .await
+    {
         Ok(url) => {
             tracing::info!("Image uploaded successfully: {}", url);
             (
@@ -72,9 +73,7 @@ pub async fn upload_image_from_url(
 }
 
 /// 删除 MinIO 中的图片
-pub async fn delete_image(
-    Path(object_name): Path<String>,
-) -> impl IntoResponse {
+pub async fn delete_image(Path(object_name): Path<String>) -> impl IntoResponse {
     let client = match get_minio_client() {
         Some(c) => c,
         None => {
@@ -113,9 +112,7 @@ pub async fn delete_image(
 }
 
 /// 获取图片的 MinIO URL
-pub async fn get_image_url(
-    Path(object_name): Path<String>,
-) -> impl IntoResponse {
+pub async fn get_image_url(Path(object_name): Path<String>) -> impl IntoResponse {
     let client = match get_minio_client() {
         Some(c) => c,
         None => {
@@ -130,7 +127,7 @@ pub async fn get_image_url(
     };
 
     let url = client.get_file_url(&object_name);
-    
+
     (
         StatusCode::OK,
         Json(serde_json::json!({

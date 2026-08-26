@@ -1,5 +1,5 @@
 //! 报表查询 Handler
-//! 
+//!
 //! 提供各种业务报表和统计查询接口，包括：
 //! - 订单详情报表
 //! - 套餐菜品关联报表
@@ -8,12 +8,9 @@
 //! - 用户订单统计报表
 //! - 地址簿用户信息报表
 
-use axum::{
-    extract::Query,
-    Extension, Json,
-};
-use serde::Deserialize;
+use axum::{extract::Query, Extension, Json};
 use rbatis::RBatis;
+use serde::Deserialize;
 
 use crate::domain::table::join_query::JoinQuery;
 
@@ -94,7 +91,7 @@ pub struct AddressBookReportQuery {
 // ==================== 报表接口实现 ====================
 
 /// 订单详情报表
-/// 
+///
 /// 查询订单及其关联的订单详情信息
 /// GET /report/order-details
 pub async fn get_order_details_report(
@@ -118,7 +115,7 @@ pub async fn get_order_details_report(
 }
 
 /// 套餐菜品报表
-/// 
+///
 /// 查询套餐及其包含的菜品信息
 /// GET /report/setmeal-dishes
 pub async fn get_setmeal_dishes_report(
@@ -142,7 +139,7 @@ pub async fn get_setmeal_dishes_report(
 }
 
 /// 购物车商品报表
-/// 
+///
 /// 查询购物车及关联的商品信息（菜品或套餐）
 /// GET /report/shopping-cart
 pub async fn get_shopping_cart_report(
@@ -165,7 +162,7 @@ pub async fn get_shopping_cart_report(
 }
 
 /// 菜品完整信息报表
-/// 
+///
 /// 查询菜品及其分类、口味信息
 /// GET /report/dish-full-info
 pub async fn get_dish_full_info_report(
@@ -189,7 +186,7 @@ pub async fn get_dish_full_info_report(
 }
 
 /// 用户订单统计报表
-/// 
+///
 /// 查询用户及其订单统计数据
 /// GET /report/user-order-stats
 pub async fn get_user_order_stats_report(
@@ -212,7 +209,7 @@ pub async fn get_user_order_stats_report(
 }
 
 /// 地址簿用户报表
-/// 
+///
 /// 查询地址簿及关联的用户信息
 /// GET /report/address-book
 pub async fn get_address_book_report(

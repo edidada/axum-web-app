@@ -21,5 +21,11 @@ crud!(SetmealDish {});
 
 #[html_sql("src/domain/table/setmeal_dish.html")]
 impl SetmealDish {
-    pub async fn select_page(conn: &dyn rbatis::Executor, page_request: &rbatis::PageRequest, dto: &SetmealDishPageDTO) -> rbatis::Result<rbatis::Page<SetmealDish>> { impled!() }
+    pub async fn select_page(
+        conn: &dyn rbatis::Executor,
+        page_request: &rbatis::PageRequest,
+        dto: &SetmealDishPageDTO,
+    ) -> rbatis::Result<rbatis::Page<SetmealDish>> {
+        impled!()
+    }
 }

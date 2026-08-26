@@ -1,8 +1,8 @@
 use aws_config::meta::region::RegionProviderChain;
 use aws_credential_types::Credentials;
-use aws_sdk_s3::{Client, Config};
 use aws_sdk_s3::config::{BehaviorVersion, Region};
 use aws_sdk_s3::primitives::ByteStream;
+use aws_sdk_s3::{Client, Config};
 use std::time::Duration;
 
 /// MinIO 配置
@@ -37,13 +37,8 @@ pub struct MinioClient {
 impl MinioClient {
     /// 创建新的 MinIO 客户端
     pub async fn new(config: MinioConfig) -> Result<Self, Box<dyn std::error::Error>> {
-        let credentials = Credentials::new(
-            &config.access_key,
-            &config.secret_key,
-            None,
-            None,
-            "minio",
-        );
+        let credentials =
+            Credentials::new(&config.access_key, &config.secret_key, None, None, "minio");
 
         let sdk_config = Config::builder()
             .behavior_version(BehaviorVersion::latest())
@@ -66,20 +61,17 @@ impl MinioClient {
     /// 创建存储桶（如果不存在）
     pub async fn create_bucket_if_not_exists(&self) -> Result<(), Box<dyn std::error::Error>> {
         let bucket_name = &self.config.bucket;
-        
+
         // 尝试创建桶，如果已存在会返回错误
-        match self.client
-            .create_bucket()
-            .bucket(bucket_name)
-            .send()
-            .await {
+        match self.client.create_bucket().bucket(bucket_name).send().await {
             Ok(_) => {
                 tracing::info!("Created bucket: {}", bucket_name);
             }
             Err(e) => {
                 // 如果桶已存在，忽略错误
                 let err_str = format!("{:?}", e);
-                if err_str.contains("BucketAlreadyExists") || err_str.contains("AlreadyOwnedByYou") {
+                if err_str.contains("BucketAlreadyExists") || err_str.contains("AlreadyOwnedByYou")
+                {
                     tracing::debug!("Bucket already exists: {}", bucket_name);
                 } else {
                     return Err(Box::new(e));
@@ -98,7 +90,7 @@ impl MinioClient {
         content_type: &str,
     ) -> Result<String, Box<dyn std::error::Error>> {
         let stream = ByteStream::from(data);
-        
+
         self.client
             .put_object()
             .bucket(&self.config.bucket)
@@ -109,13 +101,20 @@ impl MinioClient {
             .await?;
 
         // 返回文件的访问 URL
-        let url = format!("{}/{}/{}", self.config.endpoint, self.config.bucket, object_name);
+        let url = format!(
+            "{}/{}/{}",
+            self.config.endpoint, self.config.bucket, object_name
+        );
         Ok(url)
     }
 
     /// 下载文件
-    pub async fn download_file(&self, object_name: &str) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
-        let response = self.client
+    pub async fn download_file(
+        &self,
+        object_name: &str,
+    ) -> Result<Vec<u8>, Box<dyn std::error::Error>> {
+        let response = self
+            .client
             .get_object()
             .bucket(&self.config.bucket)
             .key(object_name)
@@ -140,7 +139,10 @@ impl MinioClient {
 
     /// 生成文件的访问 URL
     pub fn get_file_url(&self, object_name: &str) -> String {
-        format!("{}/{}/{}", self.config.endpoint, self.config.bucket, object_name)
+        format!(
+            "{}/{}/{}",
+            self.config.endpoint, self.config.bucket, object_name
+        )
     }
 
     /// 从 URL 下载图片并上传到 MinIO
@@ -157,14 +159,16 @@ impl MinioClient {
             .and_then(|v| v.to_str().ok())
             .unwrap_or("image/jpeg")
             .to_string();
-        
+
         let image_data = response.bytes().await?.to_vec();
 
         // 上传到 MinIO
-        let url = self.upload_file(object_name, image_data, &content_type).await?;
-        
+        let url = self
+            .upload_file(object_name, image_data, &content_type)
+            .await?;
+
         tracing::info!("Downloaded and uploaded image: {} -> {}", image_url, url);
-        
+
         Ok(url)
     }
 }
@@ -177,9 +181,11 @@ static MINIO_CLIENT: OnceCell<MinioClient> = OnceCell::new();
 pub async fn init_minio_client() -> Result<(), Box<dyn std::error::Error>> {
     let client = MinioClient::default().await?;
     client.create_bucket_if_not_exists().await?;
-    
-    MINIO_CLIENT.set(client).map_err(|_| "MinIO client already initialized")?;
-    
+
+    MINIO_CLIENT
+        .set(client)
+        .map_err(|_| "MinIO client already initialized")?;
+
     tracing::info!("MinIO client initialized successfully");
     Ok(())
 }

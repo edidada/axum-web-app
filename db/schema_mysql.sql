@@ -184,3 +184,14 @@ CREATE TABLE IF NOT EXISTS user (
     create_time DATETIME,
     update_time DATETIME
 );
+-- JWT 会话授权状态、CSRF 绑定与立即撤销。
+CREATE TABLE IF NOT EXISTS auth_sessions (
+    jti VARCHAR(64) PRIMARY KEY,
+    username VARCHAR(255) NOT NULL,
+    role VARCHAR(32) NOT NULL,
+    csrf_hash VARCHAR(64) NOT NULL,
+    issued_at BIGINT NOT NULL,
+    expires_at BIGINT NOT NULL,
+    revoked_at BIGINT,
+    INDEX idx_auth_sessions_expires_at (expires_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
