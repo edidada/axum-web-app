@@ -58,7 +58,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
     }
     init_start_time();
     init_rbatis(&config_file)?;
-    auth_session::init_store(get_rbatis()).await?;
+    let session_store =
+        auth_session::SessionStore::initialize(&config_file.session, get_rbatis()).await?;
 
     #[cfg(feature = "minio")]
     if let Err(error) = infrastructure::minio_client::init_minio_client().await {
@@ -98,15 +99,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 middleware::request_logging::log_request,
             ))
             .layer(Extension(config_file.clone()))
+            .layer(Extension(session_store.clone()))
             .layer(Extension(get_rbatis())),
     );
 
     let addr = SocketAddr::from(([127, 0, 0, 1], config_file.webapp.port));
     tracing::info!(
-        "thread {:?}, listening on {} using {} profile",
+        "thread {:?}, listening on {} using {} database profile and {} session store",
         thread::current().id(),
         addr,
-        config_file.database.db_type
+        config_file.database.db_type,
+        session_store.backend_name()
     );
     axum::Server::bind(&addr)
         .serve(app.into_make_service())

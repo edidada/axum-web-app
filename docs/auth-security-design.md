@@ -19,7 +19,7 @@ JWT 只负责证明令牌由可信服务签发，并携带用户、角色和有�
 | JWT 存 `localStorage`，每次发 Bearer | 实现简单，天然不受 cookie CSRF 影响 | 任意同源 XSS 都能读取并带走令牌，在过期前可异地重放；撤销仍需服务端状态 | 不采用 |
 | 纯服务端随机 Session cookie | 撤销和续期直观，cookie 内容无身份信息 | 每次请求必须查存储；与现有 JWT/API 客户端兼容性较弱 | 可行，但不是本项目渐进改造的最优选择 |
 | HttpOnly JWT cookie + CSRF + 服务端 `jti` 会话表 | 浏览器脚本读不到 JWT；支持立即撤销、RBAC 和 Bearer API；能沿用现有 JWT | 不再是完全无状态；cookie 请求需要 CSRF 防护 | **采用** |
-| JWT + Redis 黑名单 | 高吞吐、TTL 自然 | 测试和单机运行依赖额外服务，当前项目的 SQLite profile 仍无法独立验证认证 | 本次改为 SQLite；高规模部署可将同一接口换成 Redis |
+| JWT + Redis 会话 | 高吞吐、TTL 自然 | 运行时依赖 Redis 服务 | 已支持，通过 `session.backend = "redis"` 启用 |
 
 ## 最终设计
 
@@ -41,9 +41,9 @@ Bearer 客户端的凭据不会被浏览器自动发送，因此不要求 CSRF t
 
 ### 撤销与会话一致性
 
-`auth_sessions` 保存 `jti`、用户名、角色、CSRF 摘要、签发/过期/撤销时间。每次认证在验证 JWT 后查询该表，并确认用户名、角色和过期时间与 JWT 一致。登出设置 `revoked_at`，同时清除两个 cookie。
+会话存储通过 `session.backend` 在 `database` 和 `redis` 之间选择。数据库模式由 `auth_sessions` 保存 `jti`、用户名、角色、CSRF 摘要、签发/过期/撤销时间；Redis 模式将相同结构序列化到带前缀的键，并按 JWT 剩余有效期设置 TTL。每次认证在验证 JWT 后查询所选存储，并确认用户名、角色和过期时间与 JWT 一致。登出在数据库设置 `revoked_at`，或直接删除 Redis 键，同时清除两个 cookie。
 
-这让“签名正确”与“当前仍获授权”成为两步独立判断。代价是每次请求一次数据库查询；对当前 SQLite 应用可接受，后续可通过短 TTL 缓存或实现同接口的 Redis 存储扩展。
+这让“签名正确”与“当前仍获授权”成为两步独立判断。代价是每次请求都要访问一次所选会话存储；数据库模式适合本地独立运行，Redis 模式则利用原生 TTL 管理过期会话。
 
 ### RBAC 与 XSS
 

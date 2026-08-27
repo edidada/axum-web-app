@@ -4,7 +4,6 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
-use rbatis::RBatis;
 use serde::Deserialize;
 use sha2::{Digest, Sha256};
 use subtle::ConstantTimeEq;
@@ -50,7 +49,7 @@ fn json_error(status: StatusCode, message: &str) -> Response {
 
 pub async fn login_handler(
     headers: HeaderMap,
-    Extension(rb): Extension<&'static RBatis>,
+    Extension(session_store): Extension<auth_session::SessionStore>,
     Extension(config): Extension<Config>,
     Json(payload): Json<LoginRequest>,
 ) -> Response {
@@ -72,7 +71,7 @@ pub async fn login_handler(
         }
     };
     let csrf_token = format!("{}{}", Uuid::new_v4().simple(), Uuid::new_v4().simple());
-    if let Err(reason) = auth_session::create(rb, &claims, &csrf_token).await {
+    if let Err(reason) = auth_session::create(&session_store, &claims, &csrf_token).await {
         tracing::error!(%reason, "Auth session creation failed");
         return json_error(StatusCode::INTERNAL_SERVER_ERROR, "登录服务不可用");
     }

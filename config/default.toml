@@ -17,3 +17,9 @@ audience = "axum-web-frontend"
 # 本地 HTTP 开发为 false；生产 HTTPS 必须覆盖为 true。
 cookie_secure = false
 allowed_origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
+
+[session]
+# 可选 database 或 redis；也可通过 APP_SESSION__BACKEND 覆盖。
+backend = "database"
+redis_url = "redis://127.0.0.1:6379/0"
+redis_key_prefix = "axum:auth_session:"

@@ -26,7 +26,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let sqlite_url = format!("sqlite://{}", sqlite_path.display());
     rb.init(SqliteDriver {}, &sqlite_url)?;
     let rb: &'static RBatis = Box::leak(Box::new(rb));
-    auth_session::init_store(rb).await?;
+    let session_store = auth_session::SessionStore::initialize(&config.session, rb).await?;
     rb.exec(
         "CREATE TABLE orders (id TEXT PRIMARY KEY, number TEXT, status INTEGER)",
         vec![],
@@ -44,6 +44,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
                 middleware::security_headers::add_security_headers,
             ))
             .layer(Extension(config.clone()))
+            .layer(Extension(session_store.clone()))
             .layer(Extension(rb)),
     );
     let listener = std::net::TcpListener::bind("127.0.0.1:0")?;
@@ -232,7 +233,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     assert_eq!(hostile_origin.status(), StatusCode::FORBIDDEN);
 
     let (viewer_token, viewer_claims) = jwt::issue("readonly", "viewer", &config.jwt)?;
-    auth_session::create(rb, &viewer_claims, "api-client-csrf-not-used").await?;
+    auth_session::create(&session_store, &viewer_claims, "api-client-csrf-not-used").await?;
     let viewer_forbidden = client
         .post(format!("{base}/category/delete"))
         .header("Authorization", format!("Bearer {viewer_token}"))

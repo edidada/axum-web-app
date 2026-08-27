@@ -16,7 +16,12 @@ use uuid::Uuid;
 
 use axum_web_app::{auth_session, config, jwt, middleware, routes};
 
-async fn test_app() -> (Router, config::Config, &'static RBatis) {
+async fn test_app() -> (
+    Router,
+    config::Config,
+    &'static RBatis,
+    auth_session::SessionStore,
+) {
     std::env::set_var("APP_PROFILE", "sqlite");
     let config = config::Config::from_file().expect("load SQLite config");
     let sqlite_path = std::env::temp_dir().join(format!("axum-router-{}.db", Uuid::new_v4()));
@@ -27,7 +32,7 @@ async fn test_app() -> (Router, config::Config, &'static RBatis) {
     )
     .expect("initialize isolated SQLite");
     let rb = Box::leak(Box::new(rb));
-    auth_session::init_store(rb)
+    let session_store = auth_session::SessionStore::initialize(&config.session, rb)
         .await
         .expect("initialize auth schema");
 
@@ -37,9 +42,10 @@ async fn test_app() -> (Router, config::Config, &'static RBatis) {
                 middleware::security_headers::add_security_headers,
             ))
             .layer(Extension(config.clone()))
+            .layer(Extension(session_store.clone()))
             .layer(Extension(rb as &'static RBatis)),
     );
-    (app, config, rb)
+    (app, config, rb, session_store)
 }
 
 fn json_request(method: Method, uri: &str, body: Value) -> Request<Body> {
@@ -58,7 +64,7 @@ async fn body_json(response: axum::response::Response) -> Value {
 
 #[tokio::test]
 async fn cookie_auth_security_flow_uses_sqlite() {
-    let (app, config, rb) = test_app().await;
+    let (app, config, _rb, session_store) = test_app().await;
 
     let unauthenticated = app
         .clone()
@@ -179,7 +185,7 @@ async fn cookie_auth_security_flow_uses_sqlite() {
 
     let (viewer_token, viewer_claims) =
         jwt::issue("readonly", "viewer", &config.jwt).expect("issue viewer token");
-    auth_session::create(rb, &viewer_claims, "unused-for-bearer")
+    auth_session::create(&session_store, &viewer_claims, "unused-for-bearer")
         .await
         .expect("save viewer session");
     let viewer_read = Request::builder()
@@ -205,7 +211,7 @@ async fn cookie_auth_security_flow_uses_sqlite() {
 
     let (unknown_token, unknown_claims) =
         jwt::issue("unknown", "superuser", &config.jwt).expect("issue unknown-role token");
-    auth_session::create(rb, &unknown_claims, "unused-for-bearer")
+    auth_session::create(&session_store, &unknown_claims, "unused-for-bearer")
         .await
         .expect("save unknown-role session");
     let unknown_role = Request::builder()

@@ -6,7 +6,6 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
-use rbatis::RBatis;
 
 use crate::{
     auth_session,
@@ -16,7 +15,7 @@ use crate::{
 };
 
 pub async fn logout_handler(
-    Extension(rb): Extension<&'static RBatis>,
+    Extension(session_store): Extension<auth_session::SessionStore>,
     Extension(config): Extension<Config>,
     Extension(claims): Extension<Claims>,
 ) -> Response {
@@ -24,7 +23,7 @@ pub async fn logout_handler(
         Ok(duration) => duration.as_secs() as i64,
         Err(_) => return StatusCode::INTERNAL_SERVER_ERROR.into_response(),
     };
-    if let Err(reason) = auth_session::revoke(rb, &claims.jti, now).await {
+    if let Err(reason) = auth_session::revoke(&session_store, &claims.jti, now).await {
         tracing::error!(%reason, "Logout revocation failed");
         return StatusCode::INTERNAL_SERVER_ERROR.into_response();
     }

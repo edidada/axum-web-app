@@ -6,7 +6,6 @@ use axum::{
     response::{IntoResponse, Response},
     Json,
 };
-use rbatis::RBatis;
 use subtle::ConstantTimeEq;
 
 use crate::{auth_session, config::Config, jwt};
@@ -95,9 +94,13 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> Response
         Some(config) => config,
         None => return error(StatusCode::INTERNAL_SERVER_ERROR, "认证配置不可用"),
     };
-    let rb = match req.extensions().get::<&'static RBatis>().copied() {
-        Some(rb) => rb,
-        None => return error(StatusCode::INTERNAL_SERVER_ERROR, "认证数据库不可用"),
+    let session_store = match req
+        .extensions()
+        .get::<auth_session::SessionStore>()
+        .cloned()
+    {
+        Some(store) => store,
+        None => return error(StatusCode::INTERNAL_SERVER_ERROR, "认证会话存储不可用"),
     };
     let (token, source) = match extract_token(req.headers()) {
         Some(value) => value,
@@ -117,7 +120,7 @@ pub async fn validate_session<B>(mut req: Request<B>, next: Next<B>) -> Response
             return error(StatusCode::INTERNAL_SERVER_ERROR, "认证服务不可用");
         }
     };
-    let session = match auth_session::find_active(rb, &claims, now).await {
+    let session = match auth_session::find_active(&session_store, &claims, now).await {
         Ok(Some(session)) => session,
         Ok(None) => return error(StatusCode::UNAUTHORIZED, "会话已撤销、已过期或权限已变化"),
         Err(reason) => {

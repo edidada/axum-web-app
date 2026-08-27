@@ -26,6 +26,29 @@ pub struct SecurityConfig {
     pub allowed_origins: Vec<String>,
 }
 
+#[derive(Deserialize, Serialize, Clone, Debug, PartialEq, Eq)]
+#[serde(rename_all = "lowercase")]
+pub enum SessionBackend {
+    Database,
+    Redis,
+}
+
+impl SessionBackend {
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Database => "database",
+            Self::Redis => "redis",
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct SessionConfig {
+    pub backend: SessionBackend,
+    pub redis_url: String,
+    pub redis_key_prefix: String,
+}
+
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct DbConfig {
     pub db_type: String,
@@ -43,6 +66,7 @@ pub struct Config {
     pub webapp: WebappConfig,
     pub jwt: JwtConfig,
     pub security: SecurityConfig,
+    pub session: SessionConfig,
     pub database: DbConfig,
 }
 
@@ -65,6 +89,9 @@ impl Config {
         settings.set_default("jwt.issuer", "axum-web-app")?;
         settings.set_default("jwt.audience", "axum-web-frontend")?;
         settings.set_default("security.cookie_secure", false)?;
+        settings.set_default("session.backend", "database")?;
+        settings.set_default("session.redis_url", "redis://127.0.0.1:6379/0")?;
+        settings.set_default("session.redis_key_prefix", "axum:auth_session:")?;
         settings.set_default("database.db_type", "sqlite")?;
 
         settings.merge(config::File::with_name("config/default").required(true))?;
@@ -96,6 +123,16 @@ impl Config {
             return Err(
                 "security.allowed_origins must contain explicit http(s) origins".to_string(),
             );
+        }
+        if self.session.backend == SessionBackend::Redis {
+            if self.session.redis_url.trim().is_empty() {
+                return Err("session.redis_url must not be empty for the Redis backend".to_string());
+            }
+            if self.session.redis_key_prefix.trim().is_empty() {
+                return Err(
+                    "session.redis_key_prefix must not be empty for the Redis backend".to_string(),
+                );
+            }
         }
         Ok(())
     }
@@ -151,6 +188,7 @@ mod tests {
         std::env::remove_var("APP_PROFILE");
         let config = Config::from_file().expect("load sqlite profile");
         assert_eq!(config.database.db_type, "sqlite");
+        assert_eq!(config.session.backend, SessionBackend::Database);
         assert_eq!(config.webapp.port, 9002);
         config.validate_security().expect("valid security defaults");
     }

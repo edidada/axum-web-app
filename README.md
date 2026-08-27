@@ -136,12 +136,28 @@ axum-web-app
 
 ## Database Profiles
 
-The server selects its database configuration through `APP_PROFILE`. The default is `sqlite`; use `postgresql` or `mysql` to load `config/postgresql.toml` or `config/mysql.toml` respectively. Shared authentication, HTTP, JWT, and browser-security settings remain in `config/default.toml`.
+The server selects its business database configuration through `APP_PROFILE`. The default is `sqlite`; use `postgresql` or `mysql` to load `config/postgresql.toml` or `config/mysql.toml` respectively. Shared authentication, HTTP, JWT, browser-security, and session-store settings remain in `config/default.toml`.
 
 ```bash
 APP_PROFILE=sqlite cargo run --bin main
 APP_PROFILE=mysql cargo run --bin main
 APP_PROFILE=postgresql cargo run --bin main
+```
+
+Authentication sessions use the selected SQL database by default. To store JWT session state in the local Redis server instead, start Redis and override the session backend independently of the business database:
+
+```bash
+brew services start redis
+redis-cli ping
+APP_PROFILE=sqlite APP_SESSION__BACKEND=redis cargo run --bin main
+```
+
+The Redis defaults are `redis://127.0.0.1:6379/0` and key prefix `axum:auth_session:`. Override them with `APP_SESSION__REDIS_URL` and `APP_SESSION__REDIS_KEY_PREFIX`. Redis sessions receive the same TTL as their JWT and are deleted immediately on logout. The existing Redis 5 server is supported; no Homebrew or server upgrade is required.
+
+The auditable curl E2E starts an isolated Rust server and SQLite database, disables all HTTP proxies, uses Redis sessions, covers every default route, and removes its temporary data:
+
+```bash
+bash scripts/rust_http_e2e.sh
 ```
 
 ```powershell
@@ -154,7 +170,7 @@ $env:APP_PROFILE = 'postgresql'; cargo run --bin main
 
 `POST http://127.0.0.1:9002/api/login` signs an HS256 JWT whose claims include `sub`, `role`, `iat`, `exp`, `jti`, `iss`, and `aud`. Browser responses store it only in an `HttpOnly; SameSite=Lax` cookie; the JSON body intentionally contains neither `access_token` nor `session_id`. The frontend never stores credentials in `localStorage`.
 
-SQLite records each active `jti`, role, expiration, and CSRF digest. Logout marks that session revoked, so replay fails immediately even before JWT expiration. Cookie-authenticated POST/PUT/PATCH/DELETE requests must send the readable `csrf_token` cookie value in `X-CSRF-Token`; Bearer remains supported for non-browser clients that obtain the token from `Set-Cookie` outside browser JavaScript.
+The configured session backend records each active `jti`, role, expiration, and CSRF digest. The database backend marks a session revoked on logout; the Redis backend deletes its TTL-bound key. In both modes replay fails immediately even before JWT expiration. Cookie-authenticated POST/PUT/PATCH/DELETE requests must send the readable `csrf_token` cookie value in `X-CSRF-Token`; Bearer remains supported for non-browser clients that obtain the token from `Set-Cookie` outside browser JavaScript.
 
 The application logs only JWT algorithm and non-secret session metadata. It never logs the signing secret, token, `Authorization`, `Cookie`, or `Set-Cookie`. See `docs/auth-security-design.md` for the方案 comparison and deployment requirements. In production override the development values with `APP_JWT__SECRET`, `APP_AUTH__PASSWORD`, and `APP_SECURITY__COOKIE_SECURE=true`.
 
