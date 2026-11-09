@@ -1,4 +1,5 @@
-use rbatis::{executor::Executor, html_sql};
+use rbatis::executor::Executor;
+use rbatis::html_sql;
 use rbs::Value;
 
 #[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]

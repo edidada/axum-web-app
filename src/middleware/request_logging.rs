@@ -1,4 +1,6 @@
-use axum::{http::Request, middleware::Next, response::Response};
+use axum::http::Request;
+use axum::middleware::Next;
+use axum::response::Response;
 use std::time::Instant;
 use tracing::{debug, info};
 
@@ -20,7 +22,10 @@ where
     // 记录响应
     let status = response.status();
     let duration = start.elapsed();
-    info!("Response: {} {} - {} in {:?}", method, path, status, duration);
+    info!(
+        "Response: {} {} - {} in {:?}",
+        method, path, status, duration
+    );
 
     // 记录响应头
     debug!("Response Headers: {:?}", response.headers());

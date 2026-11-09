@@ -1,5 +1,6 @@
-use axum::{response::Html, Json};
 use ammonia::clean;
+use axum::response::Html;
+use axum::Json;
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -14,7 +15,7 @@ pub async fn get_handler() -> Html<String> {
 }
 
 pub async fn get_body_handler(Json(payload): Json<RequestBody>) -> Html<String> {
-    tracing::info!("get_body_handler {:?}",payload);
+    tracing::info!("get_body_handler {:?}", payload);
     let sanitized_html = clean(&payload.html_code);
     Html(sanitized_html)
 }

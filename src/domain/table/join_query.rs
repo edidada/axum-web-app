@@ -1,4 +1,9 @@
-use crate::domain::dto::join_dto::*;
+//! SQL-mapper backed JOIN queries and their DTO return types.
+
+use crate::domain::dto::join_dto::{
+    AddressBookWithUserDTO, CartWithItemDTO, DishFullInfoDTO, EmployeeWithOperatorDTO,
+    OrderWithDetailDTO, SetmealWithDishDTO, UserWithOrderStatsDTO,
+};
 use rbatis::executor::Executor;
 use rbatis::html_sql;
 

@@ -1,6 +1,10 @@
+//! HS256 JSON Web Token issuance and validation.
+
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use jsonwebtoken::{decode, decode_header, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation};
+use jsonwebtoken::{
+    decode, decode_header, encode, Algorithm, DecodingKey, EncodingKey, Header, Validation,
+};
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
@@ -25,6 +29,10 @@ fn now_seconds() -> Result<usize, String> {
         .map_err(|error| format!("system time error: {error}"))
 }
 
+/// Returns the first 16 bytes of a token for safe inclusion in logs.
+///
+/// The full token and the signing secret are never logged.
+#[must_use]
 fn token_preview(token: &str) -> &str {
     let length = token.len().min(16);
     &token[..length]
@@ -59,7 +67,8 @@ pub fn issue(username: &str, config: &JwtConfig) -> Result<(String, Claims), Str
 
 /// 校验 JWT 的算法、签名和 `exp`。校验成功后返回可供业务层使用的 claims。
 pub fn validate(token: &str, config: &JwtConfig) -> Result<Claims, String> {
-    let header = decode_header(token).map_err(|error| format!("JWT header parse failed: {error}"))?;
+    let header =
+        decode_header(token).map_err(|error| format!("JWT header parse failed: {error}"))?;
     if header.alg != Algorithm::HS256 {
         return Err(format!("unsupported JWT algorithm: {:?}", header.alg));
     }
@@ -97,7 +106,11 @@ mod tests {
     fn issue_and_validate_hs256_token() {
         let config = test_config();
         let (token, issued_claims) = issue("tester", &config).expect("issue token");
-        assert_eq!(token.split('.').count(), 3, "JWT must have header.payload.signature");
+        assert_eq!(
+            token.split('.').count(),
+            3,
+            "JWT must have header.payload.signature"
+        );
 
         let validated_claims = validate(&token, &config).expect("validate token");
         assert_eq!(validated_claims.sub, "tester");

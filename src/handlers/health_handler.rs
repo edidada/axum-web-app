@@ -1,7 +1,10 @@
+//! Health, readiness and liveness endpoints used by load balancers and probes.
+
 use axum::Json;
 use serde::Serialize;
 use std::time::SystemTime;
 
+/// Minimal health status returned by `/health`.
 #[derive(Serialize)]
 pub struct HealthResponse {
     pub status: String,
@@ -10,6 +13,7 @@ pub struct HealthResponse {
     pub uptime_seconds: u64,
 }
 
+/// Coarse runtime metrics included in the detailed health response.
 #[derive(Serialize)]
 pub struct SystemInfo {
     pub database_connected: bool,
@@ -17,6 +21,7 @@ pub struct SystemInfo {
     pub active_connections: u32,
 }
 
+/// Health status plus runtime metrics returned by `/health/detailed`.
 #[derive(Serialize)]
 pub struct DetailedHealthResponse {
     pub status: String,
@@ -139,8 +144,17 @@ mod tests {
         init_start_time();
         let response = health_check_detailed().await.0;
 
-        assert!(response.system.database_connected);
-        assert_eq!(response.system.active_connections, 0);
-        assert!(!response.version.is_empty());
+        assert!(
+            response.system.database_connected,
+            "the stubbed database check should report a connection"
+        );
+        assert_eq!(
+            response.system.active_connections, 0,
+            "no connection-pool metric is maintained yet"
+        );
+        assert!(
+            !response.version.is_empty(),
+            "the crate version must be present"
+        );
     }
 }

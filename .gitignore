@@ -3,7 +3,8 @@
 # ============================================
 /target/
 **/*.rs.bk
-Cargo.lock
+# Cargo.lock is committed on purpose: this is an application (binary) crate and
+# locking dependencies keeps CI builds reproducible. See docs/google-rust-style.md.
 vendor/
 
 # ============================================

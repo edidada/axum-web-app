@@ -1,9 +1,11 @@
-use axum::{response::Json, extract::Extension, http::StatusCode};
-use serde::Deserialize;
+use crate::domain::table::paginate::PaginateResult;
+use axum::extract::Extension;
+use axum::http::StatusCode;
+use axum::response::Json;
 use rbatis::rbatis::RBatis;
 use rbs::Value;
+use serde::Deserialize;
 use std::error::Error;
-use crate::domain::table::paginate::PaginateResult;
 
 #[derive(Deserialize)]
 pub struct PaginateRequest {
@@ -37,16 +39,16 @@ async fn paginate_query_with_rbs_params(
 
     // 计算偏移量
     let offset = (page - 1) * page_size;
-    
+
     // 构建带分页的 SQL
     let paginated_sql = format!("{} LIMIT {} OFFSET {}", sql, page_size, offset);
-    
+
     // 执行查询获取数据
     let data: Vec<Value> = rb.query_decode(&paginated_sql, params.clone()).await?;
-    
+
     // 构建获取总数的 SQL
     let count_sql = format!("SELECT COUNT(*) FROM ({}) as total", sql);
-    
+
     // 执行查询获取总数
     let count_result: Vec<Value> = rb.query_decode(&count_sql, params).await?;
     let mut total = 0;
@@ -67,7 +69,7 @@ async fn paginate_query_with_rbs_params(
             }
         }
     };
-    
+
     Ok(PaginateResponse {
         total,
         page,
@@ -110,7 +112,14 @@ pub async fn paginate_with_params_handler(
     Json(payload): Json<PaginateWithParamsRequest>,
     Extension(rb): Extension<&'static RBatis>,
 ) -> Result<Json<PaginateResponse>, (StatusCode, String)> {
-    let result = paginate_query_with_params(rb, &payload.sql, payload.page, payload.page_size, payload.params).await;
+    let result = paginate_query_with_params(
+        rb,
+        &payload.sql,
+        payload.page,
+        payload.page_size,
+        payload.params,
+    )
+    .await;
     match result {
         Ok(response) => Ok(Json(response)),
         Err(e) => Err((StatusCode::INTERNAL_SERVER_ERROR, e.to_string())),
@@ -130,9 +139,9 @@ mod tests {
             data: vec![rbs::value!({"id": "order-4"})],
         };
 
-        assert_eq!(response.total, 7);
-        assert_eq!(response.page, 2);
-        assert_eq!(response.page_size, 3);
-        assert_eq!(response.data.len(), 1);
+        assert_eq!(response.total, 7, "total row count should be preserved");
+        assert_eq!(response.page, 2, "requested page should be preserved");
+        assert_eq!(response.page_size, 3, "page size should be preserved");
+        assert_eq!(response.data.len(), 1, "the fixture should contain one row");
     }
 }

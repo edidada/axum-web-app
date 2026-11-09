@@ -1,6 +1,6 @@
 use ammonia::clean;
-use axum::response::Html;
 use axum::extract::Form;
+use axum::response::Html;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
@@ -34,8 +34,17 @@ mod tests {
         }))
         .await;
 
-        assert!(response.0.contains("Submission received for: <b>Alice</b>"));
-        assert!(!response.0.contains("secret-password"));
-        assert!(!response.0.contains("<script>"));
+        assert!(
+            response.0.contains("Submission received for: <b>Alice</b>"),
+            "the sanitized username should appear in the response"
+        );
+        assert!(
+            !response.0.contains("secret-password"),
+            "the password must never be echoed back"
+        );
+        assert!(
+            !response.0.contains("<script>"),
+            "script tags must be stripped by the sanitizer"
+        );
     }
 }

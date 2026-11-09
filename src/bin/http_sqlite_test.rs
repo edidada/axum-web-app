@@ -1,20 +1,21 @@
 use axum::{Extension, Router};
-use rbdc_sqlite::driver::SqliteDriver;
 use rbatis::rbatis::RBatis;
+use rbdc_sqlite::driver::SqliteDriver;
 use redis::Client as RedisClient;
 use reqwest::{Client, StatusCode};
 use serde_json::{json, Value};
-use std::{error::Error, time::{Duration, Instant}};
+use std::error::Error;
+use std::time::{Duration, Instant};
 use tower::ServiceBuilder;
 
 #[path = "../config.rs"]
 mod config;
-#[path = "../jwt.rs"]
-mod jwt;
 #[path = "../domain/mod.rs"]
 mod domain;
 #[path = "../handlers/mod.rs"]
 mod handlers;
+#[path = "../jwt.rs"]
+mod jwt;
 #[path = "../middleware/mod.rs"]
 mod middleware;
 #[path = "../routes/mod.rs"]
@@ -30,16 +31,19 @@ async fn main() -> Result<(), Box<dyn Error>> {
     std::env::set_var("APP_PROFILE", "sqlite");
     let config = config::Config::from_file()?;
     let rb = RBatis::new();
-    rb.init(SqliteDriver {}, config.database.url.as_deref().ok_or("sqlite url missing")?)?;
+    rb.init(
+        SqliteDriver {},
+        config.database.url.as_deref().ok_or("sqlite url missing")?,
+    )?;
     let rb: &'static RBatis = Box::leak(Box::new(rb));
     let redis = RedisClient::open(config.webapp.redisurl.clone())?;
 
-    let app = Router::new()
-        .merge(routes::setup_routes())
-        .layer(ServiceBuilder::new()
+    let app = Router::new().merge(routes::setup_routes()).layer(
+        ServiceBuilder::new()
             .layer(Extension(redis))
             .layer(Extension(config.clone()))
-            .layer(Extension(rb)));
+            .layer(Extension(rb)),
+    );
     let listener = std::net::TcpListener::bind("127.0.0.1:0")?;
     let address = listener.local_addr()?;
     tokio::spawn(async move {
@@ -81,11 +85,24 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let access_token = login_json["access_token"]
         .as_str()
         .expect("login returns access_token");
-    assert_eq!(session_id, access_token, "session_id remains a JWT compatibility alias");
-    assert_eq!(access_token.split('.').count(), 3, "JWT has header.payload.signature");
+    assert_eq!(
+        session_id, access_token,
+        "session_id remains a JWT compatibility alias"
+    );
+    assert_eq!(
+        access_token.split('.').count(),
+        3,
+        "JWT has header.payload.signature"
+    );
     let auth = format!("Bearer {session_id}");
 
-    let get_body = client.get(format!("{base}/get")).header("Authorization", &auth).send().await?.text().await?;
+    let get_body = client
+        .get(format!("{base}/get"))
+        .header("Authorization", &auth)
+        .send()
+        .await?
+        .text()
+        .await?;
     assert!(get_body.contains("Hello, World!"));
     assert!(!get_body.contains("script"));
 
@@ -140,7 +157,11 @@ async fn main() -> Result<(), Box<dyn Error>> {
             let mut timings = Vec::new();
             for _ in 0..20 {
                 let request_started = Instant::now();
-                let response = client.get(&endpoint).header("Authorization", &auth).send().await
+                let response = client
+                    .get(&endpoint)
+                    .header("Authorization", &auth)
+                    .send()
+                    .await
                     .map_err(|error| error.to_string())?;
                 if response.status() != StatusCode::OK {
                     return Err(format!("unexpected GET status: {}", response.status()));
@@ -157,43 +178,55 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let elapsed_seconds = started.elapsed().as_secs_f64();
     timings.sort_by(|a, b| a.partial_cmp(b).expect("finite timings"));
 
-    let logout = client.post(format!("{base}/api/logout")).header("Authorization", &auth).send().await?;
+    let logout = client
+        .post(format!("{base}/api/logout"))
+        .header("Authorization", &auth)
+        .send()
+        .await?;
     assert_eq!(logout.status(), StatusCode::OK);
-    let after_logout_status = client.get(format!("{base}/get")).header("Authorization", &auth).send().await?.status();
+    let after_logout_status = client
+        .get(format!("{base}/get"))
+        .header("Authorization", &auth)
+        .send()
+        .await?
+        .status();
 
-    println!("{}", json!({
-        "database": "SQLite test.db",
-        "functional": {
-            "unauthenticated_get": unauthenticated_status.as_u16(),
-            "invalid_login": {
-                "status": invalid_login_status.as_u16(),
-                "rejected": true
+    println!(
+        "{}",
+        json!({
+            "database": "SQLite test.db",
+            "functional": {
+                "unauthenticated_get": unauthenticated_status.as_u16(),
+                "invalid_login": {
+                    "status": invalid_login_status.as_u16(),
+                    "rejected": true
+                },
+                "valid_login": valid_login_status.as_u16(),
+                "xss_sanitization": "passed",
+                "form_post": 200,
+                "pagination_rows": paginate_json["data"].as_array().map(Vec::len),
+                "pagination_total": paginate_json["total"],
+                "parameterized_pagination": {
+                    "status": parameterized_status.as_u16(),
+                    "rows": parameterized_json["data"].as_array().map(Vec::len),
+                    "total": parameterized_json["total"]
+                },
+                "logout": 200,
+                "after_logout": after_logout_status.as_u16()
             },
-            "valid_login": valid_login_status.as_u16(),
-            "xss_sanitization": "passed",
-            "form_post": 200,
-            "pagination_rows": paginate_json["data"].as_array().map(Vec::len),
-            "pagination_total": paginate_json["total"],
-            "parameterized_pagination": {
-                "status": parameterized_status.as_u16(),
-                "rows": parameterized_json["data"].as_array().map(Vec::len),
-                "total": parameterized_json["total"]
-            },
-            "logout": 200,
-            "after_logout": after_logout_status.as_u16()
-        },
-        "performance": {
-            "requests": timings.len(),
-            "concurrency": 10,
-            "elapsed_seconds": elapsed_seconds,
-            "throughput_rps": timings.len() as f64 / elapsed_seconds,
-            "latency_ms": {
-                "min": timings[0],
-                "p50": percentile(&timings, 0.50),
-                "p95": percentile(&timings, 0.95),
-                "max": timings[timings.len() - 1]
+            "performance": {
+                "requests": timings.len(),
+                "concurrency": 10,
+                "elapsed_seconds": elapsed_seconds,
+                "throughput_rps": timings.len() as f64 / elapsed_seconds,
+                "latency_ms": {
+                    "min": timings[0],
+                    "p50": percentile(&timings, 0.50),
+                    "p95": percentile(&timings, 0.95),
+                    "max": timings[timings.len() - 1]
+                }
             }
-        }
-    }));
+        })
+    );
     Ok(())
 }

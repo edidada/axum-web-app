@@ -1,0 +1,77 @@
+name: Google Rust Style CI
+
+# CI for the google_rust_style branch. The existing Rust/Rust Mac workflows
+# only build on main; this one proves compile + tests + a live HTTP interface.
+on:
+  push:
+    branches: [google_rust_style]
+  pull_request:
+    branches: [google_rust_style]
+  workflow_dispatch:
+
+jobs:
+  build-test-http:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo artifacts
+        uses: Swatinem/rust-cache@v2
+
+      # libsqlite3-sys links against the system SQLite via pkg-config.
+      - name: Install system libraries
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libsqlite3-dev libssl-dev pkg-config
+
+      - name: Build
+        run: cargo build --verbose
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: Verify HTTP interface
+        run: |
+          set -euo pipefail
+
+          ./target/debug/main >server.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true; echo "--- server.log ---"; cat server.log' EXIT
+
+          BASE=http://127.0.0.1:9002
+          ready=0
+          for i in $(seq 1 30); do
+            if curl -fs "$BASE/health" -o health.json 2>/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            echo "::error::server did not become ready within 30s" >&2
+            exit 1
+          fi
+
+          echo "== /health =="
+          cat health.json; echo
+          grep -q '"status":"healthy"' health.json
+
+          curl -fsS "$BASE/health/detailed" -o health_detailed.json
+          echo "== /health/detailed =="
+          cat health_detailed.json; echo
+          grep -q '"database_connected":true' health_detailed.json
+
+          curl -fsS "$BASE/ready" -o ready.json
+          echo "== /ready =="
+          cat ready.json; echo
+          grep -q '"ready":true' ready.json
+
+          curl -fsS "$BASE/live" -o live.json
+          echo "== /live =="
+          cat live.json; echo
+          grep -q '"alive":true' live.json
+
+          echo "All HTTP interface checks passed."

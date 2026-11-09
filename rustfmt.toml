@@ -1,0 +1,17 @@
+# Formatting settings from the Google Rust Style Guide
+# (https://google.github.io/styleguide/rustguide.html, "Use the appropriate
+# formatting tool"). This project builds on stable Rust, so only stable rustfmt
+# options are enabled here.
+
+edition = "2021"
+max_width = 100
+
+# The guide additionally recommends these nightly-only rustfmt options:
+#   imports_granularity = "Module"   # "A use statement should import items from one module"
+#   hex_literal_case = "Lower"       # "Usage of lowercase alphabets in hex literals"
+#   format_macro_matchers = true     # "Macro matcher formatting"
+# The guide explicitly permits omitting nightly-only options for codebases that
+# build on stable, so they are documented here rather than enabled: enabling
+# them on stable makes rustfmt emit "unstable option" warnings and ignore them.
+# `imports_granularity = "Module"` is therefore applied by hand in source;
+# see docs/google-rust-style.md.

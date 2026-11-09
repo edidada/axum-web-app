@@ -1,5 +1,7 @@
 use tracing_appender::rolling::{RollingFileAppender, Rotation};
-use tracing_subscriber::{fmt, layer::SubscriberExt, EnvFilter, Registry};
+use tracing_subscriber::fmt;
+use tracing_subscriber::layer::SubscriberExt;
+use tracing_subscriber::{EnvFilter, Registry};
 
 fn main() {
     // 创建一个按天滚动的日志文件追加器
@@ -15,9 +17,7 @@ fn main() {
     let env_filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
 
     // 创建一个订阅器，将过滤器层和文件层组合起来
-    let subscriber = Registry::default()
-       .with(env_filter)
-       .with(file_layer);
+    let subscriber = Registry::default().with(env_filter).with(file_layer);
 
     // 设置全局订阅器
     tracing::subscriber::set_global_default(subscriber).expect("Failed to set subscriber");
